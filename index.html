@@ -3,31 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Chinmaya Patro — UPSC Civil Services Aspirant (Geography Optional). Public study desk with interactive syllabus tracker, Mains PYQs, Geography Optional PYQs, and Prelims practice.">
-  <title>Chinmaya Patro — UPSC Civil Services Aspirant</title>
-  <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg">
-  <link rel="stylesheet" href="./assets/css/tokens.css">
-  <link rel="stylesheet" href="./assets/css/base.css">
-  <link rel="stylesheet" href="./assets/css/home.css">
+  <meta name="description" content="Interactive UPSC CSE Syllabus tracker for Prelims, Mains (GS I–IV & Essay), and Geography Optional Paper I & II.">
+  <title>Syllabus Tracker — Chinmaya Patro UPSC Study Desk</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/syllabus.css">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
-  <!-- Sticky Top Navigation -->
   <header class="site-nav">
     <div class="container nav-inner">
-      <a class="nav-brand" href="./index.html">
+      <a class="nav-brand" href="../index.html">
         <span class="nav-brand-mark" aria-hidden="true">CP</span>
         <span>Chinmaya Patro</span>
       </a>
 
       <nav aria-label="Primary navigation">
         <ul class="nav-links">
-          <li><a class="nav-link" href="./index.html" aria-current="page">Home</a></li>
-          <li><a class="nav-link" href="./syllabus/index.html">Syllabus</a></li>
-          <li><a class="nav-link" href="./mains-pyqs/index.html">Mains PYQs</a></li>
-          <li><a class="nav-link" href="./optional-pyqs/index.html">Optional PYQs</a></li>
-          <li><a class="nav-link" href="./prelims-practice/index.html">Prelims Practice</a></li>
+          <li><a class="nav-link" href="../index.html">Home</a></li>
+          <li><a class="nav-link" href="./index.html" aria-current="page">Syllabus</a></li>
+          <li><a class="nav-link" href="../mains-pyqs/index.html">Mains PYQs</a></li>
+          <li><a class="nav-link" href="../optional-pyqs/index.html">Optional PYQs</a></li>
+          <li><a class="nav-link" href="../prelims-practice/index.html">Prelims Practice</a></li>
         </ul>
       </nav>
 
@@ -55,268 +54,72 @@
   <div class="nav-backdrop" data-nav-backdrop></div>
   <nav id="mobile-nav-drawer" class="nav-drawer" data-nav-drawer aria-label="Mobile navigation" aria-hidden="true">
     <ul class="nav-drawer-list">
-      <li><a class="nav-link" href="./index.html" aria-current="page">Home</a></li>
-      <li><a class="nav-link" href="./syllabus/index.html">Syllabus</a></li>
-      <li><a class="nav-link" href="./mains-pyqs/index.html">Mains PYQs</a></li>
-      <li><a class="nav-link" href="./optional-pyqs/index.html">Optional PYQs</a></li>
-      <li><a class="nav-link" href="./prelims-practice/index.html">Prelims Practice</a></li>
+      <li><a class="nav-link" href="../index.html">Home</a></li>
+      <li><a class="nav-link" href="./index.html" aria-current="page">Syllabus</a></li>
+      <li><a class="nav-link" href="../mains-pyqs/index.html">Mains PYQs</a></li>
+      <li><a class="nav-link" href="../optional-pyqs/index.html">Optional PYQs</a></li>
+      <li><a class="nav-link" href="../prelims-practice/index.html">Prelims Practice</a></li>
     </ul>
   </nav>
 
   <main id="main-content">
-    <!-- Hero with Full-Width UPSC Gate Banner, Profile Portrait & CSS-3D Subject Cube -->
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-banner" aria-hidden="true">
-        <img
-          src="./assets/img/banner.webp"
-          alt="Chinmaya Patro standing outside the Union Public Service Commission gate at Dholpur House, New Delhi"
-          width="1600"
-          height="900"
-          decoding="async"
-          fetchpriority="high"
-        >
-        <div class="hero-banner-overlay"></div>
-      </div>
+    <section class="page-header">
+      <div class="container">
+        <span class="eyebrow">Official UPSC CSE Syllabus</span>
+        <h1>Syllabus Tracker</h1>
+        <p class="lead">
+          Prelims, Mains, and Geography Optional (Paper I & II) organized as a collapsible checklist.
+          Tick off topics as you cover them—progress stays saved in your browser.
+        </p>
 
-      <div class="container hero-content">
-        <div class="hero-grid">
-          <div class="hero-text">
-            <div class="hero-identity">
-              <div class="profile-ring">
-                <img
-                  src="./assets/img/profile.webp"
-                  alt="Portrait of Chinmaya Patro"
-                  width="128"
-                  height="128"
-                  decoding="async"
-                >
-              </div>
-              <div class="hero-badges">
-                <span class="tag tag--accent">Geography Optional</span>
-                <span class="tag tag--sage">Public Study Desk</span>
-              </div>
-            </div>
-
-            <h1 id="hero-title">Chinmaya Patro — UPSC Civil Services Aspirant</h1>
-
-            <p class="lead hero-intro">
-              Preparing for the Civil Services Examination with Geography as my optional subject.
-              I built this static site as a calm, distraction-free public study desk—keeping the official
-              syllabus, past-year questions, and Prelims practice in one place, with all progress saved
-              privately in my browser.
-            </p>
-
-            <div class="hero-actions" role="group" aria-label="Jump to study sections">
-              <a class="btn btn-primary" href="./prelims-practice/index.html">Prelims Practice</a>
-              <a class="btn btn-secondary" href="./syllabus/index.html">Syllabus Tracker</a>
-              <a class="btn btn-secondary" href="./mains-pyqs/index.html">Mains PYQs</a>
-              <a class="btn btn-secondary" href="./optional-pyqs/index.html">Optional PYQs</a>
-            </div>
-          </div>
-
-          <!-- Pure CSS 3D Rotating Subject Cube (No WebGL required) -->
-          <div class="hero-visual" aria-hidden="true">
-            <div class="cube-stage">
-              <div class="cube">
-                <div class="cube-face cube-face--front"><span>Polity</span></div>
-                <div class="cube-face cube-face--back"><span>Geography</span></div>
-                <div class="cube-face cube-face--right"><span>Economy</span></div>
-                <div class="cube-face cube-face--left"><span>History</span></div>
-                <div class="cube-face cube-face--top"><span>Environment</span></div>
-                <div class="cube-face cube-face--bottom"><span>Ethics</span></div>
-              </div>
-            </div>
-            <p class="cube-caption">Six pillars in steady rotation</p>
-          </div>
+        <div class="syllabus-overall" id="syllabus-overall" aria-live="polite">
+          <span class="tag tag--sage" id="overall-badge">0 / 0 topics covered</span>
+          <span class="muted overall-pct" id="overall-pct">0% complete</span>
         </div>
       </div>
     </section>
 
-    <!-- Live Desk Numbers (Populated dynamically from /data/*.js + localStorage) -->
-    <section class="section stats-section" aria-labelledby="stats-heading">
+    <section class="section">
       <div class="container">
-        <div class="section-head reveal">
-          <span class="eyebrow">Desk Inventory</span>
-          <h2 id="stats-heading">Everything on the desk, counted live</h2>
+        <!-- Stage Tabs: Prelims · Mains · Optional -->
+        <div class="tabs syllabus-tabs" role="tablist" aria-label="Exam stages" id="stage-tabs">
+          <button type="button" class="tab-btn" role="tab" aria-selected="true" data-stage="prelims">Prelims</button>
+          <button type="button" class="tab-btn" role="tab" aria-selected="false" data-stage="mains">Mains</button>
+          <button type="button" class="tab-btn" role="tab" aria-selected="false" data-stage="optional">Optional (Geography)</button>
         </div>
 
-        <div class="stats-grid reveal">
-          <article class="card stat-card">
-            <span class="stat-label">Syllabus Topics</span>
-            <p class="stat-value" id="count-syllabus" data-counter data-target="0">—</p>
-            <p class="stat-meta" id="meta-syllabus">Loading syllabus data…</p>
-          </article>
+        <!-- Per-Paper SVG Progress Rings -->
+        <div class="rings-grid" id="syllabus-rings" aria-label="Progress per paper"></div>
 
-          <article class="card stat-card">
-            <span class="stat-label">Mains PYQs</span>
-            <p class="stat-value" id="count-mains" data-counter data-target="0">—</p>
-            <p class="stat-meta" id="meta-mains">GS I–IV & Essay (2013–2026)</p>
-          </article>
-
-          <article class="card stat-card">
-            <span class="stat-label">Geography Optional</span>
-            <p class="stat-value" id="count-optional" data-counter data-target="0">—</p>
-            <p class="stat-meta" id="meta-optional">Paper I & II (1986–2026)</p>
-          </article>
-
-          <article class="card stat-card">
-            <span class="stat-label">Prelims Questions</span>
-            <p class="stat-value" id="count-prelims" data-counter data-target="0">—</p>
-            <p class="stat-meta" id="meta-prelims">Active scorable practice pool</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- What I'm Preparing: Trio of Tilt Cards -->
-    <section class="section section--subtle" aria-labelledby="preparing-heading">
-      <div class="container">
-        <div class="section-head reveal">
-          <span class="eyebrow">Three Stages</span>
-          <h2 id="preparing-heading">What I’m preparing</h2>
-          <p class="lead">Each stage has its own rhythm—objective elimination for Prelims, structured synthesis for Mains, and spatial depth for Geography Optional.</p>
-        </div>
-
-        <div class="trio-grid">
-          <article class="card card--interactive tilt-card prep-card prep-card--sage reveal" data-tilt data-tilt-max="5">
-            <div class="prep-card-top">
-              <span class="tag tag--sage">Stage I · Objective</span>
-              <span class="prep-num" aria-hidden="true">01</span>
-            </div>
-            <h3>Prelims</h3>
-            <p>
-              General Studies Paper I and CSAT. Daily MCQ drills, timed 100-question simulations,
-              strict +2 / −0.66 scoring, and targeted revision of wrong or bookmarked questions.
-            </p>
-            <div class="prep-card-foot">
-              <a class="prep-link" href="./prelims-practice/index.html">Open Prelims Practice →</a>
-            </div>
-          </article>
-
-          <article class="card card--interactive tilt-card prep-card prep-card--accent reveal" data-tilt data-tilt-max="5">
-            <div class="prep-card-top">
-              <span class="tag tag--accent">Stage II · Written</span>
-              <span class="prep-num" aria-hidden="true">02</span>
-            </div>
-            <h3>Mains</h3>
-            <p>
-              GS Papers I–IV, Essay, and Ethics case studies across 19 subject groups from 2013 onward.
-              Filter by topic or year, track answers written, and spot recurring themes.
-            </p>
-            <div class="prep-card-foot">
-              <a class="prep-link" href="./mains-pyqs/index.html">Browse Mains PYQs →</a>
-            </div>
-          </article>
-
-          <article class="card card--interactive tilt-card prep-card prep-card--sky reveal" data-tilt data-tilt-max="5">
-            <div class="prep-card-top">
-              <span class="tag tag--sky">Optional · 500 Marks</span>
-              <span class="prep-num" aria-hidden="true">03</span>
-            </div>
-            <h3>Geography Optional</h3>
-            <p>
-              Paper I (Principles of Geography) and Paper II (Geography of India), including map-pointing
-              practice and four decades of topic-wise questions from 1986 to 2026.
-            </p>
-            <div class="prep-card-foot">
-              <a class="prep-link" href="./optional-pyqs/index.html">Explore Optional PYQs →</a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- My Approach (3 Principles) + Animated SVG Map of India -->
-    <section class="section" aria-labelledby="approach-heading">
-      <div class="container">
-        <div class="approach-layout">
-          <div class="approach-copy reveal">
-            <span class="eyebrow">Working Notes</span>
-            <h2 id="approach-heading">My approach</h2>
-            <p class="lead">Three quiet rules that keep preparation grounded when the reading list grows too loud.</p>
-
-            <ol class="principles-list">
-              <li class="principle-item">
-                <span class="principle-index" aria-hidden="true">01</span>
-                <div>
-                  <h3>Syllabus and PYQs first, sources second</h3>
-                  <p>Every reading session starts with the official syllabus line and past UPSC questions, so books serve the exam rather than the other way around.</p>
-                </div>
-              </li>
-
-              <li class="principle-item">
-                <span class="principle-index" aria-hidden="true">02</span>
-                <div>
-                  <h3>Small, verifiable daily loops</h3>
-                  <p>Ticking off a syllabus sub-topic, logging one written Mains answer, or reviewing ten wrong Prelims MCQs beats ambitious plans that never survive a week.</p>
-                </div>
-              </li>
-
-              <li class="principle-item">
-                <span class="principle-index" aria-hidden="true">03</span>
-                <div>
-                  <h3>Spatial thinking across every paper</h3>
-                  <p>Geography is not confined to the Optional paper—maps, regional patterns, and human-environment links sharpen GS I, III, and International Relations alike.</p>
-                </div>
-              </li>
-            </ol>
-          </div>
-
-          <aside class="map-panel card reveal" aria-label="Stylized outline map of India">
-            <div class="map-panel-head">
-              <span class="tag tag--sky">Geography Optional</span>
-              <span class="muted map-coords">8°4′N–37°6′N · 68°7′E–97°25′E</span>
-            </div>
-
-            <svg
-              class="india-svg"
-              viewBox="0 0 360 400"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              data-draw-svg
-              role="img"
-              aria-label="Minimal editorial outline of India with latitude and longitude grid"
+        <!-- Search & Tree Controls -->
+        <div class="syllabus-toolbar card">
+          <div class="search-wrap">
+            <label class="field-label" for="syllabus-search">Search topics</label>
+            <input
+              type="search"
+              id="syllabus-search"
+              class="input"
+              placeholder="e.g. geomorphology, federalism, monsoon, ethics…"
+              autocomplete="off"
             >
-              <!-- Subtle Graticule -->
-              <g class="india-grid" stroke="#E8E6DC" stroke-width="1" stroke-dasharray="3 4">
-                <line x1="30" y1="80" x2="330" y2="80"></line>
-                <line x1="30" y1="160" x2="330" y2="160"></line>
-                <line x1="30" y1="240" x2="330" y2="240"></line>
-                <line x1="30" y1="320" x2="330" y2="320"></line>
-                <line x1="100" y1="20" x2="100" y2="380"></line>
-                <line x1="180" y1="20" x2="180" y2="380"></line>
-                <line x1="260" y1="20" x2="260" y2="380"></line>
-              </g>
+          </div>
 
-              <!-- Tropic of Cancer reference -->
-              <line x1="30" y1="192" x2="330" y2="192" stroke="#D97757" stroke-opacity="0.35" stroke-width="1.2" stroke-dasharray="6 4"></line>
-              <text x="36" y="186" fill="#6B6A64" font-family="system-ui, sans-serif" font-size="9">23.5° N · Tropic of Cancer</text>
+          <div class="toolbar-actions">
+            <div class="filter-group" role="group" aria-label="Filter by completion status">
+              <button type="button" class="chip is-active" data-status-filter="all" aria-pressed="true">All</button>
+              <button type="button" class="chip" data-status-filter="pending" aria-pressed="false">Pending</button>
+              <button type="button" class="chip" data-status-filter="covered" aria-pressed="false">Covered</button>
+            </div>
 
-              <!-- Stylized India Outline (Animated draw-in) -->
-              <path
-                data-draw-path
-                class="india-outline"
-                d="M142 26 L160 22 L176 34 L192 42 L188 58 L198 72 L182 88 L194 102 L214 114 L234 126 L254 128 L272 118 L286 106 L306 112 L322 126 L312 142 L298 148 L304 166 L292 178 L280 166 L272 148 L256 154 L248 172 L240 186 L224 198 L210 218 L192 238 L178 262 L174 288 L164 316 L152 346 L142 368 L132 348 L120 318 L108 286 L98 254 L92 222 L80 208 L62 198 L54 184 L68 174 L58 162 L76 150 L86 132 L104 114 L112 94 L124 76 L118 56 L128 38 Z"
-                stroke="#D97757"
-                stroke-width="2.4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                fill="#FBF0EC"
-                fill-opacity="0.45"
-              ></path>
-
-              <!-- Reference markers -->
-              <circle cx="144" cy="126" r="4" fill="#D97757"></circle>
-              <text x="152" y="129" fill="#141413" font-family="system-ui, sans-serif" font-size="10" font-weight="600">New Delhi</text>
-              <circle cx="142" cy="368" r="3" fill="#2C5541"></circle>
-              <text x="150" y="372" fill="#6B6A64" font-family="system-ui, sans-serif" font-size="9">Kanyakumari</text>
-            </svg>
-
-            <p class="map-caption">
-              Built for fast revision on mobile and desktop—zero trackers, zero accounts, plain HTML/CSS/JS.
-            </p>
-          </aside>
+            <div class="tree-btns">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-expand-all">Expand all</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-collapse-all">Collapse all</button>
+            </div>
+          </div>
         </div>
+
+        <!-- Collapsible Topic Tree -->
+        <div id="syllabus-tree" class="syllabus-tree" aria-live="polite"></div>
       </div>
     </section>
   </main>
@@ -326,11 +129,11 @@
       <div class="footer-top">
         <span class="footer-brand">Chinmaya Patro · UPSC Study Desk</span>
         <ul class="footer-links">
-          <li><a href="./index.html">Home</a></li>
-          <li><a href="./syllabus/index.html">Syllabus</a></li>
-          <li><a href="./mains-pyqs/index.html">Mains PYQs</a></li>
-          <li><a href="./optional-pyqs/index.html">Optional PYQs</a></li>
-          <li><a href="./prelims-practice/index.html">Prelims Practice</a></li>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="./index.html">Syllabus</a></li>
+          <li><a href="../mains-pyqs/index.html">Mains PYQs</a></li>
+          <li><a href="../optional-pyqs/index.html">Optional PYQs</a></li>
+          <li><a href="../prelims-practice/index.html">Prelims Practice</a></li>
         </ul>
       </div>
       <p class="footer-disclaimer">
@@ -339,15 +142,10 @@
     </div>
   </footer>
 
-  <!-- Deferred data scripts for live desk counts (page remains fully functional if empty/pending) -->
-  <script src="./data/syllabus-data.js" defer></script>
-  <script src="./data/mains-data.js" defer></script>
-  <script src="./data/optional-data.js" defer></script>
-  <script src="./data/prelims-data.js" defer></script>
-
-  <script src="./assets/js/storage.js" defer></script>
-  <script src="./assets/js/nav.js" defer></script>
-  <script src="./assets/js/motion.js" defer></script>
-  <script src="./assets/js/home.js" defer></script>
+  <script src="../data/syllabus-data.js" defer></script>
+  <script src="../assets/js/storage.js" defer></script>
+  <script src="../assets/js/nav.js" defer></script>
+  <script src="../assets/js/motion.js" defer></script>
+  <script src="../assets/js/syllabus.js" defer></script>
 </body>
 </html>
