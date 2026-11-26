@@ -159,7 +159,16 @@ generated from a vetted boundary dataset — **no outline was hand-drawn**.
 * Filters collapse behind a **Filters** button below 768px; questions now sit
   above the fold. `?paper=GS%20Paper%20II` deep links preselect a paper (used by
   the Home cube faces and subject chips).
-* Card action toggles and source links are 44px targets on Android.
+* Card action toggles are 44px targets on Android.
+
+### Follow-up (27 Nov, second pass)
+
+* Removed the **"Source reference ↗" / "Open Ethics case source ↗"** link from
+  Mains PYQ cards at your request. The card actions are now just *Mark answer
+  written* and *Bookmark*. The `sourceUrl` fields stay in `data/mains-data.js`
+  (data files untouched); the now-unused source-map plumbing in `mains.js` and
+  the `.source-link` styles were deleted.
+* Asset query strings normalised to `?v=20261127d` on all pages.
 
 ### Prelims Practice (`prelims-practice/index.html`, `prelims.css`)
 

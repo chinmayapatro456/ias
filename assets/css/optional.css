@@ -505,10 +505,9 @@
   color: var(--accent-ink);
 }
 
-/* Android: card action toggles and source links are 44px touch targets */
+/* Android: card action toggles are 44px touch targets */
 @media (max-width: 767px) {
   .action-toggle,
-  .source-link,
   .prep-link,
   .opt-card-actions .btn {
     min-height: 44px;

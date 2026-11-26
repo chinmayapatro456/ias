@@ -2,7 +2,7 @@
    Mains PYQs Explorer — Chinmaya Patro UPSC Study Desk
    Reads window.PYQ_METADATA, window.UPSC_MAINS_PYQS, and window.PYQ_BY_TOPIC.
    Supports subject, topic, year-range, keyword, status filters, grouping,
-   localStorage bookmarks & "answer written" ticks, and Ethics sourceUrl links.
+   localStorage bookmarks & "answer written" ticks.
    ========================================================================== */
 
 (function () {
@@ -22,7 +22,7 @@
   };
 
   var allQuestions = [];
-  var groupSourceMap = {};
+
   var searchTimer = null;
 
   function escapeHtml(str) {
@@ -45,34 +45,7 @@
     }
   }
 
-  function buildSourceMap() {
-    var map = {};
-    var byTopic = window.PYQ_BY_TOPIC;
-    if (byTopic && typeof byTopic === 'object') {
-      Object.keys(byTopic).forEach(function (key) {
-        var entry = byTopic[key];
-        if (entry && typeof entry === 'object' && !Array.isArray(entry) && entry.sourceUrl) {
-          map[key] = entry.sourceUrl;
-          if (entry.topic) map[entry.topic] = entry.sourceUrl;
-          if (entry.name) map[entry.name] = entry.sourceUrl;
-        }
-      });
-    }
-    var meta = window.PYQ_METADATA;
-    if (meta && Array.isArray(meta.groups)) {
-      meta.groups.forEach(function (g) {
-        if (g && g.sourceUrl) {
-          if (g.name) map[g.name] = g.sourceUrl;
-          if (g.topic) map[g.topic] = g.sourceUrl;
-          if (g.id) map[g.id] = g.sourceUrl;
-        }
-      });
-    }
-    return map;
-  }
-
   function normalizeQuestions() {
-    groupSourceMap = buildSourceMap();
     var raw = Array.isArray(window.UPSC_MAINS_PYQS) ? window.UPSC_MAINS_PYQS : [];
 
     if (!raw.length && window.PYQ_BY_TOPIC && typeof window.PYQ_BY_TOPIC === 'object') {
@@ -91,12 +64,6 @@
       var year = parseInt(q.year, 10) || 0;
       var text = String(q.question || q.text || q.prompt || '').trim();
       var id = String(q.id || (year + '-' + idx + '-' + topic.slice(0, 16)));
-      var sourceUrl = q.sourceUrl || q.url || groupSourceMap[topic] || groupSourceMap[subject] || '';
-      var isEthicsCase =
-        /ethics|case\s*stud/i.test(topic) ||
-        /ethics|case\s*stud/i.test(subject) ||
-        Boolean(q.isCaseStudy);
-
       return {
         id: id,
         year: year,
@@ -104,8 +71,6 @@
         topic: topic,
         text: text,
         marks: q.marks || q.wordLimit || '',
-        sourceUrl: sourceUrl,
-        isEthicsCase: isEthicsCase,
         searchBlob: (subject + ' ' + topic + ' ' + year + ' ' + text).toLowerCase()
       };
     });
@@ -287,9 +252,6 @@
           .map(function (item) {
             var isWritten = writtenSet.has(item.id);
             var isBm = bmSet.has(item.id);
-            var showSourceLink =
-              item.sourceUrl &&
-              (item.isEthicsCase || /^https?:\/\//i.test(item.sourceUrl));
 
             return (
               '<article class="pyq-item' + (isWritten ? ' is-written' : '') + '" data-qid="' + escapeHtml(item.id) + '">' +
@@ -309,11 +271,6 @@
                     'data-action="bookmark" data-id="' + escapeHtml(item.id) + '" aria-pressed="' + String(isBm) + '">' +
                     (isBm ? '★ Bookmarked' : '☆ Bookmark') +
                   '</button>' +
-                  (showSourceLink
-                    ? '<a class="source-link" href="' + escapeHtml(item.sourceUrl) + '" target="_blank" rel="noopener noreferrer">' +
-                        (item.isEthicsCase ? 'Open Ethics case source ↗' : 'Source reference ↗') +
-                      '</a>'
-                    : '') +
                 '</div>' +
               '</article>'
             );
