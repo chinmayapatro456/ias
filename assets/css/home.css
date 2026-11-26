@@ -224,15 +224,18 @@
   margin-left: 0.06em;
 }
 
-/* The role line under the name — a soft italic serif whisper in terracotta,
-   set tight under the H1 so it reads as a continuation of the em dash. */
-/* The role line — an uppercase mono kicker with the same rule-and-tracking
-   treatment as the section eyebrows, sitting just under the H1. */
+/* The role line under the name — serif, set tight under the H1 so it reads as
+   a continuation of the em dash, with the last word in the site's butter-swipe
+   accent: the same roman-plus-italic treatment as the inner page titles
+   ("Syllabus Tracker"). */
 .hero-role {
-  margin: calc(-1 * var(--space-2)) 0 var(--space-5);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  color: var(--accent-ink);
+  margin: calc(-1 * var(--space-3)) 0 var(--space-5);
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+  line-height: 1.3;
+  letter-spacing: 0.005em;
+  color: var(--ink-primary);
 }
 
 .hero-intro {

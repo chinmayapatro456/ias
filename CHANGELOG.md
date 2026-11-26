@@ -13,9 +13,9 @@ localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
 Scope: `index.html`, `assets/css/home.css`, cache stamp bumped to `20261127q`.
 
 - **The line under the name** now reads **"A Civil Services Aspirant"** (was
-  "a UPSC Aspirant") and uses the site's eyebrow treatment — uppercase mono,
-  wide tracking, short rule on the left, accent ink — instead of the italic
-  serif, so it matches the kicker style used across the About page.
+  "a UPSC Aspirant") in the same treatment as the inner page titles: roman
+  serif for "A Civil Services", italic serif with the butter swipe behind
+  "Aspirant" (`.accent`), set in ink rather than the old italic terracotta.
 
 ---
 
