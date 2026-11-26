@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found — Chinmaya Patro UPSC Study Desk</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg">
+  <link rel="stylesheet" href="./assets/css/tokens.css">
+  <link rel="stylesheet" href="./assets/css/base.css">
+  <style>
+    /* Inline fallback styles so nested 404 URLs on GitHub Pages stay styled */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #FAF9F5;
+      color: #141413;
+      font-family: Georgia, "Times New Roman", Times, serif;
+      line-height: 1.65;
+    }
+    .not-found {
+      flex: 1 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 1.25rem;
+    }
+    .not-found-card {
+      width: 100%;
+      max-width: 600px;
+      background: #FFFFFF;
+      border: 1px solid #E8E6DC;
+      border-radius: 18px;
+      padding: clamp(1.75rem, 4vw, 2.75rem);
+      box-shadow: 0 4px 16px rgba(20, 20, 19, 0.05);
+      text-align: center;
+    }
+    .not-found-code {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      background: #FBF0EC;
+      border: 1px solid #EEC8BA;
+      color: #A64728;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .not-found-card h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.15;
+    }
+    .not-found-card p {
+      margin: 0 0 1.75rem;
+      color: #6B6A64;
+      font-size: 1.1rem;
+    }
+    .not-found-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .nf-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0.65rem 1.25rem;
+      border-radius: 9999px;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .nf-btn--primary {
+      background: #D97757;
+      color: #FFFFFF;
+    }
+    .nf-btn--primary:hover {
+      background: #C6613F;
+      color: #FFFFFF;
+    }
+    .nf-btn--secondary {
+      background: #FAF9F5;
+      color: #141413;
+      border: 1px solid #D4D1C4;
+    }
+    .nf-btn--secondary:hover {
+      background: #F3F1E9;
+    }
+    .nf-footer {
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      border-top: 1px solid #E8E6DC;
+      background: #F3F1E9;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.8rem;
+      color: #6B6A64;
+    }
+  </style>
+</head>
+<body>
+  <main class="not-found">
+    <section class="not-found-card" aria-labelledby="nf-title">
+      <span class="not-found-code">404 · Page Not Found</span>
+      <h1 id="nf-title">Off the syllabus</h1>
+      <p>
+        This page doesn’t exist on Chinmaya Patro’s study desk. Head back to the home page
+        or jump straight into one of the four study sections below.
+      </p>
+      <div class="not-found-actions">
+        <a class="nf-btn nf-btn--primary" data-root-link="index.html" href="./index.html">Back to Home</a>
+        <a class="nf-btn nf-btn--secondary" data-root-link="syllabus/index.html" href="./syllabus/index.html">Syllabus</a>
+        <a class="nf-btn nf-btn--secondary" data-root-link="mains-pyqs/index.html" href="./mains-pyqs/index.html">Mains PYQs</a>
+        <a class="nf-btn nf-btn--secondary" data-root-link="optional-pyqs/index.html" href="./optional-pyqs/index.html">Optional PYQs</a>
+        <a class="nf-btn nf-btn--secondary" data-root-link="prelims-practice/index.html" href="./prelims-practice/index.html">Prelims Practice</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="nf-footer">
+    Chinmaya Patro · UPSC Study Desk — <strong>Not affiliated with UPSC</strong>.
+  </footer>
+
+  <script>
+    /* Keep links working on GitHub Pages repo subpaths even from deep 404 URLs */
+    (function () {
+      if (window.location.hostname.indexOf('github.io') === -1) return;
+      var parts = window.location.pathname.split('/').filter(Boolean);
+      var base = parts.length ? '/' + parts[0] + '/' : '/';
+      document.querySelectorAll('[data-root-link]').forEach(function (a) {
+        a.setAttribute('href', base + a.getAttribute('data-root-link'));
+      });
+    })();
+  </script>
+</body>
+</html>
