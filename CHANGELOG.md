@@ -482,3 +482,17 @@ map; the cube, drawer and filter panels keep working as before.
 **Verification** — 30/30 page × width combinations pass (360/390/412/768/1280/
 1440): no overflow, no clipped text, no sub-44px targets, no console errors.
 Dark theme re-checked across pages.
+
+### Taller hero band on desktop (27 Nov, sixth pass)
+
+* `.hero-band` gets `@media (min-width: 960px) { height: clamp(340px, 52vh, 600px) }`
+  — 468px at 1512×900 and 416px at 1440×800, up from the 36vh the redesign set,
+  so the crop holds the bust and the संघ लोक सेवा आयोग board together. Phones and
+  tablets keep the 36vh band.
+* Restored the `--page-rgb` token (light `251, 249, 244`, dark `20, 18, 14`). The
+  palette consolidation dropped it, which made the whole `.hero-band::after`
+  gradient invalid — the photograph was ending on a hard edge instead of fading
+  into the paper. It fades again, in both themes.
+
+**Checked:** `node scripts/audit.js` 30/30 clean; screenshots at 1512, 1440, 1024
+and 390, light and dark. Asset URLs bumped to `?v=20261127h`.

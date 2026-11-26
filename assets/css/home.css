@@ -101,6 +101,13 @@
   grid-area: aside;
 }
 
+/* A taller band on desktop, where there is width to carry it */
+@media (min-width: 960px) {
+  .hero-band {
+    height: clamp(340px, 52vh, 600px);
+  }
+}
+
 @media (min-width: 960px) {
   .hero-grid {
     grid-template-columns: minmax(0, 1fr) auto;

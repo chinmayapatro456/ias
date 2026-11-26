@@ -15,6 +15,8 @@
      Tier 2: pure white elevated cards with hairline rules
      Tier 3: warm sand section bands                                  */
   --bg-page: #FBF9F4;
+  /* Page canvas as an RGB triplet, for gradients that must fade into it */
+  --page-rgb: 251, 249, 244;
   --bg-subtle: #F1EBE1;
   --bg-card: #FFFFFF;
   --bg-card-hover: #FDFBF7;
@@ -216,6 +218,7 @@
   color-scheme: dark;
 
   --bg-page: #14120E;
+  --page-rgb: 20, 18, 14;
   --bg-subtle: #1B1814;
   --bg-card: #1B1814;
   --bg-card-hover: #221E19;
