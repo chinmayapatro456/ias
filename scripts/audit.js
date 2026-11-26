@@ -7,6 +7,7 @@ const PAGES = [
   'mains-pyqs/index.html',
   'optional-pyqs/index.html',
   'prelims-practice/index.html',
+  'about/index.html',
   'cube/index.html'
 ];
 const WIDTHS = [360, 390, 412, 768, 1280, 1440];
@@ -45,7 +46,7 @@ const WIDTHS = [360, 390, 412, 768, 1280, 1440];
           /* horizontal overflow beyond the viewport */
           if (r.right > docW + 1 || r.left < -1) {
             /* ignore intentionally scrollable strips and decorative overhangs */
-            const scrollable = el.closest('.chart-wrap, .palette-grid, .tabs, .topic-chips, .hero, .table-scroll');
+            const scrollable = el.closest('.chart-wrap, .palette-grid, .tabs, .topic-chips, .hero, .table-scroll, .table-wrap');
             if (!scrollable) {
               offenders.push({
                 sel: el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : ''),

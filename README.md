@@ -5,6 +5,7 @@ A static, distraction-free personal study workspace for UPSC Civil Services prep
 ## Sections
 
 - **Home (`index.html`)** — Profile banner, live desk inventory counts, three-stage overview, approach notes, and animated SVG outline of India.
+- **About the exam (`about/`)** — The whole Civil Services Examination on one page: three-stage pattern and paper-wise marks, the CSE 2025 selection funnel, General-category cut-off trends 2015–2025, category-wise cut-offs, year-wise vacancies 2015–2026 with the service split, eligibility and attempts, optional subjects, the CSE 2027 calendar and a set of rules every aspirant should know. Charts are hand-built SVG from `data/about-data.js`; every figure is sourced from UPSC notices and press notes.
 - **Syllabus (`syllabus/`)** — Collapsible topic checklist for Prelims, Mains (Essay & GS I–IV), and Geography Optional (Paper I & II) with search and per-paper SVG progress rings.
 - **Mains PYQs (`mains-pyqs/`)** — 2013–2026 Mains questions across 19 subject groups with paper/topic/year/keyword filters, topic or year grouping, local bookmarks, "answer written" ticks, and Ethics case study source links.
 - **Geography Optional PYQs (`optional-pyqs/`)** — 1986–2026 Paper I, Paper II, and Mapping questions with paper tabs, topic chips, year slider, "unattempted only" filter, and an animated SVG topic-frequency chart.
@@ -20,6 +21,7 @@ All content lives in `/data/` as plain browser globals—you never need to edit 
 | `data/mains-data.js` | `window.PYQ_METADATA`, `window.UPSC_MAINS_PYQS` | Mains PYQs (2013–2026) |
 | `data/optional-data.js` | `window.PYQ_DATA` | Geography Optional PYQs (1986–2026) & topic order |
 | `data/prelims-data.js` | `window.PRELIMS_DATA` | Prelims MCQ bank, 1995–2026 (3,976 questions; `incomplete` hidden; `no_key` & `source_marks_cancelled` unscored) |
+| `data/about-data.js` | `window.ABOUT_DATA` | Cut-off series (2015–2025), category cut-offs, year-wise vacancies and the CSE 2025 service split for the About page |
 
 ## Local Preview
 

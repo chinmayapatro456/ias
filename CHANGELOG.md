@@ -1,5 +1,35 @@
 # Changelog — Study Desk visual & responsive upgrade
 
+## New page — "About the exam" (27 Nov 2026)
+
+Scope: new `about/` page, `assets/css/about.css`, `assets/js/about.js`,
+`data/about-data.js`; one nav + footer link added to every existing page;
+`scripts/audit.js` now audits the new page. No existing page's markup, storage
+keys, data globals or scoring changed.
+
+- **What it covers.** Exam pattern (three stages, nine papers, paper-wise
+  marks), the 2,025-mark architecture, the CSE 2025 selection funnel, the
+  General-category cut-off trend 2015–2025 (tabbed by stage), category-wise
+  cut-offs for 2025 and 2024, vacancies and recommendations 2015–2026, the
+  CSE 2025 service split, eligibility and attempts, optional subjects and
+  services, the CSE 2027 calendar, twelve "nitty gritty" rules and a sources
+  note.
+- **Charts.** Hand-built SVG (no library): a measured line chart that redraws
+  to the container width so axis text keeps its pixel size on a phone, a
+  two-series vacancy bar chart with the 2026 estimate drawn as an outline, and
+  CSS bar/stack components for the funnel, category gap and service split.
+  Every chart carries a `<details>` table of the same numbers.
+- **Sources.** Cut-offs and vacancies from UPSC's own cut-off notices and
+  final-result press notes; applicant figures from PIB; dates from the Annual
+  Calendar 2027. Current as of 27 November 2026 — update `data/about-data.js`
+  and the `status` block when new results land.
+- **Checked.** `node scripts/audit.js` at 360/390/412/768/1280/1440: no
+  horizontal overflow, no clipped text, no sub-44px tap targets, no console
+  errors on any of the seven pages. Charts verified at each width and in the
+  dark theme.
+
+---
+
 Date: 27 November 2026
 Scope: Home, Syllabus Tracker, Mains PYQs, Optional PYQs, Prelims Practice
 Constraint honoured throughout: plain HTML/CSS/JS, no frameworks, no trackers, no
