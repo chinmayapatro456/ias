@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UPSC Prelims PYQ Practice Engine — Topic quizzes, 100-question timed year-wise simulations, custom quizzes, wrong/bookmarked revision, +2/-0.66 scoring, and JSON progress backup.">
+  <title>Prelims Practice — Chinmaya Patro UPSC Study Desk</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/prelims.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-nav">
+    <div class="container nav-inner">
+      <a class="nav-brand" href="../index.html">
+        <span class="nav-brand-mark" aria-hidden="true">CP</span>
+        <span>Chinmaya Patro</span>
+      </a>
+
+      <nav aria-label="Primary navigation">
+        <ul class="nav-links">
+          <li><a class="nav-link" href="../index.html">Home</a></li>
+          <li><a class="nav-link" href="../syllabus/index.html">Syllabus</a></li>
+          <li><a class="nav-link" href="../mains-pyqs/index.html">Mains PYQs</a></li>
+          <li><a class="nav-link" href="../optional-pyqs/index.html">Optional PYQs</a></li>
+          <li><a class="nav-link" href="./index.html" aria-current="page">Prelims Practice</a></li>
+        </ul>
+      </nav>
+
+      <button
+        type="button"
+        class="nav-toggle"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav-drawer"
+        aria-label="Open navigation menu"
+      >
+        <svg data-icon-menu viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+        <svg data-icon-close style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-backdrop" data-nav-backdrop></div>
+  <nav id="mobile-nav-drawer" class="nav-drawer" data-nav-drawer aria-label="Mobile navigation" aria-hidden="true">
+    <ul class="nav-drawer-list">
+      <li><a class="nav-link" href="../index.html">Home</a></li>
+      <li><a class="nav-link" href="../syllabus/index.html">Syllabus</a></li>
+      <li><a class="nav-link" href="../mains-pyqs/index.html">Mains PYQs</a></li>
+      <li><a class="nav-link" href="../optional-pyqs/index.html">Optional PYQs</a></li>
+      <li><a class="nav-link" href="./index.html" aria-current="page">Prelims Practice</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <section class="page-header">
+      <div class="container">
+        <span class="eyebrow">General Studies Paper I · Objective Practice</span>
+        <h1>Prelims Practice</h1>
+        <p class="lead">
+          Practice topic quizzes, full 100-question year-wise simulations with a 2-hour countdown,
+          custom drills, or targeted revision of wrong and bookmarked questions.
+        </p>
+
+        <div class="prelims-badges" aria-live="polite">
+          <span class="tag tag--accent" id="pre-pool-badge">0 questions active</span>
+          <span class="tag tag--sage" id="pre-streak-badge">0-day streak</span>
+          <span class="tag tag--danger" id="pre-wrong-badge">0 wrong to revise</span>
+          <span class="tag tag--sky" id="pre-bm-badge">0 bookmarked</span>
+        </div>
+
+        <p class="notice notice--warning key-disclaimer" role="note">
+          <strong>Answer Key Note:</strong> Answer keys in this practice pool come from a third-party compilation
+          and should be verified against UPSC’s official answer keys. Questions flagged as incomplete are hidden;
+          cancelled or keyless questions are shown as unscored.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <!-- VIEW 1: LOBBY / SETUP -->
+        <div id="view-lobby">
+          <div class="tabs mode-tabs" role="tablist" aria-label="Practice modes" id="pre-mode-tabs">
+            <button type="button" class="tab-btn" role="tab" aria-selected="true" data-mode="topic">Topic Quiz</button>
+            <button type="button" class="tab-btn" role="tab" aria-selected="false" data-mode="year">Year-Wise Paper</button>
+            <button type="button" class="tab-btn" role="tab" aria-selected="false" data-mode="custom">Custom Quiz</button>
+            <button type="button" class="tab-btn" role="tab" aria-selected="false" data-mode="revision">Revision</button>
+          </div>
+
+          <div class="card setup-card">
+            <div id="mode-description" class="mode-desc"></div>
+
+            <div class="setup-grid" id="setup-fields">
+              <div data-field="subject">
+                <label class="field-label" for="pre-subject">Subject</label>
+                <select id="pre-subject" class="select"></select>
+              </div>
+
+              <div data-field="topic">
+                <label class="field-label" for="pre-topic">Topic</label>
+                <select id="pre-topic" class="select"></select>
+              </div>
+
+              <div data-field="year">
+                <label class="field-label" for="pre-year">Exam Year</label>
+                <select id="pre-year" class="select"></select>
+              </div>
+
+              <div data-field="count">
+                <label class="field-label" for="pre-count">Question Count</label>
+                <select id="pre-count" class="select">
+                  <option value="10">10 questions</option>
+                  <option value="20" selected>20 questions</option>
+                  <option value="30">30 questions</option>
+                  <option value="50">50 questions</option>
+                  <option value="100">100 questions</option>
+                  <option value="all">All matching</option>
+                </select>
+              </div>
+
+              <div data-field="revision-source" hidden>
+                <label class="field-label" for="pre-revision-source">Revision Set</label>
+                <select id="pre-revision-source" class="select">
+                  <option value="wrong">Wrong answers only</option>
+                  <option value="bookmarked">Bookmarked questions only</option>
+                  <option value="both">Wrong + Bookmarked combined</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="setup-footer">
+              <label class="neg-toggle">
+                <input type="checkbox" id="pre-neg-marking" checked>
+                <span>Enable UPSC negative marking (<strong>+2</strong> correct, <strong>−0.66</strong> wrong, <strong>0</strong> skipped)</span>
+              </label>
+
+              <div class="start-row">
+                <span class="muted match-count" id="pre-match-count">0 matching questions</span>
+                <button type="button" class="btn btn-primary" id="btn-start-quiz">Start Practice</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress, Topic Accuracy & Export/Import Backup -->
+          <div class="lobby-lower">
+            <article class="card">
+              <div class="card-head-row">
+                <h2 class="sub-heading">Topic Accuracy</h2>
+                <span class="muted small-meta">Saved locally</span>
+              </div>
+              <div id="lobby-topic-accuracy" class="accuracy-list"></div>
+            </article>
+
+            <article class="card">
+              <div class="card-head-row">
+                <h2 class="sub-heading">Recent Attempts & Backup</h2>
+              </div>
+              <div id="lobby-attempts" class="attempts-list"></div>
+
+              <div class="backup-bar">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-export-json">Export Progress JSON</button>
+                <label class="btn btn-secondary btn-sm import-label">
+                  Import Progress JSON
+                  <input type="file" id="input-import-json" accept="application/json,.json" class="sr-only">
+                </label>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- VIEW 2: ACTIVE QUIZ -->
+        <div id="view-quiz" hidden>
+          <div class="card quiz-topbar">
+            <div class="quiz-top-left">
+              <span class="tag tag--accent" id="quiz-mode-label">Practice</span>
+              <span class="quiz-progress-text" id="quiz-progress-text">Question 1 of 20</span>
+            </div>
+            <div class="quiz-top-right">
+              <span class="quiz-timer" id="quiz-timer" aria-live="off">00:00</span>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-submit-quiz">Submit</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-exit-quiz">Exit</button>
+            </div>
+          </div>
+
+          <div class="quiz-layout">
+            <article class="card question-stage" aria-live="polite">
+              <div class="q-meta-row" id="q-meta-row"></div>
+              <div id="q-unscored-note" class="notice notice--warning" hidden></div>
+
+              <div class="q-stem" id="q-stem"></div>
+
+              <div class="options-list" id="q-options" role="radiogroup" aria-label="Answer choices"></div>
+
+              <div class="q-tools-row">
+                <button type="button" class="btn btn-ghost btn-sm" id="btn-clear-choice">Clear answer</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-flag-review" aria-pressed="false">⚑ Flag for review</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-bookmark-q" aria-pressed="false">☆ Bookmark</button>
+              </div>
+
+              <div class="q-nav-row">
+                <button type="button" class="btn btn-secondary" id="btn-prev-q">← Previous (P)</button>
+                <span class="kbd-hint">Keys: <kbd>A</kbd>–<kbd>D</kbd> answer · <kbd>N</kbd> next · <kbd>P</kbd> prev</span>
+                <button type="button" class="btn btn-primary" id="btn-next-q">Next (N) →</button>
+              </div>
+            </article>
+
+            <aside class="card palette-panel" aria-label="Question palette">
+              <div class="palette-head">
+                <h2 class="palette-title">Question Palette</h2>
+                <span class="muted small-meta" id="palette-summary">0 answered</span>
+              </div>
+              <div class="palette-grid" id="quiz-palette"></div>
+              <div class="palette-legend" aria-hidden="true">
+                <span><i class="dot dot--answered"></i> Answered</span>
+                <span><i class="dot dot--flagged"></i> Flagged</span>
+                <span><i class="dot dot--current"></i> Current</span>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <!-- VIEW 3: RESULTS -->
+        <div id="view-results" hidden>
+          <div class="results-header">
+            <div>
+              <span class="eyebrow">Session Summary</span>
+              <h2 id="results-title">Practice Complete</h2>
+            </div>
+            <div class="results-actions">
+              <button type="button" class="btn btn-primary" id="btn-retry-wrong">Retry Wrong Only</button>
+              <button type="button" class="btn btn-secondary" id="btn-back-lobby">Back to Setup</button>
+            </div>
+          </div>
+
+          <div class="results-kpis" id="results-kpis"></div>
+
+          <section class="card results-breakdown" aria-labelledby="breakdown-heading">
+            <h3 id="breakdown-heading">Subject-Wise Breakdown</h3>
+            <div id="results-subject-chart" class="subject-bars"></div>
+          </section>
+
+          <section class="results-review" aria-labelledby="review-heading">
+            <div class="review-head">
+              <h3 id="review-heading">Question Review</h3>
+              <div class="review-filters" role="group" aria-label="Filter reviewed questions">
+                <button type="button" class="chip is-active" data-review-filter="wrong" aria-pressed="true">Wrong only</button>
+                <button type="button" class="chip" data-review-filter="all" aria-pressed="false">All questions</button>
+                <button type="button" class="chip" data-review-filter="unscored" aria-pressed="false">Unscored</button>
+              </div>
+            </div>
+            <div id="results-review-list" class="review-list"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-top">
+        <span class="footer-brand">Chinmaya Patro · UPSC Study Desk</span>
+        <ul class="footer-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../syllabus/index.html">Syllabus</a></li>
+          <li><a href="../mains-pyqs/index.html">Mains PYQs</a></li>
+          <li><a href="../optional-pyqs/index.html">Optional PYQs</a></li>
+          <li><a href="./index.html">Prelims Practice</a></li>
+        </ul>
+      </div>
+      <p class="footer-disclaimer">
+        Personal open study workspace built for self-preparation. <strong>Not affiliated with UPSC</strong> (Union Public Service Commission) or any government body. All progress is stored locally in your browser.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../data/prelims-data.js" defer></script>
+  <script src="../assets/js/storage.js" defer></script>
+  <script src="../assets/js/nav.js" defer></script>
+  <script src="../assets/js/motion.js" defer></script>
+  <script src="../assets/js/prelims.js" defer></script>
+</body>
+</html>
