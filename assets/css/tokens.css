@@ -36,6 +36,10 @@
   --accent-border: #EEC8BA;
 
   /* Palette — Secondary Editorial Tints (Sage & Sky) */
+  /* Editorial highlight — butter swipe behind an accent word */
+  --highlight: #F7E8C4;
+  --highlight-soft: #FBF3DC;
+
   --sage-bg: #EDF3EE;
   --sage-border: #C9DCCD;
   --sage-ink: #2C5541;         /* >= 4.5:1 contrast on sage-bg and white */

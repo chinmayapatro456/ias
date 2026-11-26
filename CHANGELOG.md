@@ -297,3 +297,28 @@ cube now stands on its own:
 
 **Checked:** `node scripts/audit.js` 30/30 clean; screenshots at 1512, 1024, 390;
 front-face tap and 90px drag behave exactly as before.
+
+## 9. Editorial type: accent word + butter swipe (27 Nov 2026)
+
+Display headings now carry one italic accent word in sage green, sitting on a
+soft butter swipe — the "Ideas worth *thinking* about" treatment.
+
+**System** (`tokens.css`, `base.css`):
+
+* New tokens `--highlight: #F7E8C4` and `--highlight-soft: #FBF3DC`.
+* `.accent` — Newsreader italic, `--sage-ink`, `white-space: nowrap`, with a
+  `::before` swipe behind its lower half (0.52em tall, `rotate(-0.7deg)
+  skewX(-4deg)`, softly asymmetric corners so it reads hand-drawn rather than
+  geometric). `isolation: isolate` keeps the swipe above the section background
+  and below the glyphs; it inherits the heading's font-size, so one rule serves
+  the 4.1rem hero and the 2.1rem page headers.
+* Rule of use: one accent per display heading (h1/h2 only), never two, and not
+  on panel/chart titles — those stay plain so the accent keeps its meaning.
+
+**Applied to:** home h1 ("Aspirant") and its three h2s ("live", "preparing",
+"approach"); page h1s on Syllabus ("Tracker"), Mains PYQs ("PYQs"), Optional PYQs
+("PYQs"), Prelims Practice ("Practice") and 404 ("syllabus").
+
+**Checked:** `node scripts/audit.js` 30/30 clean; screenshots at 1512, 1024, 390
+and 360 for all five pages plus 404; accent text is `--sage-ink` on `--highlight`
+(≈6.9:1, well past AA). Asset URLs bumped to `?v=20261127d` site-wide.

@@ -166,6 +166,34 @@ h4 {
   letter-spacing: -0.01em;
 }
 
+/* Editorial accent — one italic word per display heading, sage green, with a
+   soft butter swipe sitting behind its lower half (the "Ideas worth *thinking*
+   about" treatment). Keep it to h1/h2: one per heading, never two. */
+.accent {
+  position: relative;
+  display: inline;
+  font-style: italic;
+  color: var(--sage-ink);
+  white-space: nowrap;
+  padding-inline: 0.1em;
+  margin-inline: -0.02em;
+  isolation: isolate;
+}
+
+.accent::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -0.02em;
+  right: -0.03em;
+  bottom: 0.01em;
+  height: 0.52em;
+  border-radius: 0.16em 0.06em 0.14em 0.08em;
+  background: var(--highlight);
+  transform: rotate(-0.7deg) skewX(-4deg);
+  transform-origin: left bottom;
+}
+
 p {
   margin: 0 0 var(--space-4);
   /* Body copy sits inside a 58ch–65ch measure so lines stay readable on
