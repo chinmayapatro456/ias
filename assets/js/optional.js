@@ -709,19 +709,39 @@
     var panel = document.getElementById('opt-filters-panel');
     if (!btn || !panel) return;
     var wide = window.matchMedia('(min-width: 768px)');
+    var anchor = 0;
 
     function sync() {
       var open = btn.getAttribute('aria-expanded') === 'true';
       panel.classList.toggle('is-open', open);
     }
 
+    function close() {
+      if (btn.getAttribute('aria-expanded') !== 'true') return;
+      btn.setAttribute('aria-expanded', 'false');
+      sync();
+    }
+
     btn.addEventListener('click', function () {
       var open = btn.getAttribute('aria-expanded') === 'true';
       btn.setAttribute('aria-expanded', String(!open));
       sync();
+      anchor = window.scrollY;
     });
 
-    btn.setAttribute('aria-expanded', String(wide.matches));
+    /* Desktop floats the panel over the list (base.css), so it must not follow
+       the reader down the page: close it on scroll or Escape. */
+    window.addEventListener('scroll', function () {
+      if (wide.matches && Math.abs(window.scrollY - anchor) > 80) close();
+    }, { passive: true });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') close();
+    });
+
+    /* Start compact on every width: the panel is one tap away behind the
+       Filters button, so questions sit above the fold. */
+    btn.setAttribute('aria-expanded', 'false');
     sync();
   }
 

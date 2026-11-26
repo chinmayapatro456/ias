@@ -8,6 +8,30 @@ localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
 
 ---
 
+## Desktop fix — filter bar no longer eats the PYQ list (27 Nov 2026)
+
+Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, cache
+stamp bumped to `20261127p` in every page. No markup, data, storage-key or
+scoring change; phones behave exactly as before.
+
+- **What was wrong.** On a wide screen the filter panel started expanded, so the
+  sticky bar was ~230px tall and stayed pinned under the nav while the question
+  list scrolled behind it — a third of a laptop screen gone, and the block never
+  moved out of the way.
+- **Compact by default.** The panel now starts collapsed on every width: the bar
+  is a 66px strip with the Filters button, the live count and the density
+  toggle, and questions begin right under it.
+- **Floating panel on desktop.** At 768px and wider the open panel is positioned
+  absolutely below the bar (own background, border, shadow, full bar width), so
+  opening filters never grows the sticky bar or shifts the list.
+- **It gets out of the way.** The panel closes itself once the page is scrolled
+  more than 80px, or on `Escape`; a small scroll keeps it open. Below 768px the
+  panel still expands in flow inside the bar.
+- **Short windows.** The open panel is capped at `100dvh − nav − 140px` and
+  scrolls inside itself instead of pushing the list off the page.
+
+---
+
 ## New page — "About the exam" (27 Nov 2026)
 
 Scope: new `about/` page, `assets/css/about.css`, `assets/js/about.js`,

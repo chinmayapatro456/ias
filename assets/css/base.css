@@ -1540,6 +1540,34 @@ body {
   display: block;
 }
 
+/* Desktop: the open panel floats over the list instead of growing the sticky
+   bar to ~230px, so scrolling the questions never loses a third of the screen.
+   The bar stays a 66px strip and the page scripts close the panel on scroll
+   or Escape (mains.js / optional.js). */
+@media (min-width: 768px) {
+  .filterbar .filters-panel.is-open {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + var(--space-2));
+    margin: 0;
+    padding: var(--space-5) var(--space-4) var(--space-4);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Very short windows: the panel scrolls inside the bar rather than pushing the
+   list off the page. */
+.filterbar .filters-panel.is-open {
+  max-height: calc(100vh - var(--nav-height) - 140px);
+  max-height: calc(100dvh - var(--nav-height) - 140px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 /* Density toggle — two-state segmented control, comfortable | compact */
 .density-toggle {
   display: inline-flex;
