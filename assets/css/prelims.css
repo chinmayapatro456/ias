@@ -620,3 +620,80 @@
   border-color: var(--danger-border);
   color: var(--danger-ink);
 }
+/* Question palette — sticky sidebar on desktop, sticky scrolling strip on Android
+   ========================================================================== */
+
+@media (min-width: 920px) {
+  .palette-panel {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-4));
+    max-height: calc(100vh - var(--nav-height) - var(--space-8));
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 919px) {
+  .quiz-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Palette first, stuck under the header while the question scrolls */
+  .palette-panel {
+    order: -1;
+    position: sticky;
+    top: var(--nav-height);
+    z-index: var(--z-sticky);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: var(--radius-md);
+  }
+
+  .palette-head {
+    margin-bottom: var(--space-2);
+  }
+
+  .palette-title {
+    font-size: 0.95rem;
+  }
+
+  /* Horizontal strip: one row, 44x44px targets, scrolls sideways */
+  .palette-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 2px 6px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .palette-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .palette-btn {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    scroll-snap-align: center;
+  }
+
+  .palette-legend {
+    display: none;
+  }
+}
+
+/* Question stem keeps the editorial serif for long-form reading */
+.q-stem {
+  font-family: var(--font-serif);
+  font-size: 1.08rem;
+  line-height: 1.65;
+  max-width: 68ch;
+}

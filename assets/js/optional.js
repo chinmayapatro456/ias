@@ -13,6 +13,7 @@
   var state = {
     paper: 'Paper I',
     topic: 'all',
+    region: 'all',      /* region filter from the interactive India map */
     minYear: 1986,
     maxYear: 2026,
     query: '',
@@ -113,7 +114,13 @@
     var attEl = document.getElementById('opt-attempted-badge');
     var bmEl = document.getElementById('opt-bookmarked-badge');
 
-    if (totalEl) totalEl.textContent = allQuestions.length.toLocaleString('en-IN') + ' questions';
+    /* Same number the Home desk inventory shows: StudyCounts derives it from
+       window.PYQ_DATA.questions, the same array rendered below. */
+    var sharedTotal =
+      window.StudyCounts && typeof window.StudyCounts.optionalQuestions === 'function'
+        ? window.StudyCounts.optionalQuestions()
+        : allQuestions.length;
+    if (totalEl) totalEl.textContent = sharedTotal.toLocaleString('en-IN') + ' questions';
     if (attEl) attEl.textContent = getAttemptedSet().size + ' attempted';
     if (bmEl) bmEl.textContent = getBookmarkSet().size + ' bookmarked';
   }
@@ -156,14 +163,36 @@
     });
   }
 
+  /* Region filter: a question belongs to a region when its text names one of
+     that region's places or physical features (keyword list lives in
+     assets/js/india-map.js, generated with the map geometry). */
+  function regionZone(id) {
+    var map = window.INDIA_MAP;
+    if (!map || !Array.isArray(map.zones)) return null;
+    for (var i = 0; i < map.zones.length; i++) {
+      if (map.zones[i].id === id) return map.zones[i];
+    }
+    return null;
+  }
+
+  function matchesRegion(questionText, zone) {
+    if (!zone) return true;
+    var text = String(questionText || '').toLowerCase();
+    return zone.keywords.some(function (kw) {
+      return text.indexOf(kw) !== -1;
+    });
+  }
+
   function getFilteredQuestions() {
     var attSet = getAttemptedSet();
     var bmSet = getBookmarkSet();
     var qStr = state.query.trim().toLowerCase();
+    var zone = state.region === 'all' ? null : regionZone(state.region);
 
     return getPaperAndYearPool()
       .filter(function (q) {
         if (state.topic !== 'all' && q.topic !== state.topic) return false;
+        if (zone && !matchesRegion(q.text, zone)) return false;
         if (state.unattemptedOnly && attSet.has(q.id)) return false;
         if (state.bookmarkedOnly && !bmSet.has(q.id)) return false;
         if (qStr && q.searchBlob.indexOf(qStr) === -1) return false;
@@ -197,90 +226,48 @@
       topics.map(function (t) { return counts[t] || 0; }).concat([1])
     );
 
-    /* Size the SVG to the space it actually has, so 1 user unit = 1 CSS pixel.
-       Without this the 699-unit viewBox is squeezed into ~280px on a phone and
-       the 12px labels render at ~5px, which is unreadable. */
-    var hostWidth = wrap.clientWidth || (wrap.parentElement ? wrap.parentElement.clientWidth : 0) || 640;
-    var compact = hostWidth < 560;
-    var rowHeight = 30;
-    var topPad = 8;
-    var labelFont = compact ? 11 : 12;
-    var countFont = compact ? 10 : 11.5;
-    var labelWidth = compact
-      ? Math.round(Math.min(140, Math.max(92, hostWidth * 0.42)))
-      : 215;
-    var countWidth = compact ? 28 : 48;
-    var gutter = compact ? 8 : 16;
-    var barMaxWidth = Math.max(64, Math.round(hostWidth - labelWidth - countWidth - gutter));
-    var svgWidth = Math.round(labelWidth + barMaxWidth + countWidth + gutter);
-    var svgHeight = topPad * 2 + topics.length * rowHeight;
-    var labelBoxWidth = labelWidth - 8;
-
-    /* Truncate labels by measured width, not by a guessed character count:
-       Inter's capitals are wide enough that a count-based slice overflows the
-       column on a phone and the first letter gets clipped. */
-    var measureCtx = null;
-    try {
-      measureCtx = document.createElement('canvas').getContext('2d');
-      if (measureCtx) {
-        measureCtx.font = labelFont + 'px Inter, system-ui, -apple-system, sans-serif';
-      }
-    } catch (e) {
-      measureCtx = null;
-    }
-
-    function fitLabel(text) {
-      if (!measureCtx) {
-        var budget = Math.max(9, Math.floor(labelBoxWidth / (labelFont * 0.58)));
-        return text.length > budget ? text.slice(0, budget - 1) + '…' : text;
-      }
-      var limit = labelBoxWidth * 0.94; /* safety margin for font-loading races */
-      if (measureCtx.measureText(text).width <= limit) return text;
-      var cut = text;
-      while (cut.length > 1 && measureCtx.measureText(cut + '…').width > limit) {
-        cut = cut.slice(0, -1);
-      }
-      return cut.replace(/[\s,;:]+$/, '') + '…';
-    }
-
     var reduceMotion =
       window.StudyMotion && typeof window.StudyMotion.prefersReducedMotion === 'function'
         ? window.StudyMotion.prefersReducedMotion()
         : false;
 
+    /* Stacked rows: full topic name above the bar, count right-aligned on the
+       same line, bar underneath. Nothing is truncated at any width. */
     var rowsHtml = topics
-      .map(function (topic, i) {
+      .map(function (topic) {
         var c = counts[topic] || 0;
-        var y = topPad + i * rowHeight;
-        var barW = Math.max(c > 0 ? 4 : 0, Math.round((c / maxCount) * barMaxWidth));
+        var pct = maxCount ? Math.round((c / maxCount) * 100) : 0;
         var isActive = state.topic === topic;
-        var shortLabel = fitLabel(topic);
 
         return (
-          '<g class="freq-row' + (isActive ? ' is-active' : '') + '" ' +
-            'role="button" tabindex="0" data-chart-topic="' + escapeHtml(topic) + '" ' +
+          '<button type="button" class="freq-row' + (isActive ? ' is-active' : '') + '" ' +
+            'data-chart-topic="' + escapeHtml(topic) + '" ' +
+            'aria-pressed="' + String(isActive) + '" ' +
             'aria-label="Filter by ' + escapeHtml(topic) + ' (' + c + ' questions)">' +
-            '<title>' + escapeHtml(topic) + ': ' + c + ' questions</title>' +
-            '<text class="freq-label" style="font-size:' + labelFont + 'px" x="' + (labelWidth - 8) + '" y="' + (y + 18) + '" text-anchor="end">' +
-              escapeHtml(shortLabel) +
-            '</text>' +
-            '<rect class="freq-bar-track" x="' + labelWidth + '" y="' + (y + 6) + '" width="' + barMaxWidth + '" height="16" rx="4"></rect>' +
-            '<rect class="freq-bar-fill' + (reduceMotion ? '' : ' is-entering') + '" x="' + labelWidth + '" y="' + (y + 6) + '" width="' + barW + '" height="16" rx="4"></rect>' +
-            '<text class="freq-count" style="font-size:' + countFont + 'px" x="' + (labelWidth + barMaxWidth + 6) + '" y="' + (y + 18) + '">' + c + '</text>' +
-          '</g>'
+            '<span class="freq-row-head">' +
+              '<span class="freq-label">' + escapeHtml(topic) + '</span>' +
+              '<span class="freq-count">' + c + '</span>' +
+            '</span>' +
+            '<span class="freq-bar-track" aria-hidden="true">' +
+              '<span class="freq-bar-fill" style="width:' + (reduceMotion ? pct : 0) + '%"></span>' +
+            '</span>' +
+          '</button>'
         );
       })
       .join('');
 
-    wrap.innerHTML =
-      '<svg class="freq-svg" viewBox="0 0 ' + svgWidth + ' ' + svgHeight + '" role="img" aria-label="Topic frequency bar chart">' +
-        rowsHtml +
-      '</svg>';
+    wrap.innerHTML = '<div class="freq-list" role="group" aria-label="Topic frequency bar chart">' +
+      rowsHtml + '</div>';
 
     if (!reduceMotion) {
       requestAnimationFrame(function () {
-        wrap.querySelectorAll('.freq-bar-fill.is-entering').forEach(function (bar) {
-          bar.classList.remove('is-entering');
+        wrap.querySelectorAll('.freq-row').forEach(function (row, i) {
+          var bar = row.querySelector('.freq-bar-fill');
+          var topic = row.getAttribute('data-chart-topic');
+          var pct = maxCount ? Math.round(((counts[topic] || 0) / maxCount) * 100) : 0;
+          setTimeout(function () {
+            bar.style.width = pct + '%';
+          }, Math.min(i * 18, 220));
         });
       });
     }
@@ -409,7 +396,196 @@
   function renderAll() {
     renderTopicChips();
     renderChart();
+    syncMapCard();
     renderList();
+    updateFiltersMeta();
+  }
+
+  /* ---- Interactive region map -------------------------------------------
+     Regions are unions of states. Selecting one filters the list to questions
+     whose text names a place or physical feature of that region.
+     --------------------------------------------------------------------- */
+  var mapBuilt = false;
+
+  function zoneCounts() {
+    var pool = getPaperAndYearPool();
+    var counts = {};
+    var map = window.INDIA_MAP;
+    if (!map) return counts;
+    map.zones.forEach(function (zone) {
+      counts[zone.id] = pool.filter(function (q) {
+        return matchesRegion(q.text, zone);
+      }).length;
+    });
+    return counts;
+  }
+
+  function syncMapCard() {
+    var card = document.getElementById('opt-map-card');
+    if (!card) return;
+
+    /* Mapping questions live in Paper II — the map only applies there */
+    var applicable = state.paper !== 'Paper I';
+    card.hidden = !applicable;
+
+    if (!applicable) {
+      if (state.region !== 'all') {
+        state.region = 'all';
+      }
+      return;
+    }
+
+    if (!mapBuilt) buildMap();
+
+    var counts = zoneCounts();
+    var map = window.INDIA_MAP;
+
+    if (map && Array.isArray(map.zones)) {
+      map.zones.forEach(function (zone) {
+        var path = card.querySelector('.zone[data-zone="' + zone.id + '"]');
+        var label = zone.name + ' — ' + (counts[zone.id] || 0) + ' questions';
+        if (path) {
+          path.setAttribute('aria-pressed', String(state.region === zone.id));
+          path.setAttribute('aria-label', label);
+          path.setAttribute('data-label', label);
+        }
+        var btn = document.getElementById('opt-zone-' + zone.id);
+        if (btn) {
+          btn.classList.toggle('is-active', state.region === zone.id);
+          btn.setAttribute('aria-pressed', String(state.region === zone.id));
+          var countEl = btn.querySelector('.legend-btn-count');
+          if (countEl) countEl.textContent = counts[zone.id] || 0;
+        }
+      });
+    }
+
+    var resetBtn = document.getElementById('opt-map-reset');
+    if (resetBtn) resetBtn.hidden = state.region === 'all';
+  }
+
+  function setRegion(id) {
+    state.region = state.region === id ? 'all' : id;
+    state.visibleLimit = PAGE_SIZE;
+    renderAll();
+  }
+
+  function buildMap() {
+    var svg = document.getElementById('opt-map-svg');
+    var legend = document.getElementById('opt-map-legend');
+    var map = window.INDIA_MAP;
+    if (!svg || !legend || !map) return;
+
+    svg.setAttribute('viewBox', map.viewBox);
+
+    var zonesHtml = map.zones
+      .map(function (zone) {
+        return (
+          '<path class="zone" data-zone="' + zone.id + '" d="' + zone.d + '" ' +
+            'role="button" tabindex="0" aria-pressed="false" aria-label="' + escapeHtml(zone.name) + '"></path>'
+        );
+      })
+      .join('');
+
+    var bordersHtml = map.borders
+      .map(function (d) {
+        return '<path d="' + d + '"></path>';
+      })
+      .join('');
+
+    svg.innerHTML =
+      '<g class="zone-layer">' + zonesHtml + '</g>' +
+      '<g class="zone-borders" aria-hidden="true">' + bordersHtml + '</g>';
+
+    legend.innerHTML = map.zones
+      .map(function (zone) {
+        return (
+          '<button type="button" class="legend-btn" id="opt-zone-' + zone.id + '" ' +
+            'data-legend-zone="' + zone.id + '" aria-pressed="false">' +
+            '<span>' + escapeHtml(zone.name) + '</span>' +
+            '<span class="legend-btn-count">0</span>' +
+          '</button>'
+        );
+      })
+      .join('');
+
+    /* Region selection: pointer, keyboard and legend buttons */
+    svg.addEventListener('click', function (event) {
+      var zoneEl = event.target.closest('[data-zone]');
+      if (zoneEl) setRegion(zoneEl.getAttribute('data-zone'));
+    });
+
+    svg.addEventListener('keydown', function (event) {
+      var zoneEl = event.target.closest('[data-zone]');
+      if (!zoneEl) return;
+      if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+        event.preventDefault();
+        setRegion(zoneEl.getAttribute('data-zone'));
+      }
+    });
+
+    legend.addEventListener('click', function (event) {
+      var btn = event.target.closest('[data-legend-zone]');
+      if (btn) setRegion(btn.getAttribute('data-legend-zone'));
+    });
+
+    /* Hover tooltip (desktop) and tap tooltip (touch) */
+    var tooltip = document.getElementById('opt-map-tooltip');
+    var figure = svg.parentElement;
+
+    function showTip(zoneEl, clientX, clientY) {
+      if (!tooltip) return;
+      var label = zoneEl.getAttribute('data-label') || zoneEl.getAttribute('aria-label');
+      tooltip.textContent = label;
+      var box = figure.getBoundingClientRect();
+      tooltip.style.left = (clientX - box.left) + 'px';
+      tooltip.style.top = (clientY - box.top) + 'px';
+      tooltip.classList.add('is-visible');
+    }
+
+    function hideTip() {
+      if (tooltip) tooltip.classList.remove('is-visible');
+    }
+
+    svg.addEventListener('pointermove', function (event) {
+      var zoneEl = event.target.closest('[data-zone]');
+      if (zoneEl) showTip(zoneEl, event.clientX, event.clientY);
+      else hideTip();
+    });
+
+    svg.addEventListener('pointerleave', hideTip);
+    svg.addEventListener('focusin', function (event) {
+      var zoneEl = event.target.closest('[data-zone]');
+      if (zoneEl) {
+        var r = zoneEl.getBoundingClientRect();
+        showTip(zoneEl, r.left + r.width / 2, r.top + 12);
+      }
+    });
+    svg.addEventListener('focusout', hideTip);
+
+    var mapReset = document.getElementById('opt-map-reset');
+    if (mapReset) {
+      mapReset.addEventListener('click', function () {
+        state.region = 'all';
+        state.visibleLimit = PAGE_SIZE;
+        renderAll();
+      });
+    }
+
+    mapBuilt = true;
+  }
+
+  /* Compact summary shown on the collapsed Filters button (Android) */
+  function updateFiltersMeta() {
+    var meta = document.getElementById('opt-filters-meta');
+    if (!meta) return;
+    var bits = [];
+    bits.push(state.topic === 'all' ? 'all topics' : state.topic);
+    if (state.region !== 'all') {
+      var zone = regionZone(state.region);
+      if (zone) bits.push(zone.name);
+    }
+    if (state.minYear > datasetMinYear) bits.push('from ' + state.minYear);
+    meta.textContent = ' · ' + bits.join(' · ');
   }
 
   function selectTopic(topicName) {
@@ -574,6 +750,7 @@
         state.query = '';
         state.unattemptedOnly = false;
         state.bookmarkedOnly = false;
+        state.region = 'all';
         state.visibleLimit = PAGE_SIZE;
         if (slider) slider.value = String(datasetMinYear);
         if (readout) readout.textContent = state.minYear + ' – ' + state.maxYear;

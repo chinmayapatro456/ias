@@ -50,68 +50,99 @@
   display: none;
 }
 
-.freq-svg {
-  width: 100%;
-  min-width: 0;
-  height: auto;
-  display: block;
+/* Topic-frequency rows: full topic name above the bar (left), question count
+   right-aligned on the same line, progress bar underneath. No ellipsis at any
+   width — the label wraps instead of truncating. */
+.freq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .freq-row {
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: none;
+  text-align: left;
+  transition: background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
 }
 
-.freq-row:hover .freq-bar-fill {
-  opacity: 0.88;
+.freq-row:hover {
+  background-color: var(--bg-page);
+  border-color: var(--border-subtle);
 }
 
 .freq-row:focus-visible {
-  outline: var(--focus-outline);
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 1px;
+}
+
+.freq-row-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
 }
 
 .freq-label {
+  min-width: 0;
   font-family: var(--font-sans);
-  font-size: 12px;
-  fill: var(--ink-secondary);
+  font-size: 0.83rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink-secondary);
+  overflow-wrap: anywhere;
+}
+
+.freq-count {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.freq-bar-track {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background-color: var(--bg-sand);
+  overflow: hidden;
+}
+
+.freq-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background-color: var(--chart-ink);
+  transform-origin: left center;
+  transition: width var(--dur-slow) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
 }
 
 .freq-row.is-active .freq-label {
   font-weight: 700;
-  fill: var(--accent-ink);
+  color: var(--accent-ink);
 }
 
-.freq-count {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 600;
-  fill: var(--ink-muted);
-}
-
-.freq-bar-track {
-  fill: var(--bg-subtle);
-}
-
-.freq-bar-fill {
-  fill: var(--chart-ink);
-  transform-box: fill-box;
-  transform-origin: left center;
-  transform: scaleX(1);
-  transition: transform var(--dur-slow) var(--ease-out),
-    opacity var(--dur-fast) var(--ease-out);
-}
-
-.freq-bar-fill.is-entering {
-  transform: scaleX(0);
+.freq-row.is-active .freq-count {
+  color: var(--accent-ink);
 }
 
 .freq-row.is-active .freq-bar-fill {
-  fill: var(--accent);
+  background-color: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .freq-bar-fill {
     transition: none;
-    transform: scaleX(1) !important;
   }
 }
 
@@ -321,4 +352,165 @@
   display: flex;
   justify-content: center;
   padding-top: var(--space-4);
+}
+/* Interactive region map (Paper II · India & Mapping)
+   ========================================================================== */
+
+.opt-map-card {
+  margin-bottom: var(--space-6);
+}
+
+.opt-map-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.opt-map-head .chart-sub {
+  max-width: 58ch;
+}
+
+.opt-map-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .opt-map-body {
+    grid-template-columns: minmax(0, 1fr) 210px;
+    gap: var(--space-5);
+  }
+}
+
+.opt-map-figure {
+  position: relative;
+}
+
+.india-zones {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  margin-inline: auto;
+}
+
+.zone {
+  fill: #E4DBCC;
+  stroke: var(--bg-card);
+  stroke-width: 1.5;
+  cursor: pointer;
+  transition: fill var(--dur-fast) var(--ease-out);
+}
+
+.zone:hover {
+  fill: var(--accent-soft);
+}
+
+.zone[aria-pressed="true"] {
+  fill: var(--accent);
+  fill-opacity: 0.65;
+  stroke: var(--accent-ink);
+  stroke-width: 2;
+}
+
+.zone:focus-visible {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 2px;
+}
+
+.zone-borders {
+  fill: none;
+  stroke: rgba(28, 25, 23, 0.14);
+  stroke-width: 0.8;
+  pointer-events: none;
+}
+
+.opt-map-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  background: var(--ink-primary);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translate(-50%, -130%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.opt-map-tooltip.is-visible {
+  opacity: 1;
+}
+
+.opt-map-legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+@media (min-width: 768px) {
+  .opt-map-legend {
+    grid-template-columns: 1fr;
+  }
+}
+
+.legend-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  background: var(--bg-card);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  text-align: left;
+}
+
+.legend-btn:hover {
+  border-color: var(--border-warm);
+  background: var(--bg-page);
+  color: var(--ink-primary);
+}
+
+.legend-btn.is-active {
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.legend-btn-count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.legend-btn.is-active .legend-btn-count {
+  color: var(--accent-ink);
+}
+
+/* Android: card action toggles and source links are 44px touch targets */
+@media (max-width: 767px) {
+  .action-toggle,
+  .source-link,
+  .prep-link,
+  .opt-card-actions .btn {
+    min-height: 44px;
+  }
 }

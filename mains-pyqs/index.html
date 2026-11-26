@@ -7,7 +7,7 @@
   <title>Mains PYQs — Chinmaya Patro UPSC Study Desk</title>
   <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
   <link rel="canonical" href="https://chinmayapatro456.github.io/ias/mains-pyqs/">
-  <meta name="theme-color" content="#FAF9F5">
+  <meta name="theme-color" content="#FAF8F5">
   <link rel="manifest" href="../manifest.json">
   <link rel="apple-touch-icon" href="../assets/img/icon-192.png">
   <meta property="og:type" content="website">
@@ -26,10 +26,10 @@
 
   <link rel="preload" href="../assets/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/inter-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261126b">
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261126b">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20261126b">
-  <link rel="stylesheet" href="../assets/css/mains.css?v=20261126b">
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127a">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127a">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20261127a">
+  <link rel="stylesheet" href="../assets/css/mains.css?v=20261127a">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -74,6 +74,15 @@
 
   <div class="nav-backdrop" data-nav-backdrop></div>
   <nav id="mobile-nav-drawer" class="nav-drawer" data-nav-drawer aria-label="Mobile navigation" aria-hidden="true">
+    <div class="nav-drawer-head">
+      <span>Menu</span>
+      <button type="button" class="nav-drawer-close" data-nav-close aria-label="Close navigation menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
     <ul class="nav-drawer-list">
       <li><a class="nav-link" href="../index.html">Home</a></li>
       <li><a class="nav-link" href="../syllabus/index.html">Syllabus</a></li>
@@ -105,6 +114,22 @@
       <div class="container">
         <!-- Filter & Grouping Panel -->
         <div class="card mains-controls" aria-label="Filter Mains questions">
+          <!-- Collapsed behind a Filters button below 768px so questions sit
+               above the fold; always open on desktop. -->
+          <button
+            type="button"
+            class="filters-toggle"
+            data-filters-toggle
+            aria-expanded="false"
+            aria-controls="mains-filters-panel"
+          >
+            <span>Filters<span class="filters-toggle-meta" id="mains-filters-meta"> · all papers</span></span>
+            <svg class="filters-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <div class="filters-panel" id="mains-filters-panel">
           <div class="controls-grid">
             <div>
               <label class="field-label" for="mains-subject">Paper / Subject</label>
@@ -161,6 +186,7 @@
               <button type="button" class="btn btn-ghost btn-sm" id="mains-reset">Reset filters</button>
             </div>
           </div>
+          </div><!-- /.filters-panel -->
         </div>
 
         <div class="results-meta" id="mains-results-meta" aria-live="polite"></div>
@@ -189,10 +215,10 @@
     </div>
   </footer>
 
-  <script src="../data/mains-data.js?v=20261126b" defer></script>
-  <script src="../assets/js/storage.js?v=20261126b" defer></script>
-  <script src="../assets/js/nav.js?v=20261126b" defer></script>
-  <script src="../assets/js/motion.js?v=20261126b" defer></script>
-  <script src="../assets/js/mains.js?v=20261126b" defer></script>
+  <script src="../data/mains-data.js?v=20261127a" defer></script>
+  <script src="../assets/js/storage.js?v=20261127a" defer></script>
+  <script src="../assets/js/nav.js?v=20261127a" defer></script>
+  <script src="../assets/js/motion.js?v=20261127a" defer></script>
+  <script src="../assets/js/mains.js?v=20261127a" defer></script>
 </body>
 </html>

@@ -4,13 +4,19 @@
    ========================================================================== */
 
 :root {
-  /* Palette — Surfaces & Borders */
-  --bg-page: #FAF9F5;
-  --bg-subtle: #F3F1E9;
+  /* Palette — Surfaces & Borders (3-tier light system)
+     Tier 1: warm alabaster page canvas
+     Tier 2: pure white elevated cards with hairline warm borders
+     Tier 3: warm sand section bands                                  */
+  --bg-page: #FAF8F5;
+  --bg-subtle: #F2EDE6;
   --bg-card: #FFFFFF;
   --bg-card-hover: #FFFEFC;
-  --border-subtle: #E8E6DC;
-  --border-strong: #D4D1C4;
+  --bg-sand: #F2EDE6;
+  --bg-sand-deep: #EBE4DA;
+  --border-subtle: rgba(28, 25, 23, 0.08);
+  --border-strong: rgba(28, 25, 23, 0.16);
+  --border-warm: rgba(120, 98, 82, 0.22);
 
   /* Palette — Ink & Typography */
   --ink-primary: #141413;
@@ -21,6 +27,10 @@
   /* Palette — Single Primary Accent (Terracotta) */
   --accent: #D97757;
   --accent-hover: #C6613F;
+  /* Solid-fill CTA terracotta: deepened so white label text clears WCAG AA
+     (white on #B8563A = 4.7:1, on #A64728 = 5.9:1) */
+  --accent-cta: #B8563A;
+  --accent-cta-hover: #A64728;
   --accent-ink: #A64728;       /* >= 4.5:1 contrast for small text on ivory/white */
   --accent-soft: #FBF0EC;
   --accent-border: #EEC8BA;
@@ -56,8 +66,8 @@
     Georgia, serif;
   --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", monospace;
 
   /* Typography — Scale (editorial display sizes, optical tracking) */
   --text-hero: clamp(2.5rem, 4.6vw + 0.6rem, 4.1rem);
@@ -70,6 +80,7 @@
   --text-sm: 0.875rem;         /* 14px — secondary UI labels */
   --text-xs: 0.78rem;          /* ~12.5px — tags, badges, meta */
   --text-eyebrow: 0.72rem;     /* small caps label */
+  --measure: 62ch;             /* reading measure for body copy (58ch–65ch) */
 
   /* Typography — Leading & Tracking */
   --leading-tight: 1.04;
@@ -111,6 +122,8 @@
   --shadow-md: 0 2px 4px rgba(24, 22, 18, 0.04), 0 12px 28px -12px rgba(24, 22, 18, 0.16);
   --shadow-lg: 0 4px 8px rgba(24, 22, 18, 0.04), 0 28px 60px -28px rgba(24, 22, 18, 0.28);
   --shadow-photo: 0 2px 6px rgba(24, 22, 18, 0.06), 0 30px 60px -30px rgba(24, 22, 18, 0.4);
+  --shadow-warm: 0 1px 2px rgba(122, 78, 52, 0.06), 0 8px 18px -8px rgba(122, 78, 52, 0.22);
+  --shadow-lift: 0 2px 4px rgba(122, 78, 52, 0.08), 0 14px 26px -12px rgba(122, 78, 52, 0.3);
 
   /* Focus State */
   --focus-outline: 2px solid var(--accent-hover);
@@ -121,8 +134,10 @@
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-soft: cubic-bezier(0.16, 0.84, 0.44, 1);
   --dur-fast: 150ms;
-  --dur-med: 280ms;
-  --dur-slow: 520ms;
+  --dur-med: 260ms;
+  --dur-slow: 420ms;
+  --dur-reveal: 380ms;        /* scroll reveals: subtle and fast */
+  --dur-hero: 280ms;          /* above-the-fold entrance */
 
   /* Z-Index Layers */
   --z-base: 1;

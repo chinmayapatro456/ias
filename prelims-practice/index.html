@@ -7,7 +7,7 @@
   <title>Prelims Practice — Chinmaya Patro UPSC Study Desk</title>
   <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
   <link rel="canonical" href="https://chinmayapatro456.github.io/ias/prelims-practice/">
-  <meta name="theme-color" content="#FAF9F5">
+  <meta name="theme-color" content="#FAF8F5">
   <link rel="manifest" href="../manifest.json">
   <link rel="apple-touch-icon" href="../assets/img/icon-192.png">
   <meta property="og:type" content="website">
@@ -26,10 +26,10 @@
 
   <link rel="preload" href="../assets/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/inter-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261126b">
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261126b">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20261126b">
-  <link rel="stylesheet" href="../assets/css/prelims.css?v=20261126b">
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127a">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127a">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20261127a">
+  <link rel="stylesheet" href="../assets/css/prelims.css?v=20261127a">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -74,6 +74,15 @@
 
   <div class="nav-backdrop" data-nav-backdrop></div>
   <nav id="mobile-nav-drawer" class="nav-drawer" data-nav-drawer aria-label="Mobile navigation" aria-hidden="true">
+    <div class="nav-drawer-head">
+      <span>Menu</span>
+      <button type="button" class="nav-drawer-close" data-nav-close aria-label="Close navigation menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
     <ul class="nav-drawer-list">
       <li><a class="nav-link" href="../index.html">Home</a></li>
       <li><a class="nav-link" href="../syllabus/index.html">Syllabus</a></li>
@@ -101,11 +110,20 @@
           <span class="tag tag--sky" id="pre-bm-badge">0 bookmarked</span>
         </div>
 
-        <p class="notice notice--warning key-disclaimer" role="note">
-          <strong>Answer Key Note:</strong> Answer keys in this practice pool come from a third-party compilation
-          and should be verified against UPSC’s official answer keys. Questions flagged as incomplete are hidden;
-          cancelled or keyless questions are shown as unscored.
-        </p>
+        <!-- Contextual notice: anchored in the page hero, above the workspace -->
+        <div class="notice notice--callout key-disclaimer" id="pre-key-note" role="note">
+          <span class="notice-body">
+            <strong>Answer Key Note:</strong> Answer keys in this practice pool come from a third-party compilation
+            and should be verified against UPSC’s official answer keys. Questions flagged as incomplete are hidden;
+            cancelled or keyless questions are shown as unscored.
+          </span>
+          <button
+            type="button"
+            class="notice-dismiss"
+            data-dismiss="pre-key-note"
+            aria-label="Dismiss answer key note"
+          >&times;</button>
+        </div>
       </div>
     </section>
 
@@ -243,6 +261,9 @@
                 <h2 class="palette-title">Question Palette</h2>
                 <span class="muted small-meta" id="palette-summary">0 answered</span>
               </div>
+              <!-- Android: the palette becomes a sticky, horizontally scrollable
+                   strip with 44x44px targets instead of a tall grid. -->
+
               <div class="palette-grid" id="quiz-palette"></div>
               <div class="palette-legend" aria-hidden="true">
                 <span><i class="dot dot--answered"></i> Answered</span>
@@ -307,10 +328,10 @@
     </div>
   </footer>
 
-  <script src="../data/prelims-data.js?v=20261126b" defer></script>
-  <script src="../assets/js/storage.js?v=20261126b" defer></script>
-  <script src="../assets/js/nav.js?v=20261126b" defer></script>
-  <script src="../assets/js/motion.js?v=20261126b" defer></script>
-  <script src="../assets/js/prelims.js?v=20261126b" defer></script>
+  <script src="../data/prelims-data.js?v=20261127a" defer></script>
+  <script src="../assets/js/storage.js?v=20261127a" defer></script>
+  <script src="../assets/js/nav.js?v=20261127a" defer></script>
+  <script src="../assets/js/motion.js?v=20261127a" defer></script>
+  <script src="../assets/js/prelims.js?v=20261127a" defer></script>
 </body>
 </html>

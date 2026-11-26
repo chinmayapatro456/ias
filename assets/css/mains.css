@@ -257,3 +257,12 @@
     padding-inline: var(--space-4);
   }
 }
+/* Android: card action toggles and source links are 44px touch targets */
+@media (max-width: 767px) {
+  .action-toggle,
+  .source-link,
+  .prep-link,
+  .opt-card-actions .btn {
+    min-height: 44px;
+  }
+}

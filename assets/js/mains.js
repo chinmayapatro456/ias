@@ -123,6 +123,17 @@
     );
   }
 
+  /* Compact summary on the collapsed Filters button (Android) */
+  function updateFiltersMeta() {
+    var meta = document.getElementById('mains-filters-meta');
+    if (!meta) return;
+    var bits = [];
+    bits.push(state.subject === 'all' ? 'all papers' : state.subject);
+    if (state.status !== 'all') bits.push(state.status);
+    if (state.topic !== 'all') bits.push(state.topic);
+    meta.textContent = ' · ' + bits.join(' · ');
+  }
+
   function updateHeaderStats() {
     var totalEl = document.getElementById('mains-total-badge');
     var writtenEl = document.getElementById('mains-written-badge');
@@ -335,6 +346,8 @@
 
     listEl.innerHTML = html;
 
+    updateFiltersMeta();
+
     var loadMoreBtn = document.getElementById('mains-load-more');
     if (loadMoreBtn) {
       loadMoreBtn.addEventListener('click', function () {
@@ -360,6 +373,27 @@
     }
 
     populateDropdowns();
+
+    /* Deep link used by the Home subject cube and chips:
+       mains-pyqs/index.html?paper=GS%20Paper%20II */
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var paperParam = params.get('paper');
+      var subjectSelect = document.getElementById('mains-subject');
+      if (paperParam && subjectSelect) {
+        var matched = Array.prototype.filter.call(subjectSelect.options, function (opt) {
+          return opt.value === paperParam;
+        });
+        if (matched.length) {
+          state.subject = paperParam;
+          subjectSelect.value = paperParam;
+          populateTopicDropdown();
+        }
+      }
+    } catch (e) {
+      /* No URLSearchParams: ignore the deep link */
+    }
+
     updateHeaderStats();
     renderList();
 

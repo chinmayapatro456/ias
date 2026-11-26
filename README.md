@@ -44,3 +44,9 @@ Then open <http://localhost:8000/>. Opening the HTML files straight from the fil
 - Prelims answer keys come from a third-party compilation and are shown with a warning banner on the practice page. Verify against UPSC's official keys before trusting a score.
 - Mains entries carry `marks` only where the source page listed them; older entries show just the question and a source link.
 - All progress (syllabus ticks, written answers, bookmarks, attempts, streak) is stored in `localStorage` under the `cp_*` keys. Nothing leaves the browser; use **Export Progress JSON** on the Prelims page to keep a backup.
+
+## Design changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for the latest visual, responsive and
+accessibility pass: palette, typography, 3D cube, India maps, verification
+results and known limitations.

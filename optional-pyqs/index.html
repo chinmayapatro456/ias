@@ -7,7 +7,7 @@
   <title>Geography Optional PYQs — Chinmaya Patro UPSC Study Desk</title>
   <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
   <link rel="canonical" href="https://chinmayapatro456.github.io/ias/optional-pyqs/">
-  <meta name="theme-color" content="#FAF9F5">
+  <meta name="theme-color" content="#FAF8F5">
   <link rel="manifest" href="../manifest.json">
   <link rel="apple-touch-icon" href="../assets/img/icon-192.png">
   <meta property="og:type" content="website">
@@ -26,10 +26,10 @@
 
   <link rel="preload" href="../assets/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/inter-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261126b">
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261126b">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20261126b">
-  <link rel="stylesheet" href="../assets/css/optional.css?v=20261126b">
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127a">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127a">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20261127a">
+  <link rel="stylesheet" href="../assets/css/optional.css?v=20261127a">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -74,6 +74,15 @@
 
   <div class="nav-backdrop" data-nav-backdrop></div>
   <nav id="mobile-nav-drawer" class="nav-drawer" data-nav-drawer aria-label="Mobile navigation" aria-hidden="true">
+    <div class="nav-drawer-head">
+      <span>Menu</span>
+      <button type="button" class="nav-drawer-close" data-nav-close aria-label="Close navigation menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
     <ul class="nav-drawer-list">
       <li><a class="nav-link" href="../index.html">Home</a></li>
       <li><a class="nav-link" href="../syllabus/index.html">Syllabus</a></li>
@@ -123,8 +132,24 @@
           <div id="opt-chart-wrap" class="chart-wrap"></div>
         </section>
 
-        <!-- Topic Chips, Year Slider & Search Controls -->
+        <!-- Topic Chips, Year Slider & Search Controls.
+             On Android the whole panel collapses behind a Filters button so
+             the first questions sit above the fold. -->
         <div class="card opt-controls" aria-label="Filter Geography Optional questions">
+          <button
+            type="button"
+            class="filters-toggle"
+            data-filters-toggle
+            aria-expanded="false"
+            aria-controls="opt-filters-panel"
+          >
+            <span>Filters<span class="filters-toggle-meta" id="opt-filters-meta"> · all topics</span></span>
+            <svg class="filters-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <div class="filters-panel" id="opt-filters-panel">
           <div class="opt-top-controls">
             <div class="opt-search-wrap">
               <label class="field-label" for="opt-search">Search questions</label>
@@ -176,7 +201,35 @@
             <span class="field-label">Topics</span>
             <div class="topic-chips" id="opt-topic-chips" role="group" aria-label="Filter by Geography topic"></div>
           </div>
+          </div><!-- /.filters-panel -->
         </div>
+
+        <!-- Interactive region map — Paper II (India & Mapping) -->
+        <section class="card opt-map-card" id="opt-map-card" aria-labelledby="opt-map-heading" hidden>
+          <div class="opt-map-head">
+            <div>
+              <h2 id="opt-map-heading" class="chart-title">India &amp; mapping</h2>
+              <p class="chart-sub muted">
+                Pick a region to see the questions that name its states or physical features.
+                Regions are state groupings, not official physiographic boundaries.
+              </p>
+            </div>
+            <button type="button" class="btn btn-ghost btn-sm" id="opt-map-reset" hidden>Clear region</button>
+          </div>
+
+          <div class="opt-map-body">
+            <div class="opt-map-figure">
+              <svg
+                id="opt-map-svg"
+                class="india-zones"
+                role="group"
+                aria-label="Clickable regions of India"
+              ></svg>
+              <div class="opt-map-tooltip" id="opt-map-tooltip" role="status" aria-live="polite"></div>
+            </div>
+            <div class="opt-map-legend" id="opt-map-legend" role="group" aria-label="Regions of India"></div>
+          </div>
+        </section>
 
         <div class="results-meta" id="opt-results-meta" aria-live="polite"></div>
 
@@ -204,10 +257,12 @@
     </div>
   </footer>
 
-  <script src="../data/optional-data.js?v=20261126b" defer></script>
-  <script src="../assets/js/storage.js?v=20261126b" defer></script>
-  <script src="../assets/js/nav.js?v=20261126b" defer></script>
-  <script src="../assets/js/motion.js?v=20261126b" defer></script>
-  <script src="../assets/js/optional.js?v=20261126b" defer></script>
+  <script src="../data/optional-data.js?v=20261127a" defer></script>
+  <script src="../assets/js/storage.js?v=20261127a" defer></script>
+  <script src="../assets/js/data-counts.js?v=20261127a" defer></script>
+  <script src="../assets/js/india-map.js?v=20261127a" defer></script>
+  <script src="../assets/js/nav.js?v=20261127a" defer></script>
+  <script src="../assets/js/motion.js?v=20261127a" defer></script>
+  <script src="../assets/js/optional.js?v=20261127a" defer></script>
 </body>
 </html>
