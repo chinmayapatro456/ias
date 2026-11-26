@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UPSC Geography Optional Previous Year Questions (1986–2026) for Paper I, Paper II, and Mapping with animated topic-frequency chart and local progress tracking.">
+  <title>Geography Optional PYQs — Chinmaya Patro UPSC Study Desk</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/optional.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-nav">
+    <div class="container nav-inner">
+      <a class="nav-brand" href="../index.html">
+        <span class="nav-brand-mark" aria-hidden="true">CP</span>
+        <span>Chinmaya Patro</span>
+      </a>
+
+      <nav aria-label="Primary navigation">
+        <ul class="nav-links">
+          <li><a class="nav-link" href="../index.html">Home</a></li>
+          <li><a class="nav-link" href="../syllabus/index.html">Syllabus</a></li>
+          <li><a class="nav-link" href="../mains-pyqs/index.html">Mains PYQs</a></li>
+          <li><a class="nav-link" href="./index.html" aria-current="page">Optional PYQs</a></li>
+          <li><a class="nav-link" href="../prelims-practice/index.html">Prelims Practice</a></li>
+        </ul>
+      </nav>
+
+      <button
+        type="button"
+        class="nav-toggle"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav-drawer"
+        aria-label="Open navigation menu"
+      >
+        <svg data-icon-menu viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+        <svg data-icon-close style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-backdrop" data-nav-backdrop></div>
+  <nav id="mobile-nav-drawer" class="nav-drawer" data-nav-drawer aria-label="Mobile navigation" aria-hidden="true">
+    <ul class="nav-drawer-list">
+      <li><a class="nav-link" href="../index.html">Home</a></li>
+      <li><a class="nav-link" href="../syllabus/index.html">Syllabus</a></li>
+      <li><a class="nav-link" href="../mains-pyqs/index.html">Mains PYQs</a></li>
+      <li><a class="nav-link" href="./index.html" aria-current="page">Optional PYQs</a></li>
+      <li><a class="nav-link" href="../prelims-practice/index.html">Prelims Practice</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <section class="page-header">
+      <div class="container">
+        <span class="eyebrow">Geography Optional · 1986–2026</span>
+        <h1>Optional PYQs</h1>
+        <p class="lead">
+          Four decades of Geography Optional questions across Paper I (Principles of Geography),
+          Paper II (Geography of India), and Mapping. Track attempted questions, bookmark recurring
+          prompts, and inspect topic weightage below.
+        </p>
+
+        <div class="opt-stats" aria-live="polite">
+          <span class="tag tag--sky" id="opt-total-badge">0 questions</span>
+          <span class="tag tag--sage" id="opt-attempted-badge">0 attempted</span>
+          <span class="tag tag--accent" id="opt-bookmarked-badge">0 bookmarked</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <!-- Paper Tabs -->
+        <div class="tabs opt-tabs" role="tablist" aria-label="Geography Optional papers" id="opt-paper-tabs">
+          <button type="button" class="tab-btn" role="tab" aria-selected="true" data-paper="Paper I">Paper I · Principles</button>
+          <button type="button" class="tab-btn" role="tab" aria-selected="false" data-paper="Paper II">Paper II · India & Mapping</button>
+          <button type="button" class="tab-btn" role="tab" aria-selected="false" data-paper="all">All Papers</button>
+        </div>
+
+        <!-- Animated SVG Topic-Frequency Chart -->
+        <section class="card chart-card" aria-labelledby="chart-heading">
+          <div class="chart-head">
+            <div>
+              <h2 id="chart-heading" class="chart-title">Topic frequency</h2>
+              <p class="chart-sub muted">Question distribution for the active paper & year window. Click any bar to filter.</p>
+            </div>
+            <button type="button" class="btn btn-ghost btn-sm" id="opt-chart-toggle" aria-expanded="true">Hide chart</button>
+          </div>
+          <div id="opt-chart-wrap" class="chart-wrap"></div>
+        </section>
+
+        <!-- Topic Chips, Year Slider & Search Controls -->
+        <div class="card opt-controls" aria-label="Filter Geography Optional questions">
+          <div class="opt-top-controls">
+            <div class="opt-search-wrap">
+              <label class="field-label" for="opt-search">Search questions</label>
+              <input
+                type="search"
+                id="opt-search"
+                class="input"
+                placeholder="e.g. plate tectonics, monsoon, Christaller, map…"
+                autocomplete="off"
+              >
+            </div>
+
+            <div class="slider-box">
+              <div class="slider-head">
+                <label class="field-label" for="opt-year-slider">From year</label>
+                <span class="slider-readout" id="opt-year-readout">1986 – 2026</span>
+              </div>
+              <input
+                type="range"
+                id="opt-year-slider"
+                class="year-slider"
+                min="1986"
+                max="2026"
+                value="1986"
+                step="1"
+              >
+              <div class="slider-scale" aria-hidden="true">
+                <span>1986</span>
+                <span>2000</span>
+                <span>2013</span>
+                <span>2026</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="opt-toggle-row">
+            <label class="check-pill">
+              <input type="checkbox" id="opt-unattempted-only">
+              <span>Unattempted only</span>
+            </label>
+            <label class="check-pill">
+              <input type="checkbox" id="opt-bookmarked-only">
+              <span>Bookmarked only</span>
+            </label>
+            <button type="button" class="btn btn-ghost btn-sm" id="opt-reset">Reset filters</button>
+          </div>
+
+          <div class="topic-chips-section">
+            <span class="field-label">Topics</span>
+            <div class="topic-chips" id="opt-topic-chips" role="group" aria-label="Filter by Geography topic"></div>
+          </div>
+        </div>
+
+        <div class="results-meta" id="opt-results-meta" aria-live="polite"></div>
+
+        <!-- Question Cards -->
+        <div id="opt-list" class="opt-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-top">
+        <span class="footer-brand">Chinmaya Patro · UPSC Study Desk</span>
+        <ul class="footer-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../syllabus/index.html">Syllabus</a></li>
+          <li><a href="../mains-pyqs/index.html">Mains PYQs</a></li>
+          <li><a href="./index.html">Optional PYQs</a></li>
+          <li><a href="../prelims-practice/index.html">Prelims Practice</a></li>
+        </ul>
+      </div>
+      <p class="footer-disclaimer">
+        Personal open study workspace built for self-preparation. <strong>Not affiliated with UPSC</strong> (Union Public Service Commission) or any government body. All progress is stored locally in your browser.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../data/optional-data.js" defer></script>
+  <script src="../assets/js/storage.js" defer></script>
+  <script src="../assets/js/nav.js" defer></script>
+  <script src="../assets/js/motion.js" defer></script>
+  <script src="../assets/js/optional.js" defer></script>
+</body>
+</html>
