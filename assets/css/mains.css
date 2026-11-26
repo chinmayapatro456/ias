@@ -99,6 +99,15 @@
   gap: var(--space-6);
 }
 
+/* Content reserve: the list is built by mains.js after the first paint, and
+   while it is empty the footer used to sit in the first screen and then jump
+   ~30,000px down when the questions arrived (CLS 0.69). Holding one screen
+   here keeps the footer below the fold, so nothing the reader can see moves.
+   :empty stops matching the moment the list or the empty state is rendered. */
+.mains-list:empty {
+  min-height: 70vh;
+}
+
 .mains-group {
   background-color: var(--bg-card);
   border: 1px solid var(--border-subtle);

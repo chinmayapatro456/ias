@@ -329,6 +329,23 @@
   gap: var(--space-4);
 }
 
+/* Same content reserve as the Mains list (see mains.css): hold a screen while
+   optional.js builds the cards, so the footer never appears and then jumps. */
+.opt-list:empty {
+  min-height: 70vh;
+}
+
+/* The header counts go from "0 questions" to "1,372 questions" on load. Below
+   400px that extra text takes the badge row from one line to two, which pushed
+   the whole section down by 32px (CLS 0.14). Reserving the two-line height at
+   the widths where it always ends up there removes the jump; from 412px up the
+   badges stay on one line and need no reserve. */
+@media (max-width: 400px) {
+  .opt-stats {
+    min-height: 3.5rem;
+  }
+}
+
 .opt-card {
   border-left: 3px solid transparent;
 }

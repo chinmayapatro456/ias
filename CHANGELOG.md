@@ -68,6 +68,47 @@ Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, a
 
 ---
 
+## Load smoothness — no more jump on the list pages (27 Nov 2026)
+
+Scope: `assets/css/mains.css`, `assets/css/optional.css`,
+`assets/css/syllabus.css`, cache stamp bumped to `?v=20261127w` in every page.
+No markup, data, storage-key, scoring or script change.
+
+Found by measuring the real pages (Layout Instability API, one run per page ×
+390/1280 × both themes) rather than by eye:
+
+- **Mains PYQs jumped 0.687 CLS on load.** The list is built by `mains.js`
+  after the first paint, so the first screen showed the page header, the filter
+  bar and the footer — and then the questions arrived and the footer was pushed
+  ~30,000px down. `.mains-list:empty` now holds one screen (70vh) while the list
+  is still empty; the footer stays below the fold and nothing visible moves.
+  When a filter matches nothing the empty state is a child of the list, so
+  `:empty` stops matching and no gap is left behind.
+- **Optional PYQs, 0.139.** Same reserve on `.opt-list`, plus a second cause: the
+  header counts grow from "0 questions" to "1,372 questions", which takes the
+  badge row from one line to two below 400px and pushed the whole section down
+  32px. The two-line height is now reserved at those widths only (from 412px the
+  badges stay on one line and need nothing).
+- **Syllabus, 0.081.** The per-paper ring cards are rendered after paint, so the
+  toolbar and the tree slid down by one row. `.rings-grid:empty` holds a row
+  (two rows on a phone, where the grid is a single column).
+
+Measured after the change: mains 0.687 → **0.021**, optional 0.139 → **0.013**,
+syllabus 0.081 → **0.001**; every other page stays ≤ 0.011. All well inside the
+"good" band (< 0.1).
+
+Also verified while measuring, and left alone because they are already healthy:
+scrolling the 46,000px Mains page holds 55–61 fps with no long tasks, the
+reveal/counter/line-draw/ring/funnel animations all run and settle (checked by
+sampling opacity, dash offset and transform mid-flight), `prefers-reduced-motion`
+shows everything immediately with no transitions, and no page logs a console
+error or fails a request. `content-visibility: auto` was tried on the list rows
+and rejected: it cut the 213ms render task to 162ms but left the page height
+wrong until each row was measured (46,270px → 26,315px), which is a worse
+jump than the one it fixes.
+
+---
+
 ## Visual polish pass — share card, footer bookend, emblems, print (27 Nov 2026)
 
 Scope: `assets/css/tokens.css`, `assets/css/base.css`, `assets/css/prelims.css`,
