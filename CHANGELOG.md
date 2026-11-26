@@ -598,3 +598,30 @@ applying (`rgb(166,71,40)` / plate `rgb(250,248,245)` light →
 `rgb(184,86,58)` / plate `rgb(22,19,15)` dark); favicon and both PNG icons
 viewed at 16, 24, 34, 48 and 128px, where the letters stay clear of every
 flame.
+
+---
+
+## 12. Standalone GS Cube page (27 Nov 2026)
+
+Scope: new `cube/index.html`, one link added on the home page, no changes to
+`assets/css`, `assets/js`, data files, storage keys or scoring.
+
+**What changed:**
+
+* `cube/index.html` — the six-sided syllabus cube as its own page: History,
+  Geography, Polity, Economy, Ethics, Environment on the six faces, each face
+  carrying the subject name, a short accent rule and a one-line thought. Drag,
+  arrow keys and the subject chips all turn it; clicking a chip or a face turns
+  the shortest way to bring that face forward. Idle drift stops for good on the
+  first interaction, and `prefers-reduced-motion` disables it from the start.
+* Fonts are the site's self-hosted families (`../assets/css/fonts.css`):
+  Newsreader for the display serif and the italic thought lines, Inter for body,
+  JetBrains Mono for the face numbers and chips. No Google Fonts request, so the
+  page keeps the "no external requests" rule.
+* `index.html` — the cube panel caption now links to `./cube/index.html`
+  ("open the full cube"), so the page is reachable from the home page.
+* The home-page cube is untouched: still the icon-and-label ceramic cube, still
+  the buttons that open the matching PYQ paper.
+
+**Checked:** page rendered at 1200×900, six faces present, no external asset
+requests beyond the repo's own fonts, no `[cite:...]` artefacts.

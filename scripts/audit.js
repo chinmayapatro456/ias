@@ -6,7 +6,8 @@ const PAGES = [
   'syllabus/index.html',
   'mains-pyqs/index.html',
   'optional-pyqs/index.html',
-  'prelims-practice/index.html'
+  'prelims-practice/index.html',
+  'cube/index.html'
 ];
 const WIDTHS = [360, 390, 412, 768, 1280, 1440];
 

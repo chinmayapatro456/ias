@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Six-Sided Syllabus — GS Cube | Study Desk</title>
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --bg:#f3ece0;
+    --bg-2:#e8dfd0;
+    --surface:#fdfbf7;
+    --ink:#1f1b16;
+    --ink-dim:#6b6055;
+    --rule:rgba(31,27,22,0.14);
+    --rule-soft:rgba(31,27,22,0.07);
+    --c-history:#a8432a;
+    --c-geo:#5f7a3a;
+    --c-polity:#2f5f73;
+    --c-econ:#a1762a;
+    --c-ethics:#7a4a52;
+    --c-env:#3f6b52;
+    --font-display:"Newsreader","Iowan Old Style",Georgia,serif;
+    --font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+    --s:clamp(168px,46vmin,320px);
+    --half:calc(var(--s)/2);
+    --r:clamp(9px,3.6%,16px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#17150f;
+      --bg-2:#12110c;
+      --surface:#211d16;
+      --ink:#f2ece0;
+      --ink-dim:#a99e8d;
+      --rule:rgba(242,236,224,0.16);
+      --rule-soft:rgba(242,236,224,0.08);
+      --c-history:#d0705a;
+      --c-geo:#9db56a;
+      --c-polity:#7fa9bb;
+      --c-econ:#d3a95c;
+      --c-ethics:#c08a92;
+      --c-env:#7fb092;
+    }
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      radial-gradient(120% 90% at 50% -10%, var(--bg-2) 0%, transparent 60%),
+      radial-gradient(90% 70% at 50% 120%, var(--bg-2) 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:clamp(18px,4vh,38px);
+    padding:clamp(20px,4vw,48px);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* faint paper grid */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:
+      linear-gradient(to right, var(--rule-soft) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--rule-soft) 1px, transparent 1px);
+    background-size:44px 44px;
+    mask-image:radial-gradient(closest-side at 50% 45%, #000 0%, transparent 78%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  header, .stage, .legend, footer{position:relative;z-index:1}
+
+  header{text-align:center;max-width:56ch}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .eyebrow::before{
+    content:"";width:6px;height:6px;border-radius:50%;
+    background:var(--c-history);
+  }
+  h1{
+    font-family:var(--font-display);
+    font-weight:400;
+    font-size:clamp(28px,4.6vw,44px);
+    line-height:1.05;
+    letter-spacing:-0.01em;
+    margin:10px 0 8px;
+  }
+  header p{
+    margin:0;
+    color:var(--ink-dim);
+    font-size:13.5px;
+    line-height:1.6;
+  }
+
+  /* ---------- 3D stage ---------- */
+  .stage{
+    perspective:1400px;
+    width:min(calc(var(--s) * 1.9), 100%);
+    height:calc(var(--s) * 1.9);
+    display:grid;
+    place-items:center;
+    cursor:grab;
+    touch-action:none;
+    user-select:none;
+  }
+  .stage:active{cursor:grabbing}
+  .stage::after{
+    content:"";
+    position:absolute;
+    width:calc(var(--s) * 1.05);
+    height:calc(var(--s) * 0.16);
+    bottom:calc(50% - var(--s) * 0.72);
+    border-radius:50%;
+    background:radial-gradient(ellipse at center, rgba(31,27,22,0.22), rgba(31,27,22,0) 70%);
+    filter:blur(2px);
+    pointer-events:none;
+  }
+
+  .cube{
+    position:relative;
+    width:var(--s);
+    height:var(--s);
+    transform-style:preserve-3d;
+    transform:rotateX(-18deg) rotateY(-32deg);
+    will-change:transform;
+  }
+
+  .face{
+    position:absolute;
+    inset:0;
+    padding:clamp(14px,4%,22px);
+    display:grid;
+    place-items:center;
+    text-align:center;
+    background:
+      linear-gradient(158deg,
+        color-mix(in srgb, var(--face-accent) 34%, var(--surface)) 0%,
+        color-mix(in srgb, var(--face-accent) 16%, var(--surface)) 58%,
+        color-mix(in srgb, var(--face-accent) 26%, var(--bg)) 100%);
+    border:1px solid var(--rule);
+    border-radius:var(--r);
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.5),
+      inset 0 0 0 1.5px color-mix(in srgb, var(--face-accent) 55%, transparent),
+      inset 0 -18px 26px -22px rgba(31,27,22,0.55);
+    backface-visibility:hidden;
+    overflow:hidden;
+  }
+  .face::before{
+    content:"";
+    position:absolute;inset:0;
+    background:rgba(31,27,22,var(--shade,0));
+    pointer-events:none;
+  }
+  .f-top{--shade:0.03}
+  .f-right{--shade:0.05}
+  .f-left{--shade:0.09}
+  .f-bottom{--shade:0.10}
+  .f-back{--shade:0.07}
+  .face::after{
+    /* corner registration mark */
+    content:"";
+    position:absolute;right:14px;bottom:14px;
+    width:9px;height:9px;
+    border-right:1px solid var(--face-accent);
+    border-bottom:1px solid var(--face-accent);
+    opacity:0.5;
+    border-bottom-right-radius:2px;
+  }
+  .face__top{
+    position:absolute;
+    top:clamp(12px,3.6%,18px);
+    left:clamp(14px,4%,22px);
+    display:flex;align-items:center;gap:7px;
+  }
+  .face__dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--face-accent);
+    flex:none;
+  }
+  .face__num{
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:0.18em;
+    color:var(--ink-dim);
+  }
+  .face__name{
+    font-family:var(--font-display);
+    font-weight:400;
+    font-size:clamp(22px,calc(var(--s) * 0.115),38px);
+    line-height:1;
+    letter-spacing:-0.015em;
+    margin:0;
+    color:var(--ink);
+  }
+  .face__rule{
+    height:1px;background:var(--face-accent);opacity:0.45;
+    margin:12px auto 0;width:42%;
+  }
+  .face > div:nth-of-type(2){
+    display:flex;flex-direction:column;align-items:center;
+    width:100%;
+  }
+  .face__bottom{
+    position:static;
+    width:100%;
+    margin-top:clamp(8px,2.6%,13px);
+  }
+  .face__thought{
+    font-family:var(--font-display);
+    font-style:italic;
+    font-size:clamp(11px,calc(var(--s) * 0.047),15px);
+    line-height:1.35;
+    color:var(--ink-dim);
+    margin:0;
+    text-align:center;
+  }
+
+  .f-front {transform:translateZ(var(--half))}
+  .f-back  {transform:rotateY(180deg) translateZ(var(--half))}
+  .f-right {transform:rotateY(90deg)  translateZ(var(--half))}
+  .f-left  {transform:rotateY(-90deg) translateZ(var(--half))}
+  .f-top   {transform:rotateX(90deg)  translateZ(var(--half))}
+  .f-bottom{transform:rotateX(-90deg) translateZ(var(--half))}
+
+  /* ---------- legend ---------- */
+  .legend{
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+    max-width:min(760px,92vw);
+  }
+  .chip{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    background:transparent;
+    border:1px solid var(--rule);
+    border-radius:999px;
+    min-height:44px;
+    padding:11px 15px;
+    display:inline-flex;align-items:center;gap:7px;
+    cursor:pointer;
+    transition:color .18s ease, border-color .18s ease, background .18s ease, transform .18s ease;
+  }
+  .chip::before{
+    content:"";width:6px;height:6px;border-radius:50%;
+    background:var(--chip-accent);
+    opacity:.85;
+  }
+  .chip:hover{color:var(--ink);border-color:var(--ink-dim);transform:translateY(-1px)}
+  .chip.is-active{
+    color:var(--ink);
+    border-color:var(--chip-accent);
+    background:color-mix(in srgb, var(--chip-accent) 12%, transparent);
+  }
+
+  footer{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    display:flex;gap:18px;flex-wrap:wrap;justify-content:center;
+  }
+
+  .back{
+    margin:0;
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+  }
+  .back a{color:var(--ink-dim);text-decoration:none}
+  .back a:hover{color:var(--ink)}
+
+  @media (prefers-reduced-motion: reduce){
+    .chip{transition:none}
+  }
+  @media (max-width:420px){
+    .face__thought{display:none}
+    .legend{gap:6px}
+    .chip{padding:10px 11px;font-size:10px;min-height:44px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="eyebrow">Six sides, one syllabus</span>
+  <h1>The GS Cube</h1>
+  <p>Drag to turn it. Click a subject below to bring that face forward.</p>
+</header>
+
+<main class="stage" id="stage" aria-label="Rotatable cube with six subjects">
+  <div class="cube" id="cube">
+    <section class="face f-front" data-face="0" style="--face-accent:var(--c-history)">
+      <div class="face__top"><span class="face__dot"></span><span class="face__num">01</span></div>
+      <div>
+        <h2 class="face__name">History</h2>
+        <div class="face__rule"></div>
+        <div class="face__bottom"><p class="face__thought">Every present is still arguing with its past.</p></div>
+      </div>
+    </section>
+
+    <section class="face f-right" data-face="1" style="--face-accent:var(--c-geo)">
+      <div class="face__top"><span class="face__dot"></span><span class="face__num">02</span></div>
+      <div>
+        <h2 class="face__name">Geography</h2>
+        <div class="face__rule"></div>
+        <div class="face__bottom"><p class="face__thought">Terrain writes the first draft of every story.</p></div>
+      </div>
+    </section>
+
+    <section class="face f-back" data-face="2" style="--face-accent:var(--c-polity)">
+      <div class="face__top"><span class="face__dot"></span><span class="face__num">03</span></div>
+      <div>
+        <h2 class="face__name">Polity</h2>
+        <div class="face__rule"></div>
+        <div class="face__bottom"><p class="face__thought">Rules outlive the people who wrote them.</p></div>
+      </div>
+    </section>
+
+    <section class="face f-left" data-face="3" style="--face-accent:var(--c-econ)">
+      <div class="face__top"><span class="face__dot"></span><span class="face__num">04</span></div>
+      <div>
+        <h2 class="face__name">Economy</h2>
+        <div class="face__rule"></div>
+        <div class="face__bottom"><p class="face__thought">Incentives move people further than intentions do.</p></div>
+      </div>
+    </section>
+
+    <section class="face f-top" data-face="4" style="--face-accent:var(--c-ethics)">
+      <div class="face__top"><span class="face__dot"></span><span class="face__num">05</span></div>
+      <div>
+        <h2 class="face__name">Ethics</h2>
+        <div class="face__rule"></div>
+        <div class="face__bottom"><p class="face__thought">Right action is what you would defend out loud.</p></div>
+      </div>
+    </section>
+
+    <section class="face f-bottom" data-face="5" style="--face-accent:var(--c-env)">
+      <div class="face__top"><span class="face__dot"></span><span class="face__num">06</span></div>
+      <div>
+        <h2 class="face__name">Environment</h2>
+        <div class="face__rule"></div>
+        <div class="face__bottom"><p class="face__thought">Nothing is thrown away; it only moves somewhere else.</p></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<nav class="legend" aria-label="Jump to a face">
+  <button class="chip" data-target="0" style="--chip-accent:var(--c-history)">History</button>
+  <button class="chip" data-target="1" style="--chip-accent:var(--c-geo)">Geography</button>
+  <button class="chip" data-target="2" style="--chip-accent:var(--c-polity)">Polity</button>
+  <button class="chip" data-target="3" style="--chip-accent:var(--c-econ)">Economy</button>
+  <button class="chip" data-target="4" style="--chip-accent:var(--c-ethics)">Ethics</button>
+  <button class="chip" data-target="5" style="--chip-accent:var(--c-env)">Environment</button>
+</nav>
+
+<footer>
+  <span>Drag</span><span>Arrow keys</span><span>Click a face</span>
+</footer>
+
+<p class="back"><a href="../index.html">Back to Study Desk</a></p>
+
+<script>
+(function(){
+  const stage = document.getElementById('stage');
+  const cube  = document.getElementById('cube');
+  const chips = Array.from(document.querySelectorAll('.chip'));
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // rotation state (degrees)
+  let rx = -18, ry = -32;
+  let targetX = null, targetY = null;   // snap targets
+  let dragging = false, lastX = 0, lastY = 0;
+  let autoSpin = !reduced;   // stops for good on first interaction
+
+  // face -> (rx, ry) that brings it to the front
+  const SNAP = [
+    [0, 0],        // front   History
+    [0, -90],      // right   Geography
+    [0, 180],      // back    Polity
+    [0, 90],       // left    Economy
+    [-90, 0],      // top     Ethics
+    [90, 0]        // bottom  Environment
+  ];
+
+  function render(){
+    cube.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+  }
+
+  function tick(){
+    if (dragging){
+      // handled in pointermove
+    } else if (targetX !== null){
+      // ease toward the snap target
+      rx += (targetX - rx) * 0.14;
+      ry += (targetY - ry) * 0.14;
+      if (Math.abs(targetX - rx) < 0.15 && Math.abs(targetY - ry) < 0.15){
+        rx = targetX; ry = targetY; targetX = targetY = null;
+      }
+      render();
+    } else {
+      // gentle drift until the user takes over
+      if (autoSpin){
+        ry += 0.16;
+        render();
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function setActive(i){
+    chips.forEach(c => c.classList.toggle('is-active', Number(c.dataset.target) === i));
+  }
+
+  // ---- drag ----
+  function down(e){
+    dragging = true;
+    autoSpin = false;
+    targetX = targetY = null;
+    const p = e.touches ? e.touches[0] : e;
+    lastX = p.clientX; lastY = p.clientY;
+    stage.setPointerCapture && e.pointerId != null && stage.setPointerCapture(e.pointerId);
+  }
+  function move(e){
+    if (!dragging) return;
+    const p = e.touches ? e.touches[0] : e;
+    const dx = p.clientX - lastX;
+    const dy = p.clientY - lastY;
+    lastX = p.clientX; lastY = p.clientY;
+    ry += dx * 0.42;
+    rx -= dy * 0.42;
+    rx = Math.max(-90, Math.min(90, rx));
+    render();
+  }
+  function up(){ dragging = false; }
+
+  stage.addEventListener('pointerdown', down);
+  window.addEventListener('pointermove', move, {passive:true});
+  window.addEventListener('pointerup', up);
+  window.addEventListener('pointercancel', up);
+
+  // ---- click a face to bring it forward ----
+  document.querySelectorAll('.face').forEach(face => {
+    face.addEventListener('click', ev => {
+      const i = Number(face.dataset.face);
+      snapTo(i);
+      ev.stopPropagation();
+    });
+  });
+
+  function snapTo(i){
+    autoSpin = false;
+    // choose the shortest way round
+    const wantX = SNAP[i][0];
+    let wantY = SNAP[i][1];
+    const current = ((ry % 360) + 360) % 360;
+    const normalizedTarget = ((wantY % 360) + 360) % 360;
+    let delta = normalizedTarget - current;
+    if (delta > 180) delta -= 360;
+    if (delta < -180) delta += 360;
+    targetX = wantX;
+    targetY = ry + delta;
+    setActive(i);
+  }
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => snapTo(Number(chip.dataset.target)));
+  });
+
+  // ---- keyboard ----
+  window.addEventListener('keydown', e => {
+    const step = 12;
+    autoSpin = false;
+    if (e.key === 'ArrowLeft'){ ry -= step; targetX = targetY = null; }
+    else if (e.key === 'ArrowRight'){ ry += step; targetX = targetY = null; }
+    else if (e.key === 'ArrowUp'){ rx = Math.min(90, rx + step); targetX = targetY = null; }
+    else if (e.key === 'ArrowDown'){ rx = Math.max(-90, rx - step); targetX = targetY = null; }
+    else return;
+    e.preventDefault();
+    render();
+  });
+
+  render();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
