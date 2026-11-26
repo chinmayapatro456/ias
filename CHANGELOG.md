@@ -666,6 +666,12 @@ and 1280×800:
   which on a tall phone was fine but on a 320-wide phone produced a cube that
   could not fit the column. It is now
   `clamp(140px,min(46vmin,30vh),320px)`, so height counts as much as width.
+* **The cube was small on a phone.** Shrinking it to keep the header and the
+  chip list on one screen left a 165px cube in the middle of a 360px display.
+  Portrait ≤640px now sizes it from the screen — `--s:min(68vw,40vh)`, i.e.
+  245px at 360×640 and 265px at 390×844 — which is the largest square whose
+  rotated silhouette (about 1.38×) still clears the width. The page scrolls to
+  the chips instead, so the cube owns the first screen.
 * **Landscape phones were clipped at the top.** `justify-content:center` on an
   overflowing flex column cuts off the first item. It is now
   `justify-content:safe center` (plus `min-height:100svh`, so iOS Safari's
@@ -674,12 +680,13 @@ and 1280×800:
 * **Face type did not fit a small cube.** `.face__name` had a 22px floor, which
   overflows a 140px face; the floor is 15px and the face padding starts at
   10px.
-* **A notch at every cube corner.** The faces are `border-radius:var(--r)` with
-  `--r` up to 16px, and each rounded corner left a wedge where the page
-  background showed through the seam — a hairline on desktop, a visible bite on
-  a phone. `--r` is now `clamp(3px,1.4%,7px)`, and three inset planes
-  (`.core`) fill the interior so any remaining seam reads as the inside of the
-  cube rather than a hole.
+* **A notch at every cube corner.** The faces carried
+  `border-radius:clamp(9px,3.6%,16px)`, so each rounded corner left a wedge
+  where the page background showed through the seam between two faces — a
+  hairline on desktop, a visible bite at phone size, and the cube read as
+  broken rather than solid. `--r` is now `0`: square faces meet edge to edge at
+  every angle, so there is nothing to show through. (An earlier attempt filled
+  the seam with three inset interior planes; that is removed with it.)
 * **"Click" on a device with no pointer.** On `hover:none` the header says
   "Tap a subject below", the footer drops the "Arrow keys" hint, and "Click a
   face" becomes "Tap a face".
@@ -693,13 +700,15 @@ and 1280×800:
 * Short phones (≤640px tall, portrait) drop the footer, which only repeats the
   header, and tighten the body padding and gap.
 
-**Checked:** rendered at 320×568, 360×640, 390×844, 740×360 and 1280×800 —
-0 horizontal overflow and 0 vertical overflow at every size (320 was 59px over
-before this pass, now 0); no console errors; every `a` and `button` at least
-44px tall; chip tap snaps the correct face (`Polity` → `rotateY(-180deg)`); a
-swipe after that moves the cube to `-146deg` without snapping back or leaving
-the chip lit; light and dark both viewed at 360×640. `node scripts/audit.js`
-36/36 clean across the five desk pages.
+**Checked:** rendered at 320×568, 360×640, 390×844, 412×915, 740×360,
+768×1024 and 1280×800 — 0 horizontal overflow everywhere, no console errors,
+every `a` and `button` at least 44px tall, and the cube fully inside the
+viewport at every size (rotated silhouette at 360×640: 242px inside 360px).
+Portrait phones now scroll only as far as the chip list (0–109px) instead of
+the cube being shrunk to fit them. Chip tap snaps the correct face (`Polity` →
+`rotateY(-180deg)`); a swipe after that moves the cube to `-146deg` without
+snapping back or leaving the chip lit. Light and dark both viewed at 360×640.
+`node scripts/audit.js` 36/36 clean across the five desk pages.
 
 **Not checked:** a physical phone — all of the above is Chromium with
 `isMobile:true, hasTouch:true` at the listed viewports. iOS Safari's 3D

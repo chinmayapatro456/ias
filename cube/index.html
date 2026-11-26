@@ -26,7 +26,7 @@
     --font-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
     --s:clamp(140px,min(46vmin,30vh),320px);
     --half:calc(var(--s)/2);
-    --r:clamp(3px,1.4%,7px);
+    --r:0px;
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -143,27 +143,6 @@
     transform:rotateX(-18deg) rotateY(-32deg);
     will-change:transform;
   }
-
-  /* Solid interior. The faces are rounded and 1px short of the true edge, so
-     at the corners the page background used to show through as a notch - a
-     hairline on desktop, a visible bite on a phone-sized cube. Three inset
-     planes fill that volume, so a gap reads as the inside of the cube.
-     They sit 2px in from every face so they can never z-fight with one. */
-  .core{
-    position:absolute;
-    inset:0;
-    transform-style:preserve-3d;
-    pointer-events:none;
-  }
-  .core i{
-    position:absolute;
-    inset:2px;
-    background:color-mix(in srgb, var(--ink) 22%, var(--surface));
-    border-radius:var(--r);
-  }
-  .core i:nth-child(1){transform:translateZ(0)}
-  .core i:nth-child(2){transform:rotateY(90deg)}
-  .core i:nth-child(3){transform:rotateX(90deg)}
 
   .face{
     position:absolute;
@@ -319,6 +298,14 @@
   @media (prefers-reduced-motion: reduce){
     .chip{transition:none}
   }
+  /* Phones: the cube is the page, so give it the width. 68vw is the largest
+     square whose rotated silhouette (about 1.38x) still clears a 360px screen. */
+  @media (max-width:640px) and (orientation:portrait){
+    :root{--s:min(68vw,40vh)}
+    .stage{height:calc(var(--s) * 1.45);touch-action:pan-y}
+    header p{max-width:34ch;margin:0 auto}
+  }
+
   @media (max-width:420px){
     .face__thought{display:none}
     .legend{gap:6px}
@@ -369,7 +356,6 @@
 
 <main class="stage" id="stage" aria-label="Rotatable cube with six subjects">
   <div class="cube" id="cube">
-    <div class="core" aria-hidden="true"><i></i><i></i><i></i></div>
     <section class="face f-front" data-face="0" style="--face-accent:var(--c-history)">
       <div class="face__top"><span class="face__dot"></span><span class="face__num">01</span></div>
       <div>
