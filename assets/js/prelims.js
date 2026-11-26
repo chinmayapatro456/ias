@@ -2,7 +2,8 @@
    Prelims Practice Engine — Chinmaya Patro UPSC Study Desk
    - Hides questions flagged "incomplete"
    - Treats "no_key" and "source_marks_cancelled" as unscored
-   - Modes: topic quiz, year-wise 100Q countdown simulation, custom, revision
+   - Modes: topic quiz, year-wise full-paper countdown simulation (100 or 150
+     questions), custom, revision
    - Scoring: +2 correct, -0.66 wrong (toggleable), 0 skipped
    - Keyboard shortcuts: A-D answer, N next, P previous
    - LocalStorage attempts/bookmarks/wrong/streaks/topic accuracy + JSON I/O
@@ -11,7 +12,7 @@
 (function () {
   'use strict';
 
-  var YEAR_SIM_DURATION_SEC = 120 * 60; // 2 hours for 100-question GS paper
+  var YEAR_SIM_DURATION_SEC = 120 * 60; // UPSC allows 2 hours for the paper, whether it has 100 or 150 questions
 
   var activePool = [];
   var setup = {
@@ -25,7 +26,7 @@
 
   var MODE_DESCRIPTIONS = {
     topic: 'Focus on a single subject and topic to build conceptual accuracy.',
-    year: 'Full 100-question year-wise simulation with a 2-hour UPSC countdown timer.',
+    year: 'Full year-wise paper on a 2-hour UPSC countdown timer — 100 questions from 2011, 150 in the older papers.',
     custom: 'Mix any subject, topic, year, and question count for a tailored drill.',
     revision: 'Re-attempt questions you previously answered wrong or bookmarked.'
   };
@@ -237,7 +238,7 @@
         .sort(function (a, b) {
           return (Number(a.qno) || 0) - (Number(b.qno) || 0);
         });
-      return matched.slice(0, 100);
+      return matched;
     } else if (setup.mode === 'custom') {
       matched = activePool.filter(function (q) {
         if (subj !== 'all' && q.subject !== subj) return false;
