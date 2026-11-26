@@ -782,3 +782,35 @@ on another URL. That is now one cube, shown in place:
 **Checked:** `node scripts/audit.js` 42/42 clean across the seven pages and six
 widths; the panel rendered at 1280×900, 390×844 and 360×800 — every face shows
 number, name, rule and line, nothing clipped inside a face, no console errors.
+
+---
+
+## 15. Home: the cube panel now holds the whole spin (27 Nov 2026)
+
+Scope: `assets/css/home.css` (the cube panel and the hero column), cache stamp.
+
+The panel was sized to the cube's *resting* box, not to the box the cube sweeps
+while it turns. At the resting X tilt a cube of side `s` covers about `1.42s`
+across and `1.39s` down at the worst angle, so a 212px cube needed 300px of
+width inside a panel that only offered 266px — the corners crossed the card's
+padding as it spun.
+
+* `.cube-stage` is now the **sweep envelope**, `1.45 × --cube-size`, with the
+  cube centred inside it, so the space the spin needs is reserved in layout
+  rather than overflowing it.
+* `--cube-size` is `min(240px, 68cqw)` on the panel as a container, so the cube
+  is always 1/1.42 of the panel's content width and can never outgrow it — at
+  any breakpoint, without a list of magic numbers. Falls back to fixed sizes
+  (180/200/190px) where container queries are unsupported.
+* The hero's cube column goes 300px → 320px at ≥960px; the cube grows 212px →
+  194px and, more to the point, now stays inside: measured 276×270 of swept
+  cube inside 286px of panel content, at 1440, 1280, 1100 and 960.
+* 320px is deliberate — 340px pushed the h1 into two balanced lines
+  (`text-wrap: balance`), so the column stops just short of that.
+* The ground shadow follows the envelope instead of the old `margin-bottom`.
+* Cache stamp `?v=20261127n`.
+
+**Checked:** `node scripts/audit.js` 42/42 clean; the panel captured at five
+rotation angles (−32°, −5°, 25°, 60°, 95°) at 1440×1000 — no cube edge crosses
+the card at any of them; h1 still one line at 1440, 1280 and 1100; no
+horizontal overflow at 360–1440.

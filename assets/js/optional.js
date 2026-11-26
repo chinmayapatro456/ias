@@ -84,6 +84,19 @@
       var text = String(q.question || q.text || q.prompt || '').trim();
       var id = String(q.id || (paper.replace(/\s+/g, '') + '-' + year + '-' + idx));
 
+      /* Mapping rows share one directive and differ only by the place name, so
+         the two are split once, here: the card can then set the place as its
+         own headline instead of burying it at the end of a sentence. */
+      var place = '';
+      var directive = '';
+      if (topic === 'Mapping') {
+        var split = /^(.*?):\s*([^:]+)$/.exec(text);
+        if (split) {
+          directive = split[1].trim();
+          place = split[2].trim();
+        }
+      }
+
       return {
         id: id,
         paper: paper,
@@ -92,6 +105,8 @@
         marks: q.marks || '',
         subtopic: q.subtopic || '',
         text: text,
+        place: place,
+        directive: directive,
         searchBlob: (paper + ' ' + topic + ' ' + (q.subtopic || '') + ' ' + year + ' ' + text).toLowerCase()
       };
     });
@@ -198,9 +213,22 @@
         if (qStr && q.searchBlob.indexOf(qStr) === -1) return false;
         return true;
       })
-      .sort(function (a, b) {
-        return b.year - a.year;
-      });
+      .sort(questionOrder);
+  }
+
+  /* Ordering. Year-bearing questions run newest first. The Paper II mapping set
+     carries no year by design, so it is ordered alphabetically — and when the
+     Mapping topic is selected on its own, alphabetically is the only order. */
+  function byText(a, b) {
+    return a.text.localeCompare(b.text, 'en', { sensitivity: 'base', numeric: true });
+  }
+
+  function questionOrder(a, b) {
+    if (state.topic === 'Mapping') return byText(a, b);
+    if (!a.year && !b.year) return byText(a, b);
+    if (!a.year) return 1;
+    if (!b.year) return -1;
+    return b.year - a.year;
   }
 
   /* Ranked horizontal bar chart + per-topic year sparkline.
@@ -354,6 +382,19 @@
     chipsEl.innerHTML = html;
   }
 
+  /* The year slider means nothing for a set that carries no year (Mapping), so
+     it steps out of the way when the current selection has no dated question. */
+  function syncYearControl() {
+    var box = document.querySelector('.slider-box');
+    if (!box) return;
+    var anyYear = allQuestions.some(function (q) {
+      if (state.paper !== 'all' && q.paper !== state.paper) return false;
+      if (state.topic !== 'all' && q.topic !== state.topic) return false;
+      return Boolean(q.year);
+    });
+    box.style.display = anyYear ? '' : 'none';
+  }
+
   function renderList() {
     var listEl = document.getElementById('opt-list');
     var metaEl = document.getElementById('opt-results-meta');
@@ -364,13 +405,18 @@
     var bmSet = getBookmarkSet();
     var qTrim = state.query.trim();
 
-    /* Live result count for the sticky filter bar */
+    /* Live result count for the sticky filter bar. The year range only makes
+       sense when the visible questions carry a year — the mapping set does not. */
     if (metaEl) {
+      var anyYear = filtered.some(function (q) { return q.year; });
       metaEl.innerHTML =
         '<strong>' + Math.min(filtered.length, state.visibleLimit).toLocaleString('en-IN') +
         '</strong> of ' + filtered.length.toLocaleString('en-IN') +
-        ' shown · ' + state.minYear + '–' + state.maxYear;
+        ' shown' +
+        (anyYear ? ' · ' + state.minYear + '–' + state.maxYear : ' · alphabetical');
     }
+
+    syncYearControl();
 
     if (!filtered.length) {
       listEl.innerHTML =
@@ -387,15 +433,31 @@
         var isAtt = attSet.has(item.id);
         var isBm = bmSet.has(item.id);
 
+        /* Mapping rows get their own card: the shared directive reads as a
+           muted brief, and the place name is set as a display line with a pin,
+           so a place can never be mistaken for the question text. */
+        var body = item.place
+          ? '<p class="opt-map-task">' + highlightText(item.directive, qTrim) + '</p>' +
+            '<p class="opt-place">' +
+              '<svg class="opt-place-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+                'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                '<path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"></path>' +
+                '<circle cx="12" cy="9.6" r="2.5"></circle>' +
+              '</svg>' +
+              '<span>' + highlightText(item.place, qTrim) + '</span>' +
+            '</p>'
+          : '<p class="opt-card-text">' + highlightText(item.text, qTrim) + '</p>';
+
         return (
-          '<article class="card opt-card' + (isAtt ? ' is-attempted' : '') + '" tabindex="-1">' +
+          '<article class="card opt-card' + (item.place ? ' opt-card--map' : '') +
+            (isAtt ? ' is-attempted' : '') + '" tabindex="-1">' +
             '<div class="opt-card-top">' +
               (item.year ? '<span class="tag tag--year">' + item.year + '</span>' : '') +
               '<span class="tag">' + escapeHtml(item.paper) + '</span>' +
-              '<span class="tag">' + escapeHtml(item.topic) + '</span>' +
+              '<span class="tag' + (item.place ? ' tag--map' : '') + '">' + escapeHtml(item.topic) + '</span>' +
               (item.marks ? '<span class="tag">' + escapeHtml(item.marks) + '</span>' : '') +
             '</div>' +
-            '<p class="opt-card-text">' + highlightText(item.text, qTrim) + '</p>' +
+            body +
             '<div class="opt-card-actions">' +
               '<button type="button" class="action-toggle' + (isAtt ? ' is-attempted-on' : '') + '" ' +
                 'data-action="attempted" data-id="' + escapeHtml(item.id) + '" aria-pressed="' + String(isAtt) + '">' +
