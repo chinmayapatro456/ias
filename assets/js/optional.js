@@ -198,9 +198,22 @@
         if (qStr && q.searchBlob.indexOf(qStr) === -1) return false;
         return true;
       })
-      .sort(function (a, b) {
-        return b.year - a.year;
-      });
+      .sort(questionOrder);
+  }
+
+  /* Ordering. Year-bearing questions run newest first. The Paper II mapping set
+     carries no year by design, so it is ordered alphabetically — and when the
+     Mapping topic is selected on its own, alphabetically is the only order. */
+  function byText(a, b) {
+    return a.text.localeCompare(b.text, 'en', { sensitivity: 'base', numeric: true });
+  }
+
+  function questionOrder(a, b) {
+    if (state.topic === 'Mapping') return byText(a, b);
+    if (!a.year && !b.year) return byText(a, b);
+    if (!a.year) return 1;
+    if (!b.year) return -1;
+    return b.year - a.year;
   }
 
   /* Ranked horizontal bar chart + per-topic year sparkline.
@@ -354,6 +367,19 @@
     chipsEl.innerHTML = html;
   }
 
+  /* The year slider means nothing for a set that carries no year (Mapping), so
+     it steps out of the way when the current selection has no dated question. */
+  function syncYearControl() {
+    var box = document.querySelector('.slider-box');
+    if (!box) return;
+    var anyYear = allQuestions.some(function (q) {
+      if (state.paper !== 'all' && q.paper !== state.paper) return false;
+      if (state.topic !== 'all' && q.topic !== state.topic) return false;
+      return Boolean(q.year);
+    });
+    box.style.display = anyYear ? '' : 'none';
+  }
+
   function renderList() {
     var listEl = document.getElementById('opt-list');
     var metaEl = document.getElementById('opt-results-meta');
@@ -364,13 +390,18 @@
     var bmSet = getBookmarkSet();
     var qTrim = state.query.trim();
 
-    /* Live result count for the sticky filter bar */
+    /* Live result count for the sticky filter bar. The year range only makes
+       sense when the visible questions carry a year — the mapping set does not. */
     if (metaEl) {
+      var anyYear = filtered.some(function (q) { return q.year; });
       metaEl.innerHTML =
         '<strong>' + Math.min(filtered.length, state.visibleLimit).toLocaleString('en-IN') +
         '</strong> of ' + filtered.length.toLocaleString('en-IN') +
-        ' shown · ' + state.minYear + '–' + state.maxYear;
+        ' shown' +
+        (anyYear ? ' · ' + state.minYear + '–' + state.maxYear : ' · alphabetical');
     }
+
+    syncYearControl();
 
     if (!filtered.length) {
       listEl.innerHTML =
