@@ -246,3 +246,34 @@ Both scripts are checked in for transparency and take the source GeoJSON as an
 argument (default `geo-src/india.geojson`, which is not committed — download it
 with the `curl` line in the script header). Run them from the repo root.
 `node scripts/audit.js` re-runs the six-width layout audit.
+
+## 7. Hero cube placement (27 Nov 2026)
+
+**What was wrong.** The 3D subject cube lived in the same flex row as the photo
+caption (`hero-figure-foot`), pulled up with `margin-top: -46px`. That put the
+plate half outside the photograph and *across* the decorative offset frame, left
+the caption stranded mid-air at the far right of a 190px-tall empty row, and on
+phones the frame's vertical rule ran behind the plate, so it looked like a card
+dropped into a box.
+
+**What changed** (`index.html`, `assets/css/home.css`):
+
+* The photo and the cube now share a `.hero-photo` wrapper, which is the
+  positioning context. The offset frame moved from `.hero-figure::before` to
+  `.hero-photo picture::before`, so it hugs the image alone and nothing crosses it.
+* Desktop (≥960px): the plate is anchored inside the photo's bottom-left corner
+  (`position: absolute; left: 20px; bottom: 20px`) at 108px, clear of the banner
+  and the portrait, with `--cube-pad` (18px) wide enough that the rotated cube's
+  corners stay inside the plate.
+* Phones (<960px): the plate drops back into normal flow, centred under the photo
+  at 132px — the size that keeps every face a 44px+ tap target once rotated —
+  followed by the caption and the subject chips in one column.
+* The caption is now a single full-width row under the photo on desktop, and
+  `hero-figure-foot` and the `padding-bottom: 2.5rem` that reserved room for the
+  overhang are gone.
+
+**Checked:** `node scripts/audit.js` — 30/30 page×width rows clean (no overflow,
+no truncation, no small tap targets). Screenshots at 1512, 1024, 390 and 360.
+Tap on the front face still opens `mains-pyqs/index.html?paper=GS%20Paper%20II`
+and a 90px drag still spins the cube without navigating — both identical to the
+previous build.
