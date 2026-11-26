@@ -18,6 +18,8 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  /* Theme swap eases rather than snapping */
+  transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out);
   display: flex;
   flex-direction: column;
   background-color: var(--bg-page);
@@ -290,7 +292,7 @@ p:last-child {
   top: 0;
   z-index: var(--z-nav);
   height: var(--nav-height);
-  background-color: rgba(250, 249, 245, 0.92);
+  background-color: var(--nav-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-subtle);
@@ -371,6 +373,52 @@ p:last-child {
   font-weight: 600;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Light/dark switch — moon shows in light mode, sun in dark */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--ink-secondary);
+  transition: background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.theme-toggle:hover {
+  background: var(--bg-sand);
+  border-color: var(--border-warm);
+  color: var(--ink-primary);
+}
+
+.theme-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-icon-sun {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-sun {
+  display: block;
+}
+
 .nav-toggle {
   display: inline-flex;
   align-items: center;
@@ -401,7 +449,7 @@ p:last-child {
   position: fixed;
   inset: 0;
   z-index: calc(var(--z-drawer) - 1);
-  background: rgba(20, 20, 19, 0.35);
+  background: var(--backdrop);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--dur-med) var(--ease-out);
@@ -638,9 +686,9 @@ p:last-child {
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: #FBF6F0;
+  background-color: var(--surface-hover);
   color: var(--ink-primary);
-  border-color: rgba(166, 71, 40, 0.34);
+  border-color: var(--accent-border);
   transform: translateY(-1px);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), var(--shadow-warm);
 }
@@ -787,7 +835,7 @@ p:last-child {
 }
 
 .group-switch .chip:hover {
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: var(--segmented-hover);
   color: var(--ink-primary);
 }
 
@@ -796,7 +844,7 @@ p:last-child {
   background-color: var(--bg-card);
   border-color: var(--border-subtle);
   color: var(--ink-primary);
-  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.08);
+  box-shadow: var(--hairline-shadow);
 }
 
 /* Tabs
@@ -821,7 +869,7 @@ p:last-child {
   width: 0;
   height: 0;
   border-radius: calc(var(--radius-md) - 4px);
-  background-color: var(--bg-card);
+  background-color: var(--indicator-bg);
   box-shadow: var(--shadow-xs);
   border: 1px solid var(--border-subtle);
   pointer-events: none;
@@ -962,7 +1010,7 @@ p:last-child {
   border: 1px solid var(--warning-border);
   border-left: 3px solid var(--accent);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  background-color: #FDF7EA;
+  background-color: var(--callout-bg);
   color: var(--warning-ink);
   font-size: var(--text-sm);
   line-height: 1.5;
@@ -996,7 +1044,7 @@ p:last-child {
 }
 
 .notice-dismiss:hover {
-  background: rgba(124, 79, 11, 0.1);
+  background: var(--callout-hover);
 }
 
 @media (max-width: 767px) {
@@ -1081,6 +1129,10 @@ p:last-child {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  body {
+    transition: none;
   }
 
   .js-motion .reveal {
@@ -1235,6 +1287,11 @@ p:last-child {
     width: 44px;
     height: 44px;
     margin: -6px -6px 0 0;
+  }
+
+  .theme-toggle {
+    width: 44px;
+    height: 44px;
   }
 }
 

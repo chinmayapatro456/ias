@@ -4,6 +4,8 @@
    ========================================================================== */
 
 :root {
+  color-scheme: light;
+
   /* Palette — Surfaces & Borders (3-tier light system)
      Tier 1: warm alabaster page canvas
      Tier 2: pure white elevated cards with hairline warm borders
@@ -129,6 +131,43 @@
   --shadow-warm: 0 1px 2px rgba(122, 78, 52, 0.06), 0 8px 18px -8px rgba(122, 78, 52, 0.22);
   --shadow-lift: 0 2px 4px rgba(122, 78, 52, 0.08), 0 14px 26px -12px rgba(122, 78, 52, 0.3);
 
+  /* Component surfaces that need their own value in each theme */
+  --nav-bg: rgba(250, 248, 245, 0.92);
+  --backdrop: rgba(20, 20, 19, 0.35);
+  --surface-hover: #FBF6F0;
+  --callout-bg: #FDF7EA;
+  --callout-hover: rgba(124, 79, 11, 0.1);
+  --segmented-hover: rgba(255, 255, 255, 0.6);
+  --hairline-shadow: 0 1px 2px rgba(28, 25, 23, 0.08);
+  --hero-grid-line: rgba(20, 20, 19, 0.028);
+  --hero-tint-warm: rgba(217, 119, 87, 0.1);
+  --hero-tint-cool: rgba(44, 85, 65, 0.06);
+  --card-grad-a: #FFFFFF;
+  --card-grad-b: #FFFDFA;
+  --zone-fill: #E4DBCC;
+  --indicator-bg: #FFFFFF;
+  --zone-border: rgba(28, 25, 23, 0.14);
+  --sheet-bg: rgba(255, 255, 255, 0.96);
+  --attempt-tint: rgba(237, 243, 238, 0.3);
+  /* 3D cube — frosted ceramic */
+  --ceramic-rim: rgba(120, 98, 82, 0.22);
+  --ceramic-a: #FFFFFF;
+  --ceramic-b: #F7F3EC;
+  --ceramic-c: #EFE9DF;
+  --ceramic-inset: rgba(255, 255, 255, 0.95);
+  --ceramic-shade: rgba(120, 98, 82, 0.35);
+  --ceramic-front-a: #FFFDFB;
+  --ceramic-front-b: #FDF1EA;
+  --ceramic-back-a: #FBFDFF;
+  --ceramic-back-b: #EEF4FA;
+  --ceramic-right-a: #FBFDFB;
+  --ceramic-right-b: #EEF4EF;
+  --ceramic-top-a: #FFFFFF;
+  --ceramic-top-b: #F6F2EA;
+  --ceramic-bottom-a: #F2EDE4;
+  --ceramic-bottom-b: #E6DFD2;
+  --ground-shadow: rgba(24, 22, 18, 0.22);
+
   /* Focus State */
   --focus-outline: 2px solid var(--accent-hover);
   --focus-ring: 0 0 0 4px rgba(217, 119, 87, 0.28);
@@ -157,4 +196,116 @@
     --dur-med: 0.01ms;
     --dur-slow: 0.01ms;
   }
+}
+
+/* ==========================================================================
+   Dark theme — opt-in only (light stays the default; see assets/js/theme.js)
+   Warm charcoal surfaces, the same terracotta accent lifted a step for
+   legibility, and every value below verified at >= 4.5:1 for body text.
+   ========================================================================== */
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Surfaces & borders */
+  --bg-page: #16130F;
+  --bg-subtle: #1E1A15;
+  --bg-card: #201C17;
+  --bg-card-hover: #26211B;
+  --bg-sand: #1E1A15;
+  --bg-sand-deep: #2A241D;
+  --border-subtle: rgba(245, 241, 234, 0.10);
+  --border-strong: rgba(245, 241, 234, 0.20);
+  --border-warm: rgba(224, 139, 106, 0.30);
+
+  /* Ink */
+  --ink-primary: #F6F1E9;
+  --ink-secondary: #D8D0C4;
+  --ink-muted: #A79C8D;
+  --ink-on-accent: #FFFFFF;
+
+  /* Accent */
+  --accent: #E08B6A;
+  --accent-hover: #EDA184;
+  --accent-ink: #F2AC90;
+  --accent-soft: #2C221C;
+  --accent-border: rgba(224, 139, 106, 0.34);
+  --accent-cta: #B8563A;
+  --accent-cta-hover: #A94D33;
+
+  /* Editorial butter swipe behind the italic accent word */
+  --highlight: rgba(162, 211, 181, 0.16);
+  --highlight-soft: rgba(162, 211, 181, 0.10);
+
+  /* Secondary tints */
+  --sage-bg: #1A2620;
+  --sage-border: rgba(159, 208, 178, 0.28);
+  --sage-ink: #A2D3B5;
+  --sky-bg: #18222C;
+  --sky-border: rgba(169, 199, 230, 0.26);
+  --sky-ink: #B2CDE9;
+
+  /* Data visualisation */
+  --chart-ink: #9FB3C0;
+  --chart-ink-soft: #2E3A42;
+
+  /* Semantic states */
+  --success-bg: #16241C;
+  --success-border: rgba(162, 211, 181, 0.28);
+  --success-ink: #A2D3B5;
+  --danger-bg: #2A1A17;
+  --danger-border: rgba(240, 160, 140, 0.30);
+  --danger-ink: #F2A793;
+  --warning-bg: #2A2114;
+  --warning-border: rgba(232, 210, 160, 0.28);
+  --warning-ink: #EFCE92;
+
+  /* Shadows sit on dark surfaces: deeper, less diffuse */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 3px 10px -4px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4), 0 12px 28px -12px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.45), 0 28px 60px -28px rgba(0, 0, 0, 0.8);
+  --shadow-photo: 0 2px 6px rgba(0, 0, 0, 0.4), 0 30px 60px -30px rgba(0, 0, 0, 0.85);
+  --shadow-warm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 18px -8px rgba(0, 0, 0, 0.6);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.45), 0 14px 26px -12px rgba(0, 0, 0, 0.7);
+
+  /* Component surfaces */
+  --nav-bg: rgba(22, 19, 15, 0.92);
+  --backdrop: rgba(0, 0, 0, 0.62);
+  --surface-hover: #2A231C;
+  --callout-bg: #2A2118;
+  --callout-hover: rgba(255, 214, 140, 0.12);
+  --segmented-hover: rgba(255, 255, 255, 0.06);
+  --hairline-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --hero-grid-line: rgba(246, 241, 233, 0.05);
+  --hero-tint-warm: rgba(224, 139, 106, 0.10);
+  --hero-tint-cool: rgba(159, 208, 178, 0.05);
+  --card-grad-a: #221E19;
+  --card-grad-b: #1E1A16;
+  --zone-fill: #2A241D;
+  --indicator-bg: #2F2822;
+  --zone-border: rgba(246, 241, 233, 0.16);
+  --sheet-bg: rgba(32, 28, 23, 0.96);
+  --attempt-tint: rgba(162, 211, 181, 0.08);
+
+  /* 3D cube — dark ceramic */
+  --ceramic-rim: rgba(246, 241, 233, 0.18);
+  --ceramic-a: #362F28;
+  --ceramic-b: #302A23;
+  --ceramic-c: #292319;
+  --ceramic-inset: rgba(255, 255, 255, 0.07);
+  --ceramic-shade: rgba(0, 0, 0, 0.55);
+  --ceramic-front-a: #402E24;
+  --ceramic-front-b: #37271F;
+  --ceramic-back-a: #26313C;
+  --ceramic-back-b: #212B34;
+  --ceramic-right-a: #26312B;
+  --ceramic-right-b: #212A25;
+  --ceramic-top-a: #3A332B;
+  --ceramic-top-b: #332C23;
+  --ceramic-bottom-a: #1B1712;
+  --ceramic-bottom-b: #15120E;
+  --ground-shadow: rgba(0, 0, 0, 0.6);
+
+  --focus-ring: 0 0 0 4px rgba(224, 139, 106, 0.38);
 }

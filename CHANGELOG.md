@@ -170,6 +170,32 @@ generated from a vetted boundary dataset — **no outline was hand-drawn**.
   the `.source-link` styles were deleted.
 * Asset query strings normalised to `?v=20261127d` on all pages.
 
+### Dark theme (27 Nov, third pass)
+
+Light stays the default; dark is opt-in and remembered per browser.
+
+* **Switch:** a moon/sun button in the header of every page (`data-theme-toggle`,
+  40px, 44px on Android), `aria-pressed` + action-labelled `aria-label`.
+* **No flash:** a 6-line inline script in each `<head>` applies the saved choice
+  before the stylesheets paint.
+* **Persistence:** `cp_theme` (`'dark'` when chosen, removed for light). This is
+  a new, additive key — every existing progress key and its schema is untouched,
+  so saved syllabus ticks, written answers, bookmarks and quiz history survive.
+  Two open tabs stay in sync via the `storage` event.
+* **Palette:** a `:root[data-theme="dark"]` block re-maps the same tokens (warm
+  charcoal `#16130F` page, `#201C17` cards, lifted terracotta accent) so no
+  component needed a second stylesheet. Hard-coded light values in the CSS were
+  replaced with tokens (`--nav-bg`, `--callout-bg`, `--ceramic-*`, `--zone-fill`,
+  `--sheet-bg`, `--card-grad-*`, `--highlight`, `--indicator-bg`, …).
+* **Details handled:** the editorial butter swipe becomes a soft sage wash in
+  dark; the 3D cube gets darker ceramic faces with brighter rims; the map
+  regions, question palette sheet, tooltips, tab indicator, quiz callout and the
+  404 page all follow the theme. `color-scheme` and `meta[theme-color]` switch
+  with it, so native controls and the mobile browser chrome match.
+* **Contrast (dark):** body text 16.5:1, secondary 11.1:1, muted meta 6.3–6.9:1,
+  accent ink 8.2–8.9:1, sage/sky/warning tints 9.3–10.5:1, white on the CTA
+  4.7:1 (5.5:1 on hover). Light-theme values are unchanged.
+
 ### Prelims Practice (`prelims-practice/index.html`, `prelims.css`)
 
 * The amber "Answer Key Note" is now a refined **left-accented callout**

@@ -645,7 +645,7 @@
     top: var(--nav-height);
     z-index: var(--z-sticky);
     padding: var(--space-3) var(--space-4);
-    background: rgba(255, 255, 255, 0.96);
+    background: var(--sheet-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-radius: var(--radius-md);

@@ -155,7 +155,7 @@
 
 .pyq-item.is-written {
   border-left-color: var(--sage-ink);
-  background-color: rgba(237, 243, 238, 0.35);
+  background-color: var(--attempt-tint);
 }
 
 .pyq-top {

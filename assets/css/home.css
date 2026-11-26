@@ -14,8 +14,8 @@
   padding-block: clamp(2.25rem, 4.5vw, 3.75rem) clamp(3rem, 6vw, 5rem);
   border-bottom: 1px solid var(--border-subtle);
   background:
-    radial-gradient(58% 55% at 100% 0%, rgba(217, 119, 87, 0.1) 0%, rgba(217, 119, 87, 0) 62%),
-    radial-gradient(55% 55% at 0% 100%, rgba(44, 85, 65, 0.06) 0%, rgba(44, 85, 65, 0) 60%),
+    radial-gradient(58% 55% at 100% 0%, var(--hero-tint-warm) 0%, transparent 62%),
+    radial-gradient(55% 55% at 0% 100%, var(--hero-tint-cool) 0%, transparent 60%),
     var(--bg-page);
 }
 
@@ -24,7 +24,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background-image: linear-gradient(to right, rgba(20, 20, 19, 0.028) 1px, transparent 1px);
+  background-image: linear-gradient(to right, var(--hero-grid-line) 1px, transparent 1px);
   background-size: 104px 100%;
   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 62%);
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 62%);
@@ -235,8 +235,7 @@
   height: 14px;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(24, 22, 18, 0.22),
-    rgba(24, 22, 18, 0) 72%);
+  background: radial-gradient(50% 50% at 50% 50%, var(--ground-shadow), transparent 72%);
   pointer-events: none;
   z-index: -1;
 }
@@ -275,11 +274,11 @@
   padding: 0.5rem;
   margin: 0;
   border-radius: 14px;
-  border: 1px solid rgba(120, 98, 82, 0.22);
+  border: 1px solid var(--ceramic-rim);
   /* Frosted ceramic: bright top edge, warm base, crisp 1px rim */
-  background: linear-gradient(158deg, #ffffff 0%, #f7f3ec 62%, #efe9df 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -8px 14px -10px rgba(120, 98, 82, 0.35);
+  background: linear-gradient(158deg, var(--ceramic-a) 0%, var(--ceramic-b) 62%, var(--ceramic-c) 100%);
+  box-shadow: inset 0 1px 0 var(--ceramic-inset),
+    inset 0 -8px 14px -10px var(--ceramic-shade);
   color: var(--ink-primary);
   font-family: var(--font-sans);
   font-size: 0.66rem;
@@ -313,19 +312,19 @@
 .cube-face--front {
   transform: translateZ(var(--cube-half));
   border-color: var(--accent-border);
-  background: linear-gradient(158deg, #fffdfb 0%, #fdf1ea 100%);
+  background: linear-gradient(158deg, var(--ceramic-front-a) 0%, var(--ceramic-front-b) 100%);
   color: var(--accent-ink);
 }
 
 .cube-face--back {
   transform: rotateY(180deg) translateZ(var(--cube-half));
-  background: linear-gradient(158deg, #fbfdff 0%, #eef4fa 100%);
+  background: linear-gradient(158deg, var(--ceramic-back-a) 0%, var(--ceramic-back-b) 100%);
   color: var(--sky-ink);
 }
 
 .cube-face--right {
   transform: rotateY(90deg) translateZ(var(--cube-half));
-  background: linear-gradient(158deg, #fbfdfb 0%, #eef4ef 100%);
+  background: linear-gradient(158deg, var(--ceramic-right-a) 0%, var(--ceramic-right-b) 100%);
   color: var(--sage-ink);
 }
 
@@ -335,12 +334,12 @@
 
 .cube-face--top {
   transform: rotateX(90deg) translateZ(var(--cube-half));
-  background: linear-gradient(158deg, #ffffff 0%, #f6f2ea 100%);
+  background: linear-gradient(158deg, var(--ceramic-top-a) 0%, var(--ceramic-top-b) 100%);
 }
 
 .cube-face--bottom {
   transform: rotateX(-90deg) translateZ(var(--cube-half));
-  background: linear-gradient(158deg, #f2ede4 0%, #e6dfd2 100%);
+  background: linear-gradient(158deg, var(--ceramic-bottom-a) 0%, var(--ceramic-bottom-b) 100%);
 }
 
 /* Top and bottom labels would read upside-down at the resting pose, so those
@@ -404,7 +403,7 @@
 }
 
 .cube-chip:hover {
-  background: #FBF6F0;
+  background: var(--surface-hover);
   border-color: var(--accent-border);
   color: var(--accent-ink);
 }
@@ -506,7 +505,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  background: linear-gradient(180deg, #ffffff 0%, #fffdfa 100%);
+  background: linear-gradient(180deg, var(--card-grad-a) 0%, var(--card-grad-b) 100%);
 }
 
 .stat-label {

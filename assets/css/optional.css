@@ -279,7 +279,7 @@
 
 .opt-card.is-attempted {
   border-left-color: var(--sage-ink);
-  background-color: rgba(237, 243, 238, 0.3);
+  background-color: var(--attempt-tint);
 }
 
 .opt-card-top {
@@ -399,7 +399,7 @@
 }
 
 .zone {
-  fill: #E4DBCC;
+  fill: var(--zone-fill);
   stroke: var(--bg-card);
   stroke-width: 1.5;
   cursor: pointer;
@@ -424,7 +424,7 @@
 
 .zone-borders {
   fill: none;
-  stroke: rgba(28, 25, 23, 0.14);
+  stroke: var(--zone-border);
   stroke-width: 0.8;
   pointer-events: none;
 }

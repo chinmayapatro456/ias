@@ -12,7 +12,9 @@
     mainsBookmarks: 'cp_mains_bookmarks',
     optionalAttempted: 'cp_optional_attempted',
     optionalBookmarks: 'cp_optional_bookmarks',
-    prelimsState: 'cp_prelims_state'
+    prelimsState: 'cp_prelims_state',
+    /* Additive: the light/dark choice. Existing keys above are untouched. */
+    theme: 'cp_theme'
   };
 
   function defaultPrelimsState() {
