@@ -1,0 +1,133 @@
+/* ==========================================================================
+   Design Tokens — Chinmaya Patro UPSC Study Desk
+   Anthropic-inspired editorial light theme (warm ivory, ink, terracotta)
+   ========================================================================== */
+
+:root {
+  /* Palette — Surfaces & Borders */
+  --bg-page: #FAF9F5;
+  --bg-subtle: #F3F1E9;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FFFEFC;
+  --border-subtle: #E8E6DC;
+  --border-strong: #D4D1C4;
+
+  /* Palette — Ink & Typography */
+  --ink-primary: #141413;
+  --ink-secondary: #3D3C38;
+  --ink-muted: #6B6A64;
+  --ink-on-accent: #FFFFFF;
+
+  /* Palette — Single Primary Accent (Terracotta) */
+  --accent: #D97757;
+  --accent-hover: #C6613F;
+  --accent-ink: #A64728;       /* >= 4.5:1 contrast for small text on ivory/white */
+  --accent-soft: #FBF0EC;
+  --accent-border: #EEC8BA;
+
+  /* Palette — Secondary Editorial Tints (Sage & Sky) */
+  --sage-bg: #EDF3EE;
+  --sage-border: #C9DCCD;
+  --sage-ink: #2C5541;         /* >= 4.5:1 contrast on sage-bg and white */
+
+  --sky-bg: #ECF2F8;
+  --sky-border: #C5D8EA;
+  --sky-ink: #2A5278;          /* >= 4.5:1 contrast on sky-bg and white */
+
+  /* Palette — Semantic States (Quiz, Progress, Flags) */
+  --success-bg: #EBF4EE;
+  --success-border: #BBDAC5;
+  --success-ink: #22543D;
+
+  --danger-bg: #FCEEEB;
+  --danger-border: #F0C2B9;
+  --danger-ink: #9E2F23;
+
+  --warning-bg: #FBF4E4;
+  --warning-border: #E8D2A0;
+  --warning-ink: #7C4F0B;
+
+  /* Typography — Families (System fonts only, zero external font requests) */
+  --font-serif: Georgia, "Times New Roman", Times, serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+
+  /* Typography — Scale */
+  --text-hero: clamp(2.8rem, 7vw, 5.5rem);
+  --text-h2: clamp(2rem, 4.2vw, 3rem);
+  --text-h3: clamp(1.35rem, 2.2vw, 1.75rem);
+  --text-h4: 1.2rem;
+  --text-lead: clamp(1.2rem, 1vw + 1.05rem, 1.4rem);
+  --text-body: clamp(1.15rem, 0.35vw + 1.08rem, 1.25rem);
+  --text-ui: 0.9375rem;        /* 15px — buttons, inputs, nav */
+  --text-sm: 0.875rem;         /* 14px — secondary UI labels */
+  --text-xs: 0.78rem;          /* ~12.5px — tags, badges, meta */
+
+  /* Typography — Leading & Tracking */
+  --leading-tight: 1.1;
+  --leading-heading: 1.2;
+  --leading-snug: 1.4;
+  --leading-body: 1.65;
+  --tracking-tight: -0.025em;
+  --tracking-wide: 0.06em;
+
+  /* Layout & Spacing */
+  --container-max: 1100px;
+  --container-narrow: 760px;
+  --nav-height: 68px;
+
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --section-pad: clamp(3rem, 6vw, 5.25rem);
+  --gutter: clamp(1rem, 3vw, 1.75rem);
+
+  /* Radii (Generous editorial corners: 14–20px) */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+
+  /* Shadows (Subtle warm-toned elevation) */
+  --shadow-xs: 0 1px 2px rgba(20, 20, 19, 0.04);
+  --shadow-sm: 0 2px 8px rgba(20, 20, 19, 0.05), 0 1px 2px rgba(20, 20, 19, 0.03);
+  --shadow-md: 0 8px 24px rgba(20, 20, 19, 0.07), 0 2px 6px rgba(20, 20, 19, 0.04);
+  --shadow-lg: 0 16px 40px rgba(20, 20, 19, 0.09), 0 4px 12px rgba(20, 20, 19, 0.04);
+
+  /* Focus State */
+  --focus-outline: 2px solid var(--accent-hover);
+  --focus-ring: 0 0 0 4px rgba(217, 119, 87, 0.28);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-med: 280ms;
+  --dur-slow: 520ms;
+
+  /* Z-Index Layers */
+  --z-base: 1;
+  --z-sticky: 20;
+  --z-nav: 100;
+  --z-drawer: 150;
+  --z-modal: 200;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0.01ms;
+    --dur-med: 0.01ms;
+    --dur-slow: 0.01ms;
+  }
+}

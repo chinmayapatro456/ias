@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Chinmaya Patro Study Desk">
+  <rect width="64" height="64" rx="16" fill="#FAF9F5" />
+  <rect x="3" y="3" width="58" height="58" rx="13" fill="none" stroke="#D97757" stroke-width="3" />
+  <circle cx="32" cy="32" r="22" fill="#D97757" />
+  <text x="32" y="40" text-anchor="middle" font-family="Georgia, Times, serif" font-size="24" font-weight="700" fill="#FAF9F5" letter-spacing="-1">CP</text>
+</svg>
