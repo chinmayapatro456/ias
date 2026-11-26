@@ -8,6 +8,22 @@ localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
 
 ---
 
+## Home — role line under the name (27 Nov 2026)
+
+Scope: `index.html`, `assets/css/home.css` (`?v=20261127t`). No data, storage-key,
+scoring or copy change elsewhere.
+
+- **What was added.** A single line, "a UPSC Aspirant", sits directly under the
+  `Chinmaya Patro` H1 in the hero, continuing the editorial em dash the heading
+  already carried.
+- **The formatting.** Set in Newsreader italic at weight 300, in the terracotta
+  accent ink, sized `clamp(1.2rem, 2.4vw, 1.7rem)` so it stays a quiet whisper
+  beside the display name at 360px and on a wide screen. Tight top margin keeps
+  it tucked under the H1; it inherits the existing dark-theme accent ink, so it
+  needs no separate dark rule.
+
+---
+
 ## Desktop fix — filter bar no longer eats the PYQ list (27 Nov 2026)
 
 Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, cache
