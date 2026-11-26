@@ -92,7 +92,7 @@
 }
 
 .freq-bar-fill {
-  fill: var(--sky-ink);
+  fill: var(--chart-ink);
   transform-box: fill-box;
   transform-origin: left center;
   transform: scaleX(1);

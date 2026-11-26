@@ -6,9 +6,12 @@
   <meta name="description" content="Chinmaya Patro — UPSC Civil Services Aspirant (Geography Optional). Public study desk with interactive syllabus tracker, Mains PYQs, Geography Optional PYQs, and Prelims practice.">
   <title>Chinmaya Patro — UPSC Civil Services Aspirant</title>
   <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg">
-  <link rel="stylesheet" href="./assets/css/tokens.css">
-  <link rel="stylesheet" href="./assets/css/base.css">
-  <link rel="stylesheet" href="./assets/css/home.css">
+  <link rel="preload" href="./assets/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/inter-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./assets/css/fonts.css?v=20261126a">
+  <link rel="stylesheet" href="./assets/css/tokens.css?v=20261126a">
+  <link rel="stylesheet" href="./assets/css/base.css?v=20261126a">
+  <link rel="stylesheet" href="./assets/css/home.css?v=20261126a">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -64,58 +67,61 @@
   </nav>
 
   <main id="main-content">
-    <!-- Hero with Full-Width UPSC Gate Banner, Profile Portrait & CSS-3D Subject Cube -->
+    <!-- Hero: editorial opening with the UPSC gate portrait plate & CSS-3D subject cube -->
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-banner" aria-hidden="true">
-        <img
-          src="./assets/img/banner.webp"
-          alt="Chinmaya Patro standing outside the Union Public Service Commission gate at Dholpur House, New Delhi"
-          width="1600"
-          height="900"
-          decoding="async"
-          fetchpriority="high"
-        >
-        <div class="hero-banner-overlay"></div>
-      </div>
-
-      <div class="container hero-content">
-        <div class="hero-grid">
-          <div class="hero-text">
-            <div class="hero-identity">
-              <div class="profile-ring">
-                <img
-                  src="./assets/img/profile.webp"
-                  alt="Portrait of Chinmaya Patro"
-                  width="128"
-                  height="128"
-                  decoding="async"
-                >
-              </div>
-              <div class="hero-badges">
-                <span class="tag tag--accent">Geography Optional</span>
-                <span class="tag tag--sage">Public Study Desk</span>
-              </div>
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <div class="hero-identity">
+            <div class="profile-ring">
+              <img
+                src="./assets/img/profile.webp"
+                alt="Portrait of Chinmaya Patro"
+                width="84"
+                height="84"
+                decoding="async"
+              >
             </div>
-
-            <h1 id="hero-title">Chinmaya Patro — UPSC Civil Services Aspirant</h1>
-
-            <p class="lead hero-intro">
-              Preparing for the Civil Services Examination with Geography as my optional subject.
-              I built this static site as a calm, distraction-free public study desk—keeping the official
-              syllabus, past-year questions, and Prelims practice in one place, with all progress saved
-              privately in my browser.
-            </p>
-
-            <div class="hero-actions" role="group" aria-label="Jump to study sections">
-              <a class="btn btn-primary" href="./prelims-practice/index.html">Prelims Practice</a>
-              <a class="btn btn-secondary" href="./syllabus/index.html">Syllabus Tracker</a>
-              <a class="btn btn-secondary" href="./mains-pyqs/index.html">Mains PYQs</a>
-              <a class="btn btn-secondary" href="./optional-pyqs/index.html">Optional PYQs</a>
+            <div class="hero-badges">
+              <span class="tag tag--accent">Geography Optional</span>
+              <span class="tag tag--sage">Public Study Desk</span>
             </div>
           </div>
 
-          <!-- Pure CSS 3D Rotating Subject Cube (No WebGL required) -->
-          <div class="hero-visual" aria-hidden="true">
+          <h1 id="hero-title">Chinmaya Patro — UPSC Civil Services Aspirant</h1>
+
+          <p class="lead hero-intro">
+            Preparing for the Civil Services Examination with Geography as my optional subject.
+            I built this static site as a calm, distraction-free public study desk—keeping the official
+            syllabus, past-year questions, and Prelims practice in one place, with all progress saved
+            privately in my browser.
+          </p>
+
+          <div class="hero-actions" role="group" aria-label="Jump to study sections">
+            <a class="btn btn-primary" href="./prelims-practice/index.html">Prelims Practice</a>
+            <a class="btn btn-secondary" href="./syllabus/index.html">Syllabus Tracker</a>
+            <a class="btn btn-secondary" href="./mains-pyqs/index.html">Mains PYQs</a>
+            <a class="btn btn-secondary" href="./optional-pyqs/index.html">Optional PYQs</a>
+          </div>
+        </div>
+
+        <div class="hero-figure-wrap">
+          <figure class="hero-figure">
+            <img
+              src="./assets/img/banner.webp"
+              alt="Chinmaya Patro standing outside the Union Public Service Commission gate at Dholpur House, New Delhi"
+              width="967"
+              height="728"
+              decoding="async"
+              fetchpriority="high"
+            >
+            <figcaption>
+              <span class="hero-figure-dot" aria-hidden="true"></span>
+              At the UPSC gate · Dholpur House, New Delhi
+            </figcaption>
+          </figure>
+
+          <!-- Pure CSS 3D subject cube (no WebGL) -->
+          <div class="hero-cube" aria-hidden="true">
             <div class="cube-stage">
               <div class="cube">
                 <div class="cube-face cube-face--front"><span>Polity</span></div>
@@ -126,7 +132,6 @@
                 <div class="cube-face cube-face--bottom"><span>Ethics</span></div>
               </div>
             </div>
-            <p class="cube-caption">Six pillars in steady rotation</p>
           </div>
         </div>
       </div>
@@ -341,14 +346,14 @@
   </footer>
 
   <!-- Deferred data scripts for live desk counts (page remains fully functional if empty/pending) -->
-  <script src="./data/syllabus-data.js" defer></script>
-  <script src="./data/mains-data.js" defer></script>
-  <script src="./data/optional-data.js" defer></script>
-  <script src="./data/prelims-data.js" defer></script>
+  <script src="./data/syllabus-data.js?v=20261126a" defer></script>
+  <script src="./data/mains-data.js?v=20261126a" defer></script>
+  <script src="./data/optional-data.js?v=20261126a" defer></script>
+  <script src="./data/prelims-data.js?v=20261126a" defer></script>
 
-  <script src="./assets/js/storage.js" defer></script>
-  <script src="./assets/js/nav.js" defer></script>
-  <script src="./assets/js/motion.js" defer></script>
-  <script src="./assets/js/home.js" defer></script>
+  <script src="./assets/js/storage.js?v=20261126a" defer></script>
+  <script src="./assets/js/nav.js?v=20261126a" defer></script>
+  <script src="./assets/js/motion.js?v=20261126a" defer></script>
+  <script src="./assets/js/home.js?v=20261126a" defer></script>
 </body>
 </html>
