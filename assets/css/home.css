@@ -45,94 +45,56 @@
   object-position: 58% 30%;
 }
 
+/* Bottom fade — the photograph dissolves into the page canvas, so the portrait
+   ring, the eyebrow and the name sit on clean ivory (and on --bg-page in dark). */
 .hero-band::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 2;
   background: linear-gradient(
     to bottom,
     rgba(var(--page-rgb), 0) 0%,
-    rgba(var(--page-rgb), 0) 38%,
-    rgba(var(--page-rgb), 0.6) 74%,
+    rgba(var(--page-rgb), 0) 30%,
+    rgba(var(--page-rgb), 0.45) 62%,
+    rgba(var(--page-rgb), 0.85) 85%,
     var(--bg-page) 100%
   );
 }
 
-/* Desktop: the whole frame, head to feet.
-   A wide band cannot show a 4:3 photograph without cropping it, so the figure
-   is no longer stretched to the band width. Instead the frame keeps its natural
-   aspect ratio at the band's full height, pinned right, and the same frame —
-   blurred — fills the rest of the band behind it. Nothing of the figure is cut
-   off, at any window width, which is what the phone layout already did. */
+/* Desktop: one clean, full-bleed frame — no blurred duplicate behind it. The
+   photograph is cropped from the bottom only (anchored to the top edge), so the
+   gate sign and the figure stay whole, and the band is tall enough to read as a
+   portrait rather than a strip. */
 @media (min-width: 768px) {
   .hero-band {
-    --band-h: clamp(440px, 64vh, 620px);
+    --band-h: clamp(380px, 62vh, 620px);
     height: var(--band-h);
-  }
-
-  /* Backdrop: a pre-blurred copy of the same frame, so the band stays
-     full-bleed behind the uncropped photograph. Generated once, not filtered
-     live — a filtered pseudo-element here sat on top of the photo in Chrome. */
-  .hero-band {
-    background-image: url("../img/banner-backdrop.webp");
-    background-size: cover;
-    background-position: center;
-  }
-
-  @supports (background-image: image-set(url("../img/banner-backdrop.avif") type("image/avif"))) {
-    .hero-band {
-      background-image: image-set(
-        url("../img/banner-backdrop.avif") type("image/avif"),
-        url("../img/banner-backdrop.webp") type("image/webp")
-      );
-    }
-  }
-
-  /* The frame itself: full height, uncropped, flush with the right edge and
-     feathered into the backdrop on its left side. */
-  .hero-band picture {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: var(--band-h);
-    width: calc(var(--band-h) * 967 / 728);
-    z-index: 1;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 30%);
-    mask-image: linear-gradient(to right, transparent 0%, #000 30%);
   }
 
   .hero-band img {
     object-fit: cover;
-    object-position: center;
+    object-position: 50% 30%;
   }
 
-  /* The figure now holds the right edge, so the tag moves out of its way.
-     Scoped to .hero-band so it outranks the base .hero-band-tag rule below. */
-  .hero-band .hero-band-tag {
-    left: clamp(1rem, 3vw, 1.75rem);
-    right: auto;
-  }
-
-  /* On very wide screens the uncropped frame would otherwise leave a large
-     blurred expanse, so the band grows with the window and the figure keeps a
-     similar share of the width. */
-  @media (min-width: 1500px) {
-    .hero-band {
-      --band-h: clamp(520px, 70vh, 700px);
-    }
-  }
-
-  /* Fade kept low so the legs and feet stay legible */
+  /* Long, late fade: the gate sign and the figure stay legible for most of the
+     band and only the foot of the frame dissolves into the page. */
   .hero-band::after {
-    z-index: 2;
     background: linear-gradient(
       to bottom,
       rgba(var(--page-rgb), 0) 0%,
-      rgba(var(--page-rgb), 0) 90%,
-      rgba(var(--page-rgb), 0.28) 97%,
+      rgba(var(--page-rgb), 0) 55%,
+      rgba(var(--page-rgb), 0.35) 76%,
+      rgba(var(--page-rgb), 0.85) 92%,
       var(--bg-page) 100%
     );
+  }
+
+  @media (min-width: 1500px) {
+    .hero-band {
+      --band-h: clamp(460px, 66vh, 700px);
+    }
   }
 }
 
@@ -140,14 +102,14 @@
   position: absolute;
   top: var(--space-4);
   right: clamp(1rem, 3vw, 1.75rem);
-  z-index: 1;
-  padding: 0.34rem 0.72rem;
+  z-index: 3;
+  padding: 0.42rem 0.85rem;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   background: var(--bg-card);
   color: var(--ink-primary);
   font-family: var(--font-sans);
-  font-size: var(--text-xs);
+  font-size: 0.78rem;
   letter-spacing: 0.01em;
   box-shadow: var(--shadow-sm);
 }
@@ -163,6 +125,19 @@
   padding-top: clamp(1.25rem, 2.4vw, 1.75rem);
 }
 
+@media (min-width: 768px) {
+  /* The portrait ring and the role line ride up over the faded foot of the
+     photograph, the way the reference banner reads. */
+  .hero-grid {
+    padding-top: 0;
+  }
+
+  .hero-identity {
+    margin-top: calc(-1 * clamp(2.5rem, 5vw, 4rem));
+    margin-bottom: var(--space-5);
+  }
+}
+
 @media (min-width: 960px) {
   .hero-grid {
     grid-template-columns: minmax(0, 1fr) 300px;
@@ -176,6 +151,8 @@
 }
 
 .hero-identity {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: var(--space-4);
@@ -187,11 +164,11 @@
 }
 
 .profile-ring {
-  width: 64px;
-  height: 64px;
-  padding: 3px;
+  width: 84px;
+  height: 84px;
+  padding: 4px;
   border-radius: 50%;
-  border: 1px solid var(--accent-border);
+  border: 2px solid var(--accent);
   background-color: var(--bg-card);
   box-shadow: var(--shadow-sm);
   flex-shrink: 0;
@@ -199,8 +176,10 @@
 
 @media (min-width: 768px) {
   .profile-ring {
-    width: 76px;
-    height: 76px;
+    width: 116px;
+    height: 116px;
+    padding: 5px;
+    border-width: 3px;
   }
 }
 
@@ -214,8 +193,8 @@
 }
 
 .hero-eyebrow {
-  margin-bottom: 0.25rem;
-  font-size: 0.66rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
 }
 
 .hero-eyebrow::before {
@@ -226,19 +205,23 @@
 .hero-subtitle {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
+  font-size: clamp(0.95rem, 1.1vw, 1.06rem);
   line-height: 1.35;
   color: var(--ink-secondary);
 }
 
-/* The name is the only H1 on the page: 2.35rem at 360px keeps "Chinmaya
-   Patro" on one line, and the clamp tops out at 3.85rem on desktop. */
+/* The name is the only H1 on the page. It carries the editorial em dash that
+   the lead paragraph continues; 2.35rem at 360px keeps it on one line. */
 .hero h1 {
   margin-bottom: var(--space-5);
-  font-size: clamp(2.35rem, 5vw, 3.85rem);
-  line-height: 1.02;
-  letter-spacing: -0.032em;
+  font-size: clamp(2.35rem, 7vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
   text-wrap: balance;
+}
+
+.hero-h1-dash {
+  margin-left: 0.06em;
 }
 
 .hero-intro {
