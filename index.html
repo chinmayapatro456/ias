@@ -35,10 +35,10 @@
       }
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="./assets/css/fonts.css?v=20261127f">
-  <link rel="stylesheet" href="./assets/css/tokens.css?v=20261127f">
-  <link rel="stylesheet" href="./assets/css/base.css?v=20261127f">
-  <link rel="stylesheet" href="./assets/css/home.css?v=20261127f">
+  <link rel="stylesheet" href="./assets/css/fonts.css?v=20261127g">
+  <link rel="stylesheet" href="./assets/css/tokens.css?v=20261127g">
+  <link rel="stylesheet" href="./assets/css/base.css?v=20261127g">
+  <link rel="stylesheet" href="./assets/css/home.css?v=20261127g">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -177,16 +177,8 @@
           </p>
 
           <div class="hero-actions" role="group" aria-label="Jump to study sections">
-            <a class="btn btn-primary hero-cta" href="./prelims-practice/index.html">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z"></path>
-                <path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"></path>
-              </svg>
-              <span>Prelims Practice</span>
-            </a>
-            <a class="btn btn-secondary btn-arrow hero-cta" href="./syllabus/index.html">Syllabus Tracker</a>
-            <a class="btn btn-secondary btn-arrow hero-cta" href="./mains-pyqs/index.html">Mains PYQs</a>
-            <a class="btn btn-secondary btn-arrow hero-cta" href="./optional-pyqs/index.html">Optional PYQs</a>
+            <a class="btn btn-primary hero-cta" href="./prelims-practice/index.html">Open Prelims Practice</a>
+            <a class="btn btn-secondary btn-arrow hero-cta" href="./syllabus/index.html">Explore Syllabus Tracker</a>
           </div>
         </div>
 
@@ -268,31 +260,31 @@
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow">Desk Inventory</span>
-          <h2 id="stats-heading">Everything on the desk, counted <span class="accent">live</span></h2>
+          <h2 id="stats-heading">The desk in <span class="accent">numbers</span></h2>
         </div>
 
         <div class="stats-grid reveal">
           <article class="card stat-card">
             <span class="stat-label">Syllabus Topics</span>
-            <p class="stat-value" id="count-syllabus" data-counter data-target="0">—</p>
+            <p class="stat-value" id="count-syllabus">—</p>
             <p class="stat-meta" id="meta-syllabus">Loading syllabus data…</p>
           </article>
 
           <article class="card stat-card">
             <span class="stat-label">Mains PYQs</span>
-            <p class="stat-value" id="count-mains" data-counter data-target="0">—</p>
+            <p class="stat-value" id="count-mains">—</p>
             <p class="stat-meta" id="meta-mains">GS I–IV & Essay (2013–2026)</p>
           </article>
 
           <article class="card stat-card">
             <span class="stat-label">Geography Optional</span>
-            <p class="stat-value" id="count-optional" data-counter data-target="0">—</p>
+            <p class="stat-value" id="count-optional">—</p>
             <p class="stat-meta" id="meta-optional">Paper I & II (1986–2026)</p>
           </article>
 
           <article class="card stat-card">
             <span class="stat-label">Prelims Questions</span>
-            <p class="stat-value" id="count-prelims" data-counter data-target="0">—</p>
+            <p class="stat-value" id="count-prelims">—</p>
             <p class="stat-meta" id="meta-prelims">Active scorable practice pool</p>
           </article>
         </div>
@@ -309,7 +301,7 @@
         </div>
 
         <div class="trio-grid">
-          <article class="card card--interactive tilt-card prep-card prep-card--sage reveal" data-tilt data-tilt-max="5">
+          <article class="card card--interactive prep-card prep-card--sage reveal">
             <div class="prep-card-top">
               <span class="tag tag--sage">Stage I · Objective</span>
               <span class="prep-num" aria-hidden="true">01</span>
@@ -325,7 +317,7 @@
             </div>
           </article>
 
-          <article class="card card--interactive tilt-card prep-card prep-card--accent reveal" data-tilt data-tilt-max="5">
+          <article class="card card--interactive prep-card prep-card--accent reveal">
             <div class="prep-card-top">
               <span class="tag tag--accent">Stage II · Written</span>
               <span class="prep-num" aria-hidden="true">02</span>
@@ -340,7 +332,7 @@
             </div>
           </article>
 
-          <article class="card card--interactive tilt-card prep-card prep-card--sky reveal" data-tilt data-tilt-max="5">
+          <article class="card card--interactive prep-card prep-card--sky reveal">
             <div class="prep-card-top">
               <span class="tag tag--sky">Optional · 500 Marks</span>
               <span class="prep-num" aria-hidden="true">03</span>
@@ -478,33 +470,57 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <div class="footer-top">
-        <span class="footer-brand">Chinmaya Patro · UPSC Study Desk</span>
-        <ul class="footer-links">
-          <li><a href="./index.html">Home</a></li>
-          <li><a href="./syllabus/index.html">Syllabus</a></li>
-          <li><a href="./mains-pyqs/index.html">Mains PYQs</a></li>
-          <li><a href="./optional-pyqs/index.html">Optional PYQs</a></li>
-          <li><a href="./prelims-practice/index.html">Prelims Practice</a></li>
-        </ul>
+      <div class="footer-colophon">
+        <div class="footer-col">
+          <span class="footer-wordmark">Chinmaya Patro · UPSC Study Desk</span>
+          <p class="footer-mission">
+            A public, distraction-free workspace for the Civil Services Examination — the official
+            syllabus, four decades of past questions, and Prelims practice in one place.
+          </p>
+          <p class="footer-disclaimer">
+            <strong>Not affiliated with UPSC</strong> (Union Public Service Commission) or any
+            government body. Built and maintained independently.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col-title">Archive</h2>
+          <ul class="footer-links">
+            <li><a href="./syllabus/index.html">Syllabus</a></li>
+            <li><a href="./mains-pyqs/index.html">Mains PYQs</a></li>
+            <li><a href="./optional-pyqs/index.html">Optional PYQs</a></li>
+            <li><a href="./prelims-practice/index.html">Prelims Practice</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col-title">Data &amp; technical note</h2>
+          <ul class="footer-notes">
+            <li>Progress is stored in this browser only — no accounts, no trackers, no server.</li>
+            <li><strong>Coverage</strong> · Optional 1986–2026 · Mains 2013–2026 · Prelims 1995–2026</li>
+            <li><strong>Maps</strong> · DataMeet-derived boundary dataset (udit-001/india-maps-data), Albers equal-area projection</li>
+          </ul>
+        </div>
       </div>
-      <p class="footer-disclaimer">
-        Personal open study workspace built for self-preparation. <strong>Not affiliated with UPSC</strong> (Union Public Service Commission) or any government body. All progress is stored locally in your browser.
-      </p>
+
+      <div class="footer-base">
+        <span>© 2026 Chinmaya Patro</span>
+        <span class="footer-mono">Plain HTML · CSS · JS — no trackers</span>
+      </div>
     </div>
   </footer>
 
   <!-- Deferred data scripts for live desk counts (page remains fully functional if empty/pending) -->
-  <script src="./data/syllabus-data.js?v=20261127f" defer></script>
-  <script src="./data/mains-data.js?v=20261127f" defer></script>
-  <script src="./data/optional-data.js?v=20261127f" defer></script>
-  <script src="./data/prelims-data.js?v=20261127f" defer></script>
+  <script src="./data/syllabus-data.js?v=20261127g" defer></script>
+  <script src="./data/mains-data.js?v=20261127g" defer></script>
+  <script src="./data/optional-data.js?v=20261127g" defer></script>
+  <script src="./data/prelims-data.js?v=20261127g" defer></script>
 
-  <script src="./assets/js/storage.js?v=20261127f" defer></script>
-  <script src="./assets/js/theme.js?v=20261127f" defer></script>
-  <script src="./assets/js/data-counts.js?v=20261127f" defer></script>
-  <script src="./assets/js/nav.js?v=20261127f" defer></script>
-  <script src="./assets/js/motion.js?v=20261127f" defer></script>
-  <script src="./assets/js/home.js?v=20261127f" defer></script>
+  <script src="./assets/js/storage.js?v=20261127g" defer></script>
+  <script src="./assets/js/theme.js?v=20261127g" defer></script>
+  <script src="./assets/js/data-counts.js?v=20261127g" defer></script>
+  <script src="./assets/js/nav.js?v=20261127g" defer></script>
+  <script src="./assets/js/motion.js?v=20261127g" defer></script>
+  <script src="./assets/js/home.js?v=20261127g" defer></script>
 </body>
 </html>

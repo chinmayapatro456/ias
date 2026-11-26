@@ -413,3 +413,72 @@ navigating. Asset URLs bumped to `?v=20261127e`.
 390 and 360 plus the dark theme; front-face tap still opens
 `mains-pyqs/index.html?paper=GS%20Paper%20II`, drag still spins without
 navigating. Asset URLs bumped to `?v=20261127f`.
+
+### Institutional redesign (27 Nov, fifth pass) — design system applied
+
+Kept your newest hero (full-bleed gate photograph, enlarged cube beside the
+heading, identity row) and applied the publication system around it. Reference
+points: Brookings (ruled layout, thin rules instead of card shadows, compact
+metadata), Carnegie (attribution-first content blocks), and the recurring
+think-tank design finding that restraint serves the content.
+
+**Geometry & surfaces**
+- Radii 12–16px → 2–4px on cards, buttons, inputs, chips, tabs, tags, palette,
+  map panel, cube faces and the 404 card. Progress rings, palette dots and map
+  markers stay circular: they are data, not chrome.
+- Floating shadows removed (`--shadow-xs/sm/md: none`); elevation is a `1px`
+  hairline (`--rule` / `--rule-strong`). Shadows survive only on overlays.
+- Paper `#FBF9F4`, sand `#F1EBE1` and white cards kept as the tier system.
+
+**Palette**
+- Ink `#171612`; terracotta consolidated to `#AE5230` for CTAs (white label
+  5.2:1) and `#C05F3A` for 2px rules/underlines; deep forest `#2C4A38` for
+  kickers, stat labels and secondary metadata.
+- Pastel pill backgrounds removed from metadata; tinted card variants
+  (`card--sage/sky/accent`) neutralised to white surfaces.
+
+**Typography**
+- Heading tracking tightened (h1 −0.034em), body 17px at a 62ch measure, new
+  11px `--text-micro` step for tracked-out labels, `tabular-nums` on every
+  metric, year, coordinate, ring percentage and the quiz timer.
+- Metadata is typographic: `2026 · GS PAPER I · 150 WORDS · 10 MARKS` in
+  uppercase 0.1em tracking, no borders or backgrounds.
+- The italic accent word stays italic but loses the butter swipe; it is set in
+  forest green.
+
+**Header & navigation**
+- `1px` warm rule under the header, `PUBLIC STUDY DESK` descriptor under the
+  wordmark, square ink monogram.
+- Active nav link: 2px terracotta underline, transparent background.
+
+**Homepage (your hero, kept)**
+- Hero: full-bleed band, identity row with hairline, cube beside the heading.
+  The copy now sits on clean paper below the band instead of on the photograph's
+  fade — the kicker and avatar were unreadable over the image.
+- Four CTAs streamlined to `Open Prelims Practice` (filled) and
+  `Explore Syllabus Tracker →` (outlined), per the brief.
+- Desk inventory renders statically: `animateCounter`, its rAF loop and its
+  observer are deleted. Numbers still come from `StudyCounts`.
+- Stage cards share one terracotta top rule with ruled gutters; the oversized
+  `01/02/03` are 11px mono marks.
+- Working notes are a ruled list; the India map stays prominent with monospace
+  coordinates.
+
+**Footer** — three-column colophon: identity + mission + non-affiliation,
+archive links, and a data/technical note (browser-only storage, coverage
+1986–2026 / 2013–2026 / 1995–2026, map attribution), closed by a ruled base.
+
+**Subpages**
+- Measured white tab pill and its JS deleted; tabs are a bottom-ruled strip with
+  a 2px terracotta underline, scrolling horizontally on Android.
+- Topic-frequency chart: 2px bars, hairline gridlines in the track, tabular
+  values, live year-range line in the header.
+- Mains/Prelims cards carry one monochrome metadata line.
+
+**Removed code**: `animateCounter`/`initCounters`, `initTiltCards`,
+`initTabIndicators`/`.tab-indicator`. `motion.js` now only reveals and draws the
+map; the cube, drawer and filter panels keep working as before.
+
+**Verification** — 30/30 page × width combinations pass (360/390/412/768/1280/
+1440): no overflow, no clipped text, no sub-44px targets, no console errors.
+Dark theme re-checked across pages.

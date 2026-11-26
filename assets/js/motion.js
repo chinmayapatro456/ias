@@ -55,113 +55,6 @@
     });
   }
 
-  /* 2. Pointer-Tilt Parallax Cards (Desktop Only) */
-  function initTiltCards() {
-    if (prefersReducedMotion() || !isDesktopPointer()) return;
-
-    var cards = document.querySelectorAll('[data-tilt]');
-    if (!cards.length) return;
-
-    cards.forEach(function (card) {
-      var maxTilt = parseFloat(card.getAttribute('data-tilt-max')) || 6;
-      var rafId = null;
-
-      function onMove(event) {
-        if (!isDesktopPointer() || prefersReducedMotion()) return;
-        var rect = card.getBoundingClientRect();
-        var relX = (event.clientX - rect.left) / rect.width - 0.5;
-        var relY = (event.clientY - rect.top) / rect.height - 0.5;
-        var rotY = (relX * maxTilt * 2).toFixed(2);
-        var rotX = (-relY * maxTilt * 2).toFixed(2);
-
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(function () {
-          card.style.transform =
-            'perspective(900px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) translateZ(0)';
-        });
-      }
-
-      function onLeave() {
-        if (rafId) cancelAnimationFrame(rafId);
-        card.style.transform = '';
-      }
-
-      card.addEventListener('pointermove', onMove, { passive: true });
-      card.addEventListener('pointerleave', onLeave, { passive: true });
-      card.addEventListener('pointercancel', onLeave, { passive: true });
-    });
-  }
-
-  /* 3. Animated Numeric Counters */
-  function formatNumber(n) {
-    try {
-      return Number(n).toLocaleString('en-IN');
-    } catch (e) {
-      return String(n);
-    }
-  }
-
-  function animateCounter(el, targetValue) {
-    if (!el) return;
-    var target = Number(targetValue);
-    if (!Number.isFinite(target) || target < 0) return;
-
-    var suffix = el.getAttribute('data-suffix') || '';
-    if (prefersReducedMotion() || target === 0) {
-      el.textContent = formatNumber(target) + suffix;
-      return;
-    }
-
-    var duration = 700;
-    var startTime = null;
-
-    function tick(now) {
-      if (!startTime) startTime = now;
-      var elapsed = now - startTime;
-      var progress = Math.min(elapsed / duration, 1);
-      var eased = 1 - Math.pow(1 - progress, 3);
-      var current = Math.round(eased * target);
-      el.textContent = formatNumber(current) + suffix;
-      if (progress < 1) {
-        requestAnimationFrame(tick);
-      }
-    }
-
-    requestAnimationFrame(tick);
-  }
-
-  function initCounters() {
-    var counters = document.querySelectorAll('[data-counter]');
-    if (!counters.length) return;
-
-    if (prefersReducedMotion() || typeof IntersectionObserver === 'undefined') {
-      counters.forEach(function (el) {
-        var target = el.getAttribute('data-target');
-        if (target !== null) animateCounter(el, Number(target));
-      });
-      return;
-    }
-
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            var target = entry.target.getAttribute('data-target');
-            if (target !== null) {
-              animateCounter(entry.target, Number(target));
-            }
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.25 }
-    );
-
-    counters.forEach(function (el) {
-      observer.observe(el);
-    });
-  }
-
   /* 4. Inline SVG Outline Draw-In (e.g., India Map) */
   function initSvgDraw() {
     var svgs = document.querySelectorAll('[data-draw-svg]');
@@ -219,8 +112,6 @@
   function initAll() {
     try {
       initReveal();
-      initTiltCards();
-      initCounters();
       initSvgDraw();
     } catch (err) {
       document.documentElement.classList.remove('js-motion');
@@ -228,7 +119,6 @@
   }
 
   window.StudyMotion = {
-    animateCounter: animateCounter,
     prefersReducedMotion: prefersReducedMotion
   };
 

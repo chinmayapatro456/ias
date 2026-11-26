@@ -1,8 +1,9 @@
 /* ==========================================================================
    Navigation & Shared UI Helpers — Chinmaya Patro UPSC Study Desk
    Mobile slide-over drawer (focus trap, Escape, aria-expanded, aria-current),
-   sliding tab indicators, collapsible mobile filter drawers, dismissible
-   callouts, and toast alerts. No dependencies.
+   collapsible mobile filter drawers, dismissible callouts, and toast alerts.
+   Tabs are styled purely in CSS now (2px underline), so nothing here measures
+   or positions them. No dependencies.
    ========================================================================== */
 
 (function () {
@@ -122,74 +123,6 @@
   }
 
   /* ---------------------------------------------------------------------
-     2. Sliding active-tab indicator
-     Positions a single pill behind the selected [role="tab"] of every .tabs
-     group and follows programmatic aria-selected changes (MutationObserver),
-     resize, and font load. Falls back to plain backgrounds without JS.
-     --------------------------------------------------------------------- */
-  function initTabIndicators() {
-    var groups = document.querySelectorAll('.tabs');
-    if (!groups.length) return;
-
-    /* NOTE: classList.add() rewrites the class attribute even when the token is
-       already present, which would make the MutationObserver below fire forever.
-       Every class change here is therefore guarded by a contains() check. */
-    function sync(group) {
-      var indicator = group.querySelector('.tab-indicator');
-      if (!indicator) {
-        indicator = document.createElement('span');
-        indicator.className = 'tab-indicator';
-        indicator.setAttribute('aria-hidden', 'true');
-        group.appendChild(indicator);
-      }
-
-      var active = group.querySelector('[role="tab"][aria-selected="true"], [role="tab"].is-active');
-      var groupRect = group.getBoundingClientRect();
-      var rect = active ? active.getBoundingClientRect() : null;
-
-      if (!rect || !rect.width) {
-        if (group.classList.contains('has-indicator')) group.classList.remove('has-indicator');
-        return;
-      }
-
-      indicator.style.width = rect.width + 'px';
-      indicator.style.height = rect.height + 'px';
-      indicator.style.transform =
-        'translate(' + (rect.left - groupRect.left) + 'px, ' + (rect.top - groupRect.top) + 'px)';
-
-      if (!group.classList.contains('has-indicator')) group.classList.add('has-indicator');
-    }
-
-    function syncAll() {
-      Array.prototype.forEach.call(groups, sync);
-    }
-
-    syncAll();
-
-    if (typeof ResizeObserver !== 'undefined') {
-      var ro = new ResizeObserver(syncAll);
-      Array.prototype.forEach.call(groups, function (g) { ro.observe(g); });
-    }
-
-    window.addEventListener('resize', syncAll, { passive: true });
-
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(syncAll).catch(function () {});
-    }
-
-    /* Follow programmatic tab changes (aria-selected / .is-active toggles) */
-    if (typeof MutationObserver !== 'undefined') {
-      var mo = new MutationObserver(syncAll);
-      Array.prototype.forEach.call(groups, function (g) {
-        mo.observe(g, { subtree: true, attributes: true, attributeFilter: ['aria-selected', 'class'] });
-      });
-    }
-
-    window.StudyUI = window.StudyUI || {};
-    window.StudyUI.syncTabs = syncAll;
-  }
-
-  /* ---------------------------------------------------------------------
      3. Collapsible filter drawers (Mains PYQs, Optional PYQs on Android)
      Desktop keeps the panel open; below 768px the panel starts collapsed so
      questions sit above the fold. Filter state is untouched either way.
@@ -268,14 +201,12 @@
   }
 
   window.StudyUI = {
-    toast: showToast,
-    syncTabs: function () {}
+    toast: showToast
   };
 
   function initAll() {
     try {
       initNav();
-      initTabIndicators();
       initFilterDrawers();
       initDismissibles();
     } catch (err) {

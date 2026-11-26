@@ -206,6 +206,18 @@
   /* Animated SVG Topic-Frequency Chart */
   function renderChart() {
     var wrap = document.getElementById('opt-chart-wrap');
+
+    /* Year-range context for the chart header */
+    var rangeEl = document.getElementById('opt-chart-range');
+    if (rangeEl) {
+      var from = state.minYear;
+      var to = state.maxYear;
+      var paperLabel = state.paper === 'all' ? 'both papers' : state.paper;
+      rangeEl.textContent =
+        from + '\u2013' + to + ' \u00b7 ' + paperLabel +
+        (from === datasetMinYear && to === datasetMaxYear ? ' \u00b7 all years' : '');
+    }
+
     if (!wrap) return;
 
     var pool = getPaperAndYearPool();

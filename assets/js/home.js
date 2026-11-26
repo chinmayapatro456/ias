@@ -9,21 +9,17 @@
 (function () {
   'use strict';
 
+  /* Figures render statically: no count-up, no observer, no delay. */
   function setCounter(el, value) {
     if (!el) return;
     if (value === null || value === undefined) {
       el.textContent = '—';
       return;
     }
-    el.setAttribute('data-target', String(value));
-    if (window.StudyMotion && typeof window.StudyMotion.animateCounter === 'function') {
-      window.StudyMotion.animateCounter(el, value);
-    } else {
-      try {
-        el.textContent = Number(value).toLocaleString('en-IN');
-      } catch (e) {
-        el.textContent = String(value);
-      }
+    try {
+      el.textContent = Number(value).toLocaleString('en-IN');
+    } catch (e) {
+      el.textContent = String(value);
     }
   }
 

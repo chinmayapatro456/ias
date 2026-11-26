@@ -64,9 +64,10 @@
   flex-direction: column;
   gap: 6px;
   width: 100%;
-  padding: 8px;
-  border: 1px solid transparent;
-  border-radius: 9px;
+  padding: 8px 6px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
   background: none;
   text-align: left;
   transition: background-color var(--dur-fast) var(--ease-out),
@@ -74,8 +75,7 @@
 }
 
 .freq-row:hover {
-  background-color: var(--bg-page);
-  border-color: var(--border-subtle);
+  background-color: var(--surface-hover);
 }
 
 .freq-row:focus-visible {
@@ -93,7 +93,7 @@
 .freq-label {
   min-width: 0;
   font-family: var(--font-sans);
-  font-size: 0.83rem;
+  font-size: 0.8rem;
   font-weight: 500;
   line-height: 1.35;
   color: var(--ink-secondary);
@@ -103,24 +103,27 @@
 .freq-count {
   flex-shrink: 0;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  color: var(--ink-muted);
+  color: var(--ink-secondary);
 }
 
+/* Data bars: 2px corners, one accent series, hairline gridlines behind */
 .freq-bar-track {
   display: block;
-  height: 8px;
-  border-radius: 999px;
+  height: 10px;
+  border-radius: 2px;
   background-color: var(--bg-sand);
+  background-image: linear-gradient(to right, var(--rule) 1px, transparent 1px);
+  background-size: 25% 100%;
   overflow: hidden;
 }
 
 .freq-bar-fill {
   display: block;
   height: 100%;
-  border-radius: 999px;
+  border-radius: 2px;
   background-color: var(--chart-ink);
   transform-origin: left center;
   transition: width var(--dur-slow) var(--ease-out),
@@ -137,7 +140,7 @@
 }
 
 .freq-row.is-active .freq-bar-fill {
-  background-color: var(--accent);
+  background-color: var(--accent-rule);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -193,8 +196,8 @@
   color: var(--accent-ink);
   background: var(--accent-soft);
   border: 1px solid var(--accent-border);
-  padding: 0.15rem 0.55rem;
-  border-radius: var(--radius-pill);
+  padding: 0.12rem 0.45rem;
+  border-radius: var(--radius-xs);
 }
 
 .year-slider {
@@ -225,17 +228,29 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 38px;
-  padding: 0.35rem 0.9rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border-strong);
-  background: var(--bg-page);
+  min-height: 36px;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: 500;
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--ink-secondary);
   cursor: pointer;
   user-select: none;
+}
+
+.check-pill:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+}
+
+.check-pill:has(input:checked) {
+  border-color: var(--ink-primary);
+  color: var(--ink-primary);
 }
 
 .check-pill input {
@@ -317,15 +332,17 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 36px;
-  padding: 0.35rem 0.85rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border-strong);
+  min-height: 34px;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
   background-color: var(--bg-card);
   color: var(--ink-secondary);
   font-family: var(--font-sans);
-  font-size: var(--text-xs);
+  font-size: var(--text-micro);
   font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   transition: background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out);
@@ -435,7 +452,7 @@
   left: 0;
   z-index: 3;
   padding: 0.25rem 0.5rem;
-  border-radius: 6px;
+  border-radius: var(--radius-xs);
   background: var(--ink-primary);
   color: #fff;
   font-family: var(--font-sans);
@@ -470,9 +487,9 @@
   justify-content: space-between;
   gap: var(--space-2);
   min-height: 44px;
-  padding: 0.4rem 0.65rem;
+  padding: 0.4rem 0.6rem;
   border: 1px solid var(--border-subtle);
-  border-radius: 9px;
+  border-radius: var(--radius-xs);
   background: var(--bg-card);
   font-family: var(--font-sans);
   font-size: 0.8rem;
@@ -512,4 +529,15 @@
   .opt-card-actions .btn {
     min-height: 44px;
   }
+}
+
+/* Year-range context shown in the chart header */
+.chart-range {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
 }

@@ -97,10 +97,9 @@
 
 .mains-group {
   background-color: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-xs);
   overflow: hidden;
-  box-shadow: var(--shadow-xs);
 }
 
 .mains-group-head {
@@ -109,9 +108,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-6);
-  background-color: var(--bg-subtle);
-  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--bg-sand);
+  border-bottom: 1px solid var(--rule-strong);
 }
 
 .mains-group-title {
@@ -138,9 +137,9 @@
    ========================================================================== */
 
 .pyq-item {
-  padding: var(--space-5) var(--space-6);
-  border-bottom: 1px solid var(--border-subtle);
-  border-left: 3px solid transparent;
+  padding: var(--space-5) var(--space-5);
+  border-bottom: 1px solid var(--rule);
+  border-left: 2px solid transparent;
   transition: background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
 }
@@ -153,8 +152,9 @@
   background-color: var(--bg-card-hover);
 }
 
+/* One state colour only: a forest rule marks an answer already written */
 .pyq-item.is-written {
-  border-left-color: var(--sage-ink);
+  border-left-color: var(--forest);
   background-color: var(--attempt-tint);
 }
 
@@ -168,9 +168,10 @@
 
 .pyq-text {
   margin: 0 0 var(--space-4);
+  max-width: 72ch;
   font-family: var(--font-serif);
-  font-size: 1.08rem;
-  line-height: 1.65;
+  font-size: 1.06rem;
+  line-height: 1.6;
   color: var(--ink-primary);
   white-space: pre-line;
 }
@@ -193,11 +194,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 36px;
-  padding: 0.35rem 0.8rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border-strong);
+  min-height: 34px;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
   background-color: var(--bg-card);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--ink-secondary);
   font-family: var(--font-sans);
   font-size: var(--text-xs);

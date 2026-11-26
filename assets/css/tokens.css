@@ -1,73 +1,77 @@
 /* ==========================================================================
    Design Tokens — Chinmaya Patro UPSC Study Desk
-   Anthropic-inspired editorial light theme (warm ivory, ink, terracotta)
+   Institutional editorial theme: warm paper, ruled hairlines, near-black ink,
+   terracotta reserved for primary actions and active rules, deep forest green
+   for labels. Modelled on research-institution publishing (Brookings,
+   Carnegie, Chatham House): the layout is serious because it is ruled, not
+   because it is decorated.
    ========================================================================== */
 
 :root {
   color-scheme: light;
 
   /* Palette — Surfaces & Borders (3-tier light system)
-     Tier 1: warm alabaster page canvas
-     Tier 2: pure white elevated cards with hairline warm borders
+     Tier 1: warm paper page canvas
+     Tier 2: pure white elevated cards with hairline rules
      Tier 3: warm sand section bands                                  */
-  --bg-page: #FAF8F5;
-  --bg-subtle: #F2EDE6;
+  --bg-page: #FBF9F4;
+  --bg-subtle: #F1EBE1;
   --bg-card: #FFFFFF;
-  --bg-card-hover: #FFFEFC;
-  --bg-sand: #F2EDE6;
-  --bg-sand-deep: #EBE4DA;
-  /* Page canvas as an RGB triplet, for gradients that must fade into it */
-  --page-rgb: 250, 248, 245;
-  --border-subtle: rgba(28, 25, 23, 0.08);
-  --border-strong: rgba(28, 25, 23, 0.16);
-  --border-warm: rgba(120, 98, 82, 0.22);
+  --bg-card-hover: #FDFBF7;
+  --bg-sand: #F1EBE1;
+  --bg-sand-deep: #E7DFD2;
+  --border-subtle: rgba(24, 22, 18, 0.12);
+  --border-strong: rgba(24, 22, 18, 0.26);
+  --border-warm: rgba(24, 22, 18, 0.16);
+  --rule: rgba(24, 22, 18, 0.14);          /* editorial hairline rules */
+  --rule-strong: rgba(24, 22, 18, 0.34);
 
   /* Palette — Ink & Typography */
-  --ink-primary: #141413;
-  --ink-secondary: #3D3C38;
-  --ink-muted: #6B6A64;
+  --ink-primary: #171612;
+  --ink-secondary: #3A3831;
+  --ink-muted: #6B675D;
   --ink-on-accent: #FFFFFF;
 
-  /* Palette — Single Primary Accent (Terracotta) */
-  --accent: #D97757;
-  --accent-hover: #C6613F;
-  /* Solid-fill CTA terracotta: deepened so white label text clears WCAG AA
-     (white on #B8563A = 4.7:1, on #A64728 = 5.9:1) */
-  --accent-cta: #B8563A;
-  --accent-cta-hover: #A64728;
-  --accent-ink: #A64728;       /* >= 4.5:1 contrast for small text on ivory/white */
-  --accent-soft: #FBF0EC;
-  --accent-border: #EEC8BA;
+  /* Palette — Primary Accent (terracotta): actions and active rules only */
+  --accent: #B4552F;
+  --accent-hover: #9A4526;
+  --accent-rule: #C05F3A;                  /* 2px underlines, rules, markers */
+  --accent-ink: #9A4526;                   /* text-safe terracotta */
+  --accent-cta: #AE5230;                   /* white label = 5.2:1 */
+  --accent-cta-hover: #9A4526;
+  --accent-soft: #F7EDE7;
+  --accent-border: rgba(176, 82, 48, 0.28);
 
-  /* Palette — Secondary Editorial Tints (Sage & Sky) */
-  /* Editorial highlight — butter swipe behind an accent word */
-  --highlight: #F7E8C4;
-  --highlight-soft: #FBF3DC;
+  /* Editorial butter swipe (kept as a token, no longer painted) */
+  --highlight: transparent;
+  --highlight-soft: transparent;
 
-  --sage-bg: #EDF3EE;
-  --sage-border: #C9DCCD;
-  --sage-ink: #2C5541;         /* >= 4.5:1 contrast on sage-bg and white */
+  /* Palette — Secondary: deep forest green for labels, slate for data */
+  --forest: #2C4A38;
+  --forest-soft: #EAF0EB;
+  --sage-bg: #EAF0EB;
+  --sage-border: rgba(44, 74, 56, 0.24);
+  --sage-ink: #2C4A38;
 
-  /* Data visualisation — muted slate so charts sit under the terracotta accent */
-  --chart-ink: #46545f;
-  --chart-ink-soft: #dfe6ea;
+  --chart-ink: #45535C;
+  --chart-ink-soft: #DDE3E6;
 
-  --sky-bg: #ECF2F8;
-  --sky-border: #C5D8EA;
-  --sky-ink: #2A5278;          /* >= 4.5:1 contrast on sky-bg and white */
+  --sky-bg: #EDF1F5;
+  --sky-border: rgba(69, 83, 92, 0.24);
+  --sky-ink: #37454E;
 
-  /* Palette — Semantic States (Quiz, Progress, Flags) */
-  --success-bg: #EBF4EE;
-  --success-border: #BBDAC5;
-  --success-ink: #22543D;
+  /* Palette — Semantic States */
+  --success-bg: #EAF0EB;
+  --success-border: rgba(44, 74, 56, 0.24);
+  --success-ink: #2C4A38;
 
-  --danger-bg: #FCEEEB;
-  --danger-border: #F0C2B9;
-  --danger-ink: #9E2F23;
+  --danger-bg: #F8EBE7;
+  --danger-border: rgba(154, 69, 38, 0.28);
+  --danger-ink: #8E3A20;
 
-  --warning-bg: #FBF4E4;
-  --warning-border: #E8D2A0;
-  --warning-ink: #7C4F0B;
+  --warning-bg: #F8F1E2;
+  --warning-border: rgba(124, 79, 11, 0.26);
+  --warning-ink: #6F4A0D;
 
   /* Typography — Families (self-hosted, see fonts.css; no external requests) */
   --font-serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino,
@@ -78,30 +82,31 @@
     Consolas, "Liberation Mono", monospace;
 
   /* Typography — Scale (editorial display sizes, optical tracking) */
-  --text-hero: clamp(2.5rem, 4.6vw + 0.6rem, 4.1rem);
-  --text-h2: clamp(1.85rem, 2.6vw + 0.5rem, 2.65rem);
-  --text-h3: clamp(1.3rem, 1.2vw + 0.95rem, 1.6rem);
-  --text-h4: 1.15rem;
-  --text-lead: clamp(1.15rem, 0.55vw + 1rem, 1.35rem);
-  --text-body: clamp(1.0625rem, 0.22vw + 1rem, 1.1875rem);
+  --text-hero: clamp(2.35rem, 4.1vw + 0.6rem, 3.85rem);
+  --text-h2: clamp(1.75rem, 2.4vw + 0.5rem, 2.45rem);
+  --text-h3: clamp(1.25rem, 1.1vw + 0.95rem, 1.5rem);
+  --text-h4: 1.1rem;
+  --text-lead: clamp(1.06rem, 0.5vw + 0.98rem, 1.25rem);
+  --text-body: 1.0625rem;      /* 17px */
   --text-ui: 0.9375rem;        /* 15px — buttons, inputs, nav */
   --text-sm: 0.875rem;         /* 14px — secondary UI labels */
-  --text-xs: 0.78rem;          /* ~12.5px — tags, badges, meta */
-  --text-eyebrow: 0.72rem;     /* small caps label */
-  --measure: 62ch;             /* reading measure for body copy (58ch–65ch) */
+  --text-xs: 0.78rem;          /* ~12.5px — meta, badges */
+  --text-micro: 0.6875rem;     /* 11px — tracked-out micro labels */
+  --text-eyebrow: 0.7rem;
 
   /* Typography — Leading & Tracking */
-  --leading-tight: 1.04;
-  --leading-heading: 1.16;
-  --leading-snug: 1.4;
+  --leading-tight: 1.02;
+  --leading-heading: 1.1;
+  --leading-snug: 1.38;
   --leading-body: 1.62;
-  --tracking-tight: -0.022em;
-  --tracking-wide: 0.12em;
+  --tracking-tight: -0.028em;
+  --tracking-wide: 0.14em;
+  --measure: 62ch;
 
   /* Layout & Spacing */
-  --container-max: 1100px;
+  --container-max: 1120px;
   --container-narrow: 760px;
-  --nav-height: 68px;
+  --nav-height: 66px;
 
   --space-1: 0.25rem;   /* 4px */
   --space-2: 0.5rem;    /* 8px */
@@ -114,52 +119,54 @@
   --space-12: 3rem;     /* 48px */
   --space-16: 4rem;     /* 64px */
   --space-20: 5rem;     /* 80px */
-  --section-pad: clamp(3rem, 6vw, 5.25rem);
+  --section-pad: clamp(2.75rem, 5.5vw, 4.75rem);
   --gutter: clamp(1rem, 3vw, 1.75rem);
 
-  /* Radii (editorial: soft but not bubbly) */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 22px;
-  --radius-pill: 9999px;
+  /* Radii — print-adjacent geometry: near-square, never pill */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+  --radius-pill: 4px;    /* legacy alias: pills resolve to rectangles */
 
-  /* Shadows (soft, warm, diffuse — paper on a desk) */
-  --shadow-xs: 0 1px 2px rgba(24, 22, 18, 0.05);
-  --shadow-sm: 0 1px 2px rgba(24, 22, 18, 0.04), 0 3px 10px -4px rgba(24, 22, 18, 0.08);
-  --shadow-md: 0 2px 4px rgba(24, 22, 18, 0.04), 0 12px 28px -12px rgba(24, 22, 18, 0.16);
-  --shadow-lg: 0 4px 8px rgba(24, 22, 18, 0.04), 0 28px 60px -28px rgba(24, 22, 18, 0.28);
-  --shadow-photo: 0 2px 6px rgba(24, 22, 18, 0.06), 0 30px 60px -30px rgba(24, 22, 18, 0.4);
-  --shadow-warm: 0 1px 2px rgba(122, 78, 52, 0.06), 0 8px 18px -8px rgba(122, 78, 52, 0.22);
-  --shadow-lift: 0 2px 4px rgba(122, 78, 52, 0.08), 0 14px 26px -12px rgba(122, 78, 52, 0.3);
+  /* Shadows — elevation is expressed with rules; only overlays float */
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: 0 18px 48px -24px rgba(24, 22, 18, 0.35);
+  --shadow-photo: none;
+  --shadow-warm: none;
+  --shadow-lift: 0 6px 18px -12px rgba(24, 22, 18, 0.28);
 
   /* Component surfaces that need their own value in each theme */
-  --nav-bg: rgba(250, 248, 245, 0.92);
-  --backdrop: rgba(20, 20, 19, 0.35);
-  --surface-hover: #FBF6F0;
-  --callout-bg: #FDF7EA;
+  --nav-bg: rgba(251, 249, 244, 0.94);
+  --backdrop: rgba(24, 22, 18, 0.38);
+  --surface-hover: #F6F1E9;
+  --callout-bg: #F8F1E2;
   --callout-hover: rgba(124, 79, 11, 0.1);
-  --segmented-hover: rgba(255, 255, 255, 0.6);
-  --hairline-shadow: 0 1px 2px rgba(28, 25, 23, 0.08);
-  --hero-grid-line: rgba(20, 20, 19, 0.028);
-  --hero-tint-warm: rgba(217, 119, 87, 0.1);
-  --hero-tint-cool: rgba(44, 85, 65, 0.06);
+  --segmented-hover: rgba(24, 22, 18, 0.05);
+  --hairline-shadow: none;
+  --hero-grid-line: rgba(24, 22, 18, 0.035);
+  --hero-tint-warm: rgba(180, 85, 47, 0.05);
+  --hero-tint-cool: rgba(44, 74, 56, 0.04);
   --card-grad-a: #FFFFFF;
-  --card-grad-b: #FFFDFA;
-  --zone-fill: #E4DBCC;
+  --card-grad-b: #FFFFFF;
+  --zone-fill: #E7DFD2;
+  --zone-border: rgba(24, 22, 18, 0.16);
   --indicator-bg: #FFFFFF;
-  --zone-border: rgba(28, 25, 23, 0.14);
-  --sheet-bg: rgba(255, 255, 255, 0.96);
-  --attempt-tint: rgba(237, 243, 238, 0.3);
-  /* 3D cube — frosted ceramic */
-  --ceramic-rim: rgba(120, 98, 82, 0.22);
+  --sheet-bg: rgba(255, 255, 255, 0.97);
+  --attempt-tint: #F4F7F4;
+
+  /* 3D cube — frosted ceramic (kept for parity; the cube is no longer shown) */
+  --ceramic-rim: rgba(24, 22, 18, 0.22);
   --ceramic-a: #FFFFFF;
-  --ceramic-b: #F7F3EC;
-  --ceramic-c: #EFE9DF;
+  --ceramic-b: #FAF7F1;
+  --ceramic-c: #F1EBE1;
   --ceramic-inset: rgba(255, 255, 255, 0.95);
   --ceramic-shade: rgba(120, 98, 82, 0.35);
-  --ceramic-front-a: #FFFDFB;
-  --ceramic-front-b: #FDF1EA;
+  --ceramic-front-a: #FFFFFF;
+  --ceramic-front-b: #FBF1EA;
   --ceramic-back-a: #FBFDFF;
   --ceramic-back-b: #EEF4FA;
   --ceramic-right-a: #FBFDFB;
@@ -172,17 +179,17 @@
 
   /* Focus State */
   --focus-outline: 2px solid var(--accent-hover);
-  --focus-ring: 0 0 0 4px rgba(217, 119, 87, 0.28);
+  --focus-ring: 0 0 0 3px rgba(180, 85, 47, 0.3);
 
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-soft: cubic-bezier(0.16, 0.84, 0.44, 1);
-  --dur-fast: 150ms;
-  --dur-med: 260ms;
-  --dur-slow: 420ms;
-  --dur-reveal: 380ms;        /* scroll reveals: subtle and fast */
-  --dur-hero: 280ms;          /* above-the-fold entrance */
+  --dur-fast: 130ms;
+  --dur-med: 220ms;
+  --dur-slow: 380ms;
+  --dur-reveal: 340ms;
+  --dur-hero: 240ms;
 
   /* Z-Index Layers */
   --z-base: 1;
@@ -202,113 +209,85 @@
 
 /* ==========================================================================
    Dark theme — opt-in only (light stays the default; see assets/js/theme.js)
-   Warm charcoal surfaces, the same terracotta accent lifted a step for
-   legibility, and every value below verified at >= 4.5:1 for body text.
+   Charcoal surfaces, paper-white ink, terracotta lifted a step.
    ========================================================================== */
 
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  /* Surfaces & borders */
-  --bg-page: #16130F;
-  --bg-subtle: #1E1A15;
-  --bg-card: #201C17;
-  --bg-card-hover: #26211B;
-  --bg-sand: #1E1A15;
-  --bg-sand-deep: #2A241D;
-  --page-rgb: 22, 19, 15;
-  --border-subtle: rgba(245, 241, 234, 0.10);
-  --border-strong: rgba(245, 241, 234, 0.20);
-  --border-warm: rgba(224, 139, 106, 0.30);
+  --bg-page: #14120E;
+  --bg-subtle: #1B1814;
+  --bg-card: #1B1814;
+  --bg-card-hover: #221E19;
+  --bg-sand: #1B1814;
+  --bg-sand-deep: #262119;
+  --border-subtle: rgba(245, 241, 232, 0.14);
+  --border-strong: rgba(245, 241, 232, 0.28);
+  --border-warm: rgba(245, 241, 232, 0.18);
+  --rule: rgba(245, 241, 232, 0.16);
+  --rule-strong: rgba(245, 241, 232, 0.38);
 
-  /* Ink */
-  --ink-primary: #F6F1E9;
-  --ink-secondary: #D8D0C4;
-  --ink-muted: #A79C8D;
+  --ink-primary: #F5F1E8;
+  --ink-secondary: #D6CFC2;
+  --ink-muted: #A69C8C;
   --ink-on-accent: #FFFFFF;
 
-  /* Accent */
   --accent: #E08B6A;
   --accent-hover: #EDA184;
-  --accent-ink: #F2AC90;
-  --accent-soft: #2C221C;
-  --accent-border: rgba(224, 139, 106, 0.34);
-  --accent-cta: #B8563A;
-  --accent-cta-hover: #A94D33;
+  --accent-rule: #E08B6A;
+  --accent-ink: #E8A184;
+  --accent-cta: #B4552F;
+  --accent-cta-hover: #C4603A;
+  --accent-soft: #2A211B;
+  --accent-border: rgba(224, 139, 106, 0.32);
 
-  /* Editorial butter swipe behind the italic accent word */
-  --highlight: rgba(162, 211, 181, 0.16);
-  --highlight-soft: rgba(162, 211, 181, 0.10);
+  --highlight: transparent;
+  --highlight-soft: transparent;
 
-  /* Secondary tints */
-  --sage-bg: #1A2620;
-  --sage-border: rgba(159, 208, 178, 0.28);
+  --forest: #A2D3B5;
+  --forest-soft: #1D2A23;
+  --sage-bg: #1D2A23;
+  --sage-border: rgba(162, 211, 181, 0.26);
   --sage-ink: #A2D3B5;
-  --sky-bg: #18222C;
-  --sky-border: rgba(169, 199, 230, 0.26);
-  --sky-ink: #B2CDE9;
 
-  /* Data visualisation */
   --chart-ink: #9FB3C0;
   --chart-ink-soft: #2E3A42;
 
-  /* Semantic states */
-  --success-bg: #16241C;
-  --success-border: rgba(162, 211, 181, 0.28);
+  --sky-bg: #1B242B;
+  --sky-border: rgba(178, 199, 216, 0.24);
+  --sky-ink: #B2C7D8;
+
+  --success-bg: #1D2A23;
+  --success-border: rgba(162, 211, 181, 0.26);
   --success-ink: #A2D3B5;
-  --danger-bg: #2A1A17;
-  --danger-border: rgba(240, 160, 140, 0.30);
-  --danger-ink: #F2A793;
-  --warning-bg: #2A2114;
-  --warning-border: rgba(232, 210, 160, 0.28);
+
+  --danger-bg: #2A1C17;
+  --danger-border: rgba(232, 161, 132, 0.28);
+  --danger-ink: #E8A184;
+
+  --warning-bg: #2A2314;
+  --warning-border: rgba(239, 206, 146, 0.26);
   --warning-ink: #EFCE92;
 
-  /* Shadows sit on dark surfaces: deeper, less diffuse */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 3px 10px -4px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4), 0 12px 28px -12px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.45), 0 28px 60px -28px rgba(0, 0, 0, 0.8);
-  --shadow-photo: 0 2px 6px rgba(0, 0, 0, 0.4), 0 30px 60px -30px rgba(0, 0, 0, 0.85);
-  --shadow-warm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 18px -8px rgba(0, 0, 0, 0.6);
-  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.45), 0 14px 26px -12px rgba(0, 0, 0, 0.7);
-
-  /* Component surfaces */
-  --nav-bg: rgba(22, 19, 15, 0.92);
-  --backdrop: rgba(0, 0, 0, 0.62);
-  --surface-hover: #2A231C;
-  --callout-bg: #2A2118;
+  --nav-bg: rgba(20, 18, 14, 0.94);
+  --backdrop: rgba(0, 0, 0, 0.66);
+  --surface-hover: #262019;
+  --callout-bg: #2A2314;
   --callout-hover: rgba(255, 214, 140, 0.12);
-  --segmented-hover: rgba(255, 255, 255, 0.06);
-  --hairline-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --hero-grid-line: rgba(246, 241, 233, 0.05);
-  --hero-tint-warm: rgba(224, 139, 106, 0.10);
-  --hero-tint-cool: rgba(159, 208, 178, 0.05);
-  --card-grad-a: #221E19;
-  --card-grad-b: #1E1A16;
+  --segmented-hover: rgba(245, 241, 232, 0.06);
+  --hero-grid-line: rgba(245, 241, 232, 0.05);
+  --hero-tint-warm: rgba(224, 139, 106, 0.07);
+  --hero-tint-cool: rgba(162, 211, 181, 0.04);
+  --card-grad-a: #1B1814;
+  --card-grad-b: #1B1814;
   --zone-fill: #2A241D;
+  --zone-border: rgba(245, 241, 232, 0.18);
   --indicator-bg: #2F2822;
-  --zone-border: rgba(246, 241, 233, 0.16);
-  --sheet-bg: rgba(32, 28, 23, 0.96);
-  --attempt-tint: rgba(162, 211, 181, 0.08);
+  --sheet-bg: rgba(27, 24, 20, 0.97);
+  --attempt-tint: #1E2721;
 
-  /* 3D cube — dark ceramic */
-  --ceramic-rim: rgba(246, 241, 233, 0.18);
-  --ceramic-a: #362F28;
-  --ceramic-b: #302A23;
-  --ceramic-c: #292319;
-  --ceramic-inset: rgba(255, 255, 255, 0.07);
-  --ceramic-shade: rgba(0, 0, 0, 0.55);
-  --ceramic-front-a: #402E24;
-  --ceramic-front-b: #37271F;
-  --ceramic-back-a: #26313C;
-  --ceramic-back-b: #212B34;
-  --ceramic-right-a: #26312B;
-  --ceramic-right-b: #212A25;
-  --ceramic-top-a: #3A332B;
-  --ceramic-top-b: #332C23;
-  --ceramic-bottom-a: #1B1712;
-  --ceramic-bottom-b: #15120E;
-  --ground-shadow: rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 20px 52px -24px rgba(0, 0, 0, 0.85);
+  --shadow-lift: 0 6px 18px -12px rgba(0, 0, 0, 0.7);
 
-  --focus-ring: 0 0 0 4px rgba(224, 139, 106, 0.38);
+  --focus-ring: 0 0 0 3px rgba(224, 139, 106, 0.38);
 }

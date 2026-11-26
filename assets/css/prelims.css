@@ -197,6 +197,7 @@
 }
 
 .quiz-timer {
+  font-variant-numeric: tabular-nums;
   font-family: var(--font-mono);
   font-size: var(--text-ui);
   font-weight: 700;
@@ -385,7 +386,8 @@
 
 .palette-btn {
   height: 38px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
+  font-variant-numeric: tabular-nums;
   border: 1px solid var(--border-strong);
   background-color: var(--bg-page);
   font-family: var(--font-mono);
@@ -407,8 +409,8 @@
 }
 
 .palette-btn.is-current {
-  border: 2px solid var(--accent);
-  box-shadow: var(--focus-ring);
+  border: 2px solid var(--accent-rule);
+  box-shadow: none;
 }
 
 .palette-legend {

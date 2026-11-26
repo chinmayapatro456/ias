@@ -94,7 +94,7 @@ a:hover {
   font-family: var(--font-sans);
   font-size: var(--text-ui);
   font-weight: 600;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   text-decoration: none;
   transition: transform var(--dur-fast) var(--ease-out);
 }
@@ -147,53 +147,32 @@ h4 {
 h1 {
   font-size: var(--text-hero);
   line-height: var(--leading-tight);
-  letter-spacing: -0.028em;
+  letter-spacing: -0.034em;
 }
 
 h2 {
   font-size: var(--text-h2);
   line-height: var(--leading-heading);
-  letter-spacing: -0.024em;
+  letter-spacing: -0.03em;
 }
 
 h3 {
   font-size: var(--text-h3);
   line-height: var(--leading-snug);
-  letter-spacing: -0.016em;
+  letter-spacing: -0.022em;
 }
 
 h4 {
   font-size: var(--text-h4);
   line-height: var(--leading-snug);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.014em;
 }
 
-/* Editorial accent — one italic word per display heading, sage green, with a
-   soft butter swipe sitting behind its lower half (the "Ideas worth *thinking*
-   about" treatment). Keep it to h1/h2: one per heading, never two. */
+/* Editorial accent — one italic word per display heading, set in deep forest
+   green. No highlighter swipe: the emphasis is carried by the italic alone. */
 .accent {
-  position: relative;
-  display: inline;
   font-style: italic;
-  color: var(--sage-ink);
-  white-space: nowrap;
-  padding-inline: 0.1em;
-  margin-inline: -0.02em;
-  isolation: isolate;
-}
-
-.accent::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: -0.02em;
-  right: -0.03em;
-  bottom: 0.01em;
-  height: 0.52em;
-  border-radius: 0.16em 0.06em 0.14em 0.08em;
-  background: var(--highlight);
-  transform: rotate(-0.7deg) skewX(-4deg);
-  transform-origin: left bottom;
+  color: var(--forest);
 }
 
 p {
@@ -223,26 +202,27 @@ p:last-child {
   color: var(--ink-muted);
 }
 
+/* Section kicker: tracked-out uppercase sans in deep forest green, led by a
+   short terracotta rule — the institutional rubric line. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
   margin-bottom: var(--space-4);
   font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-size: var(--text-eyebrow);
   font-weight: 600;
   line-height: 1.2;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent-ink);
+  color: var(--forest);
 }
 
 .eyebrow::before {
   content: "";
-  width: 22px;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.55;
+  width: 18px;
+  height: 2px;
+  background: var(--accent-rule);
 }
 
 /* Layout Containers
@@ -270,9 +250,9 @@ p:last-child {
 }
 
 .page-header {
-  padding-block: clamp(2.25rem, 5vw, 3.75rem) clamp(1.5rem, 3vw, 2.25rem);
-  border-bottom: 1px solid var(--border-subtle);
-  background: linear-gradient(180deg, var(--bg-sand) 0%, var(--bg-page) 100%);
+  padding-block: clamp(2rem, 4.2vw, 3.25rem) clamp(1.35rem, 2.6vw, 2rem);
+  border-bottom: 1px solid var(--rule-strong);
+  background-color: var(--bg-page);
 }
 
 .page-header h1 {
@@ -295,7 +275,7 @@ p:last-child {
   background-color: var(--nav-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--rule);
 }
 
 .nav-inner {
@@ -309,32 +289,51 @@ p:last-child {
 .nav-brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 0.7rem;
   text-decoration: none;
   color: var(--ink-primary);
   font-family: var(--font-serif);
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   white-space: nowrap;
+}
+
+.nav-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+/* Institutional descriptor under the wordmark */
+.nav-brand-descriptor {
+  margin-top: 3px;
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
 }
 
 .nav-brand:hover {
   color: var(--accent-ink);
 }
 
+/* Square monogram: a print masthead mark, not an avatar */
 .nav-brand-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-cta);
-  color: var(--ink-on-accent);
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-xs);
+  background: var(--ink-primary);
+  color: var(--bg-page);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-serif);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
+  letter-spacing: 0.01em;
   flex-shrink: 0;
 }
 
@@ -351,26 +350,31 @@ p:last-child {
   display: inline-flex;
   align-items: center;
   min-height: 40px;
-  padding: 0.45rem 0.8rem;
-  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.7rem;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: 500;
+  letter-spacing: -0.006em;
   color: var(--ink-secondary);
   text-decoration: none;
-  transition: background-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out);
+  transition: color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
 }
 
 .nav-link:hover {
-  background-color: var(--bg-subtle);
+  background-color: transparent;
   color: var(--ink-primary);
+  border-bottom-color: var(--border-strong);
 }
 
+/* Active page: sharp terracotta underline, no fill */
 .nav-link[aria-current="page"] {
-  background-color: var(--accent-soft);
-  color: var(--accent-ink);
+  background-color: transparent;
+  color: var(--ink-primary);
   font-weight: 600;
+  border-bottom-color: var(--accent-rule);
 }
 
 .nav-actions {
@@ -387,8 +391,8 @@ p:last-child {
   width: 40px;
   height: 40px;
   padding: 0;
-  border: 1px solid var(--border-subtle);
-  border-radius: 10px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
   background: var(--bg-card);
   color: var(--ink-secondary);
   transition: background-color var(--dur-fast) var(--ease-out),
@@ -397,8 +401,8 @@ p:last-child {
 }
 
 .theme-toggle:hover {
-  background: var(--bg-sand);
-  border-color: var(--border-warm);
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
   color: var(--ink-primary);
 }
 
@@ -426,7 +430,7 @@ p:last-child {
   width: 44px;
   height: 44px;
   padding: 0;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--rule);
   border-radius: var(--radius-sm);
   background: var(--bg-card);
   color: var(--ink-primary);
@@ -473,7 +477,7 @@ p:last-child {
   overflow-y: auto;
   overscroll-behavior: contain;
   background: var(--bg-card);
-  border-left: 1px solid var(--border-subtle);
+  border-left: 1px solid var(--rule-strong);
   box-shadow: var(--shadow-lg);
   padding: var(--space-5) var(--space-5)
     calc(var(--space-8) + env(safe-area-inset-bottom, 0px));
@@ -523,14 +527,15 @@ p:last-child {
   display: flex;
   width: 100%;
   min-height: 48px;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0.15rem;
   font-size: 1rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid transparent;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
 }
 
 .nav-drawer .nav-link[aria-current="page"] {
-  border-color: var(--accent-border);
+  border-bottom: 2px solid var(--accent-rule);
 }
 
 .nav-drawer-close {
@@ -566,36 +571,30 @@ p:last-child {
 /* Cards
    ========================================================================== */
 
+/* Cards carry a hairline rule, never a shadow: elevation is drawn, not floated */
 .card {
   background-color: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: clamp(1.25rem, 2.5vw, 1.75rem);
-  box-shadow: var(--shadow-xs);
-  transition: transform var(--dur-med) var(--ease-out),
-    box-shadow var(--dur-med) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  padding: clamp(1.15rem, 2.2vw, 1.6rem);
+  box-shadow: none;
+  transition: border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
 }
 
 .card--interactive:hover {
   border-color: var(--border-strong);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-3px);
+  background-color: var(--bg-card-hover);
+  transform: none;
+  box-shadow: none;
 }
 
-.card--sage {
-  background-color: var(--sage-bg);
-  border-color: var(--sage-border);
-}
-
-.card--sky {
-  background-color: var(--sky-bg);
-  border-color: var(--sky-border);
-}
-
+/* Tinted card variants are retired: content surfaces stay white or paper */
+.card--sage,
+.card--sky,
 .card--accent {
-  background-color: var(--accent-soft);
-  border-color: var(--accent-border);
+  background-color: var(--bg-card);
+  border-color: var(--rule);
 }
 
 /* Buttons (System Sans)
@@ -607,28 +606,24 @@ p:last-child {
   justify-content: center;
   gap: 0.55rem;
   min-height: 44px;
-  padding: 0.62rem 1.15rem;
-  border-radius: 11px;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
   font-family: var(--font-sans);
   font-size: var(--text-ui);
   font-weight: 600;
-  letter-spacing: -0.006em;
+  letter-spacing: -0.008em;
   line-height: 1.2;
   text-decoration: none;
   white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
-  transition: transform var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out),
+  transition: background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-fast) var(--ease-out);
+    color var(--dur-fast) var(--ease-out);
 }
 
-/* Press feedback: the control settles rather than shrinking away */
 .btn:active:not(:disabled) {
-  transform: translateY(0) scale(0.99);
-  transition-duration: 60ms;
+  background-color: var(--surface-hover);
 }
 
 .btn:focus-visible {
@@ -642,15 +637,13 @@ p:last-child {
   content: "\2192";
   font-size: 0.95em;
   line-height: 1;
-  opacity: 0.55;
-  transition: transform var(--dur-fast) var(--ease-out),
-    opacity var(--dur-fast) var(--ease-out);
+  opacity: 0.7;
+  transition: transform var(--dur-fast) var(--ease-out);
 }
 
 .btn-arrow:hover::after,
 .btn-arrow:focus-visible::after {
   transform: translateX(3px);
-  opacity: 1;
 }
 
 .btn:disabled {
@@ -661,36 +654,26 @@ p:last-child {
 
 .btn-primary {
   background-color: var(--accent-cta);
-  /* Subtle top inner highlight — a pressed-ceramic, not a flat pill */
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0) 58%);
   color: var(--ink-on-accent);
-  border-color: var(--accent-cta-hover);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
-    0 1px 2px rgba(122, 78, 52, 0.2);
+  border-color: var(--accent-cta);
 }
 
 .btn-primary:hover:not(:disabled) {
   background-color: var(--accent-cta-hover);
   border-color: var(--accent-cta-hover);
   color: var(--ink-on-accent);
-  transform: translateY(-1px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), var(--shadow-warm);
 }
 
 .btn-secondary {
   background-color: var(--bg-card);
   color: var(--ink-primary);
-  border-color: var(--border-warm);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), var(--shadow-xs);
+  border-color: var(--border-strong);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background-color: var(--surface-hover);
   color: var(--ink-primary);
-  border-color: var(--accent-border);
-  transform: translateY(-1px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), var(--shadow-warm);
+  border-color: var(--ink-primary);
 }
 
 .btn-ghost {
@@ -700,7 +683,7 @@ p:last-child {
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background-color: var(--bg-subtle);
+  background-color: var(--surface-hover);
   color: var(--ink-primary);
 }
 
@@ -713,70 +696,83 @@ p:last-child {
 /* Tags, Badges & Filter Chips (System Sans)
    ========================================================================== */
 
+/* Metadata tags are typographic, not decorative: a tracked-out uppercase
+   micro-label with no background, border or radius. Siblings are separated by
+   a middot so a card reads "2026 · GS PAPER I · 150 WORDS · 10 MARKS". */
 .tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.22rem 0.65rem;
-  border-radius: var(--radius-pill);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
   font-family: var(--font-sans);
-  font-size: var(--text-xs);
+  font-size: var(--text-micro);
   font-weight: 600;
-  line-height: 1.3;
-  background-color: var(--bg-subtle);
-  color: var(--ink-secondary);
-  border: 1px solid var(--border-subtle);
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
 }
 
+/* The year / primary marker stays in full ink for scanning */
 .tag--accent {
-  background-color: var(--accent-soft);
-  color: var(--accent-ink);
-  border-color: var(--accent-border);
+  background: none;
+  border: 0;
+  color: var(--ink-primary);
+  font-weight: 700;
 }
 
-.tag--sage {
-  background-color: var(--sage-bg);
-  color: var(--sage-ink);
-  border-color: var(--sage-border);
-}
-
+.tag--sage,
 .tag--sky {
-  background-color: var(--sky-bg);
-  color: var(--sky-ink);
-  border-color: var(--sky-border);
+  background: none;
+  border: 0;
+  color: var(--ink-secondary);
 }
 
+/* Status keeps its colour but loses the pastel pill */
 .tag--success {
-  background-color: var(--success-bg);
+  background: none;
+  border: 0;
   color: var(--success-ink);
-  border-color: var(--success-border);
 }
 
 .tag--danger {
-  background-color: var(--danger-bg);
+  background: none;
+  border: 0;
   color: var(--danger-ink);
-  border-color: var(--danger-border);
 }
 
 .tag--warning {
-  background-color: var(--warning-bg);
+  background: none;
+  border: 0;
   color: var(--warning-ink);
-  border-color: var(--warning-border);
+}
+
+/* Middot separators between adjacent metadata items */
+.tag + .tag::before {
+  content: "\00b7";
+  margin-right: 0.5rem;
+  color: var(--ink-muted);
+  opacity: 0.75;
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 38px;
-  padding: 0.35rem 0.8rem;
-  border-radius: 9px;
+  min-height: 34px;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-xs);
   border: 1px solid var(--border-subtle);
   background-color: var(--bg-card);
   color: var(--ink-secondary);
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: 500;
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   transition: background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out);
@@ -784,7 +780,7 @@ p:last-child {
 
 .chip:hover {
   border-color: var(--border-strong);
-  background-color: var(--bg-subtle);
+  background-color: var(--surface-hover);
   color: var(--ink-primary);
 }
 
@@ -792,8 +788,7 @@ p:last-child {
 .chip[aria-pressed="true"] {
   background-color: var(--ink-primary);
   border-color: var(--ink-primary);
-  color: var(--bg-card);
-  box-shadow: var(--shadow-xs);
+  color: var(--bg-page);
 }
 
 .chip:focus-visible {
@@ -806,137 +801,106 @@ p:last-child {
 .group-switch {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 3px;
-  border-radius: 11px;
-  background-color: var(--bg-sand);
+  gap: 0;
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
   border: 1px solid var(--border-subtle);
 }
 
 .group-label {
-  padding-inline: 0.5rem 0.35rem;
+  padding-inline: 0.7rem 0.5rem;
   font-family: var(--font-sans);
-  font-size: var(--text-xs);
+  font-size: var(--text-micro);
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-muted);
+  border-right: 1px solid var(--border-subtle);
 }
 
 .group-switch .chip {
   min-height: 32px;
-  padding: 0.2rem 0.8rem;
-  border-radius: 8px;
+  padding: 0.2rem 0.7rem;
+  border-radius: 0;
+  border: 0;
+  border-left: 1px solid var(--border-subtle);
   background-color: transparent;
-  border-color: transparent;
-  font-size: var(--text-sm);
+  font-size: var(--text-micro);
   font-weight: 600;
-  color: var(--ink-secondary);
+  color: var(--ink-muted);
+}
+
+.group-switch .chip:first-of-type {
+  border-left: 0;
 }
 
 .group-switch .chip:hover {
-  background-color: var(--segmented-hover);
+  background-color: var(--surface-hover);
   color: var(--ink-primary);
 }
 
 .group-switch .chip.is-active,
 .group-switch .chip[aria-pressed="true"] {
-  background-color: var(--bg-card);
-  border-color: var(--border-subtle);
-  color: var(--ink-primary);
-  box-shadow: var(--hairline-shadow);
+  background-color: var(--ink-primary);
+  color: var(--bg-page);
+  border-left-color: var(--ink-primary);
 }
 
 /* Tabs
    ========================================================================== */
 
+/* Tab strip: a ruled baseline with a 2px terracotta underline on the active
+   tab. Pure CSS — no measured indicator element, no JS to keep in sync. */
 .tabs {
-  position: relative;
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  padding: 0.3rem;
-  background-color: var(--bg-sand);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-}
-
-/* Sliding active-tab indicator (positioned by assets/js/nav.js) */
-.tab-indicator {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-radius: calc(var(--radius-md) - 4px);
-  background-color: var(--indicator-bg);
-  box-shadow: var(--shadow-xs);
-  border: 1px solid var(--border-subtle);
-  pointer-events: none;
-  opacity: 0;
-  transform: translateX(0);
-  transition: transform var(--dur-med) var(--ease-out),
-    width var(--dur-med) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
-}
-
-.tabs.has-indicator .tab-indicator {
-  opacity: 1;
-}
-
-.tabs.has-indicator .tab-btn[aria-selected="true"],
-.tabs.has-indicator .tab-btn.is-active {
+  flex-wrap: nowrap;
+  gap: 0;
+  padding: 0;
   background-color: transparent;
-  box-shadow: none;
+  border: 0;
+  border-bottom: 1px solid var(--rule-strong);
+  border-radius: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* Below 768px the tab strip scrolls horizontally instead of wrapping onto a
-   second row, so the active-tab indicator always sits on the right tab. */
-@media (max-width: 767px) {
-  .tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tab-btn {
-    flex: 1 0 auto;
-    white-space: nowrap;
-  }
+.tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tab-btn {
-  position: relative;
-  z-index: 1;
-  flex: 1 1 auto;
-  min-height: 42px;
-  padding: 0.55rem 1.1rem;
-  border: 1px solid transparent;
-  border-radius: calc(var(--radius-md) - 4px);
+  flex: 1 0 auto;
+  min-height: 44px;
+  margin-bottom: -1px;
+  padding: 0.7rem 1.05rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
   background: transparent;
   color: var(--ink-muted);
   font-family: var(--font-sans);
-  font-size: var(--text-ui);
+  font-size: var(--text-micro);
   font-weight: 600;
-  transition: background-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-fast) var(--ease-out);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
 }
 
 .tab-btn:hover {
   color: var(--ink-primary);
+  border-bottom-color: var(--border-strong);
 }
 
 .tab-btn[aria-selected="true"],
 .tab-btn.is-active {
-  background-color: var(--bg-card);
+  background-color: transparent;
   color: var(--ink-primary);
-  box-shadow: var(--shadow-xs);
+  border-bottom-color: var(--accent-rule);
 }
 
 /* Form Inputs
@@ -946,10 +910,10 @@ p:last-child {
 .select {
   width: 100%;
   min-height: 44px;
-  padding: 0.6rem 0.9rem;
+  padding: 0.55rem 0.75rem;
   background-color: var(--bg-card);
   border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xs);
   font-family: var(--font-sans);
   font-size: var(--text-ui);
   color: var(--ink-primary);
@@ -972,10 +936,10 @@ p:last-child {
   display: block;
   margin-bottom: var(--space-1);
   font-family: var(--font-sans);
-  font-size: var(--text-xs);
+  font-size: var(--text-micro);
   font-weight: 600;
   color: var(--ink-muted);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
@@ -984,7 +948,7 @@ p:last-child {
 
 .notice {
   padding: var(--space-4) var(--space-5);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xs);
   border: 1px solid var(--border-subtle);
   background-color: var(--bg-subtle);
   font-family: var(--font-sans);
@@ -1007,11 +971,11 @@ p:last-child {
   gap: var(--space-3);
   margin: var(--space-5) 0 0;
   padding: 0.7rem 0.85rem 0.7rem 0.95rem;
-  border: 1px solid var(--warning-border);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  background-color: var(--callout-bg);
-  color: var(--warning-ink);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-rule);
+  border-radius: 0;
+  background-color: var(--bg-card);
+  color: var(--ink-secondary);
   font-size: var(--text-sm);
   line-height: 1.5;
   max-width: 78ch;
@@ -1019,6 +983,7 @@ p:last-child {
 
 .notice--callout strong {
   font-weight: 700;
+  color: var(--ink-primary);
 }
 
 .notice--callout .notice-body {
@@ -1036,7 +1001,7 @@ p:last-child {
   margin: -4px -4px 0 0;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--radius-xs);
   background: transparent;
   color: inherit;
   font-size: 1rem;
@@ -1067,8 +1032,8 @@ p:last-child {
   text-align: center;
   padding: var(--space-12) var(--space-6);
   background: var(--bg-card);
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-xs);
   color: var(--ink-muted);
 }
 
@@ -1081,7 +1046,7 @@ p:last-child {
   opacity: 0;
   pointer-events: none;
   padding: 0.7rem 1.25rem;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   background-color: var(--ink-primary);
   color: var(--bg-card);
   font-family: var(--font-sans);
@@ -1146,14 +1111,14 @@ p:last-child {
   }
 }
 
-/* Shared Footer
+/* Shared Footer — institutional colophon
    ========================================================================== */
 
 .site-footer {
   margin-top: auto;
-  background-color: var(--bg-subtle);
-  border-top: 1px solid var(--border-subtle);
-  padding-block: var(--space-10);
+  background-color: var(--bg-sand);
+  border-top: 1px solid var(--rule-strong);
+  padding-block: var(--space-10) var(--space-6);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: var(--ink-muted);
@@ -1162,28 +1127,80 @@ p:last-child {
 .footer-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-8);
 }
 
-.footer-top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
+.footer-colophon {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
 }
 
-.footer-brand {
+@media (min-width: 900px) {
+  .footer-colophon {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 0;
+  }
+
+  .footer-col + .footer-col {
+    padding-left: var(--space-8);
+    border-left: 1px solid var(--rule);
+  }
+}
+
+.footer-col {
+  min-width: 0;
+}
+
+.footer-col-title {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+
+.footer-wordmark {
+  display: block;
+  margin-bottom: var(--space-3);
   font-family: var(--font-serif);
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--ink-primary);
 }
 
-.footer-links {
+.footer-mission {
+  margin: 0 0 var(--space-4);
+  max-width: 46ch;
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--ink-secondary);
+}
+
+.footer-disclaimer {
+  margin: 0;
+  max-width: 46ch;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule);
+  font-size: var(--text-xs);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.footer-disclaimer strong {
+  color: var(--ink-primary);
+  font-weight: 600;
+}
+
+.footer-links,
+.footer-notes {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
+  flex-direction: column;
+  gap: 0;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1192,21 +1209,57 @@ p:last-child {
 .footer-links a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 40px;
+  font-size: var(--text-sm);
   color: var(--ink-secondary);
   text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
 }
 
 .footer-links a:hover {
-  color: var(--accent-ink);
-  text-decoration: underline;
+  color: var(--ink-primary);
+  border-bottom-color: var(--accent-rule);
 }
 
-.footer-disclaimer {
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--border-subtle);
+.footer-notes li {
+  padding-block: 0.5rem;
   font-size: var(--text-xs);
+  line-height: 1.55;
   color: var(--ink-muted);
+  border-top: 1px solid var(--rule);
+}
+
+.footer-notes li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.footer-notes strong {
+  color: var(--ink-secondary);
+  font-weight: 600;
+}
+
+.footer-base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--rule-strong);
+  font-size: var(--text-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.footer-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Collapsible filter drawer (Mains PYQs & Optional PYQs on Android)
@@ -1220,8 +1273,8 @@ p:last-child {
   gap: var(--space-3);
   min-height: 48px;
   padding: 0.7rem 1rem;
-  border: 1px solid var(--border-warm);
-  border-radius: 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xs);
   background-color: var(--bg-card);
   font-family: var(--font-sans);
   font-size: var(--text-ui);
