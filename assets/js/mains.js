@@ -27,16 +27,17 @@
 
   function escapeHtml(str) {
     return String(str == null ? '' : str)
-      .replace(/&/g, '&')
-      .replace(/</g, '<')
-      .replace(/>/g, '>')
-      .replace(/"/g, '"');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function highlightText(text, query) {
     var safe = escapeHtml(text);
     if (!query) return safe;
-    var esc = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var esc = escapeHtml(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     try {
       return safe.replace(new RegExp('(' + esc + ')', 'gi'), '<mark>$1</mark>');
     } catch (e) {
@@ -352,7 +353,7 @@
         listEl.innerHTML =
           '<div class="empty-state">' +
             '<h3>Mains PYQ data not loaded yet</h3>' +
-            '<p>Run <code>convert_mains.py</code> to generate <code>data/mains-data.js</code> and reload this page.</p>' +
+            '<p>Add <code>data/mains-data.js</code> and reload this page.</p>' +
           '</div>';
       }
       return;

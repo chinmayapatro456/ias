@@ -32,16 +32,17 @@
 
   function escapeHtml(str) {
     return String(str == null ? '' : str)
-      .replace(/&/g, '&')
-      .replace(/</g, '<')
-      .replace(/>/g, '>')
-      .replace(/"/g, '"');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function highlightText(text, query) {
     var safe = escapeHtml(text);
     if (!query) return safe;
-    var esc = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var esc = escapeHtml(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     try {
       return safe.replace(new RegExp('(' + esc + ')', 'gi'), '<mark>$1</mark>');
     } catch (e) {
@@ -196,13 +197,51 @@
       topics.map(function (t) { return counts[t] || 0; }).concat([1])
     );
 
+    /* Size the SVG to the space it actually has, so 1 user unit = 1 CSS pixel.
+       Without this the 699-unit viewBox is squeezed into ~280px on a phone and
+       the 12px labels render at ~5px, which is unreadable. */
+    var hostWidth = wrap.clientWidth || (wrap.parentElement ? wrap.parentElement.clientWidth : 0) || 640;
+    var compact = hostWidth < 560;
     var rowHeight = 30;
     var topPad = 8;
-    var labelWidth = 215;
-    var barMaxWidth = 420;
-    var countWidth = 48;
-    var svgWidth = labelWidth + barMaxWidth + countWidth + 16;
+    var labelFont = compact ? 11 : 12;
+    var countFont = compact ? 10 : 11.5;
+    var labelWidth = compact
+      ? Math.round(Math.min(140, Math.max(92, hostWidth * 0.42)))
+      : 215;
+    var countWidth = compact ? 28 : 48;
+    var gutter = compact ? 8 : 16;
+    var barMaxWidth = Math.max(64, Math.round(hostWidth - labelWidth - countWidth - gutter));
+    var svgWidth = Math.round(labelWidth + barMaxWidth + countWidth + gutter);
     var svgHeight = topPad * 2 + topics.length * rowHeight;
+    var labelBoxWidth = labelWidth - 8;
+
+    /* Truncate labels by measured width, not by a guessed character count:
+       Inter's capitals are wide enough that a count-based slice overflows the
+       column on a phone and the first letter gets clipped. */
+    var measureCtx = null;
+    try {
+      measureCtx = document.createElement('canvas').getContext('2d');
+      if (measureCtx) {
+        measureCtx.font = labelFont + 'px Inter, system-ui, -apple-system, sans-serif';
+      }
+    } catch (e) {
+      measureCtx = null;
+    }
+
+    function fitLabel(text) {
+      if (!measureCtx) {
+        var budget = Math.max(9, Math.floor(labelBoxWidth / (labelFont * 0.58)));
+        return text.length > budget ? text.slice(0, budget - 1) + '…' : text;
+      }
+      var limit = labelBoxWidth * 0.94; /* safety margin for font-loading races */
+      if (measureCtx.measureText(text).width <= limit) return text;
+      var cut = text;
+      while (cut.length > 1 && measureCtx.measureText(cut + '…').width > limit) {
+        cut = cut.slice(0, -1);
+      }
+      return cut.replace(/[\s,;:]+$/, '') + '…';
+    }
 
     var reduceMotion =
       window.StudyMotion && typeof window.StudyMotion.prefersReducedMotion === 'function'
@@ -215,19 +254,19 @@
         var y = topPad + i * rowHeight;
         var barW = Math.max(c > 0 ? 4 : 0, Math.round((c / maxCount) * barMaxWidth));
         var isActive = state.topic === topic;
-        var shortLabel = topic.length > 30 ? topic.slice(0, 29) + '…' : topic;
+        var shortLabel = fitLabel(topic);
 
         return (
           '<g class="freq-row' + (isActive ? ' is-active' : '') + '" ' +
             'role="button" tabindex="0" data-chart-topic="' + escapeHtml(topic) + '" ' +
             'aria-label="Filter by ' + escapeHtml(topic) + ' (' + c + ' questions)">' +
             '<title>' + escapeHtml(topic) + ': ' + c + ' questions</title>' +
-            '<text class="freq-label" x="' + (labelWidth - 10) + '" y="' + (y + 18) + '" text-anchor="end">' +
+            '<text class="freq-label" style="font-size:' + labelFont + 'px" x="' + (labelWidth - 8) + '" y="' + (y + 18) + '" text-anchor="end">' +
               escapeHtml(shortLabel) +
             '</text>' +
             '<rect class="freq-bar-track" x="' + labelWidth + '" y="' + (y + 6) + '" width="' + barMaxWidth + '" height="16" rx="4"></rect>' +
             '<rect class="freq-bar-fill' + (reduceMotion ? '' : ' is-entering') + '" x="' + labelWidth + '" y="' + (y + 6) + '" width="' + barW + '" height="16" rx="4"></rect>' +
-            '<text class="freq-count" x="' + (labelWidth + barMaxWidth + 10) + '" y="' + (y + 18) + '">' + c + '</text>' +
+            '<text class="freq-count" style="font-size:' + countFont + 'px" x="' + (labelWidth + barMaxWidth + 6) + '" y="' + (y + 18) + '">' + c + '</text>' +
           '</g>'
         );
       })
@@ -388,7 +427,7 @@
         listEl.innerHTML =
           '<div class="empty-state">' +
             '<h3>Geography Optional PYQ data not loaded yet</h3>' +
-            '<p>Run <code>convert_optional.py</code> to generate <code>data/optional-data.js</code> and reload this page.</p>' +
+            '<p>Add <code>data/optional-data.js</code> and reload this page.</p>' +
           '</div>';
       }
       return;
@@ -507,6 +546,22 @@
         var collapsed = chartWrap.classList.toggle('is-collapsed');
         chartToggle.setAttribute('aria-expanded', String(!collapsed));
         chartToggle.textContent = collapsed ? 'Show chart' : 'Hide chart';
+      });
+    }
+
+    /* Re-render the chart when its container changes width (window resize,
+       phone rotation) so the labels keep their real pixel size */
+    if (chartWrap) {
+      var lastChartWidth = chartWrap.clientWidth;
+      var chartResizeTimer = null;
+      window.addEventListener('resize', function () {
+        if (chartResizeTimer) clearTimeout(chartResizeTimer);
+        chartResizeTimer = setTimeout(function () {
+          var nextWidth = chartWrap.clientWidth;
+          if (!nextWidth || Math.abs(nextWidth - lastChartWidth) < 24) return;
+          lastChartWidth = nextWidth;
+          renderChart();
+        }, 150);
       });
     }
 

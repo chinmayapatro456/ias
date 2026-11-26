@@ -52,7 +52,7 @@
 
 .freq-svg {
   width: 100%;
-  min-width: 310px;
+  min-width: 0;
   height: auto;
   display: block;
 }

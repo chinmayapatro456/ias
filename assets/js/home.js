@@ -54,6 +54,22 @@
     return null;
   }
 
+  function countMainsGroups() {
+    if (window.PYQ_BY_TOPIC && typeof window.PYQ_BY_TOPIC === 'object') {
+      var keys = Object.keys(window.PYQ_BY_TOPIC);
+      if (keys.length) return keys.length;
+    }
+    var meta = window.PYQ_METADATA;
+    if (meta) {
+      if (meta.perTopic && typeof meta.perTopic === 'object') {
+        var grouped = Object.keys(meta.perTopic).length;
+        if (grouped) return grouped;
+      }
+      if (Array.isArray(meta.topics) && meta.topics.length) return meta.topics.length;
+    }
+    return null;
+  }
+
   function countOptionalQuestions() {
     var d = window.PYQ_DATA;
     if (!d) return null;
@@ -104,12 +120,12 @@
     if (mainsTotal !== null) {
       setCounter(mainsEl, mainsTotal);
       var written = storage ? storage.getSet(storage.KEYS.mainsWritten).length : 0;
-      var groupCount =
-        window.PYQ_BY_TOPIC && typeof window.PYQ_BY_TOPIC === 'object'
-          ? Object.keys(window.PYQ_BY_TOPIC).length
-          : 19;
+      var groupCount = countMainsGroups();
       if (mainsMeta) {
-        mainsMeta.textContent = written + ' answers written · ' + groupCount + ' subject groups';
+        mainsMeta.textContent =
+          written +
+          ' answers written' +
+          (groupCount ? ' · ' + groupCount + ' subject groups' : '');
       }
     } else if (mainsMeta) {
       mainsMeta.textContent = 'Add data/mains-data.js to populate';

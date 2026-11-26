@@ -17,17 +17,18 @@
   };
 
   function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&')
-      .replace(/</g, '<')
-      .replace(/>/g, '>')
-      .replace(/"/g, '"');
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function highlightMatch(text, query) {
     var safe = escapeHtml(text);
     if (!query) return safe;
-    var escapedQ = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var escapedQ = escapeHtml(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     try {
       return safe.replace(new RegExp('(' + escapedQ + ')', 'gi'), '<mark>$1</mark>');
     } catch (e) {

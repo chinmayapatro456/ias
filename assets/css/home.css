@@ -468,6 +468,9 @@
 }
 
 .prep-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--font-sans);
   font-size: var(--text-ui);
   font-weight: 600;

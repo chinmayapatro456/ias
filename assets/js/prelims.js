@@ -33,10 +33,11 @@
 
   function escapeHtml(str) {
     return String(str == null ? '' : str)
-      .replace(/&/g, '&')
-      .replace(/</g, '<')
-      .replace(/>/g, '>')
-      .replace(/"/g, '"');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function shuffle(arr) {
@@ -737,7 +738,7 @@
         setupCard.innerHTML =
           '<div class="empty-state">' +
             '<h3>Prelims dataset not loaded yet</h3>' +
-            '<p>Run <code>convert_prelims.py</code> to generate <code>data/prelims-data.js</code> and reload this page.</p>' +
+            '<p>Add <code>data/prelims-data.js</code> and reload this page.</p>' +
           '</div>';
       }
       return;
