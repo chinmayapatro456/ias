@@ -16,6 +16,8 @@
   --bg-card-hover: #FFFEFC;
   --bg-sand: #F2EDE6;
   --bg-sand-deep: #EBE4DA;
+  /* Page canvas as an RGB triplet, for gradients that must fade into it */
+  --page-rgb: 250, 248, 245;
   --border-subtle: rgba(28, 25, 23, 0.08);
   --border-strong: rgba(28, 25, 23, 0.16);
   --border-warm: rgba(120, 98, 82, 0.22);
@@ -214,6 +216,7 @@
   --bg-card-hover: #26211B;
   --bg-sand: #1E1A15;
   --bg-sand-deep: #2A241D;
+  --page-rgb: 22, 19, 15;
   --border-subtle: rgba(245, 241, 234, 0.10);
   --border-strong: rgba(245, 241, 234, 0.20);
   --border-warm: rgba(224, 139, 106, 0.30);
