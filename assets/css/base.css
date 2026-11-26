@@ -330,11 +330,10 @@ p:last-child {
   color: var(--accent-ink);
 }
 
-/* Nav brand mark — a fireball: a terracotta ball of flame with tongues swept
-   back and two sparks trailing it. The mark is inline SVG (see index.html) so
-   it keeps its shape at any size; assets/img/favicon.svg is the same artwork
-   with the ivory plate baked in. Falls back to a plain terracotta roundel if
-   the SVG is ever removed. */
+/* Nav monogram — an italic serif "CP" set inside a map-pin / compass ring.
+   The mark is inline SVG (see index.html) so the letters use Newsreader and
+   the pin keeps its shape at any size. Falls back to a plain terracotta
+   roundel if the SVG is ever removed. */
 .nav-brand-mark {
   width: 34px;
   height: 34px;
@@ -1635,50 +1634,27 @@ p:last-child {
   white-space: nowrap;
 }
 
-/* Brand mark artwork — a fireball: a terracotta ball of flame with three
-   licking tongues swept back and two sparks trailing it. The mark is inline SVG
-   (see index.html) so it stays crisp at any size; assets/img/favicon.svg is the
-   same artwork with the ivory plate baked in. The ramp lives here as local
-   custom properties so the whole fire can be re-tuned in one place, and the
-   dark theme only has to lift the silhouette colour off the ink background. */
+/* Monogram artwork — italic serif "CP" inside a map-pin / compass head.
+   Colours come from tokens so the mark follows the theme. */
 .nav-brand-mark:has(svg) {
   background: transparent;
 }
 
-.nav-brand-mark {
-  --fire-deep: #A64728;
-  --fire-mid: #D97757;
-  --fire-ball: #C6613F;
-  --fire-bright: #E08B6A;
-  --fire-core: #F4D0A6;
+.nav-brand-mark .mark-pin {
+  fill: var(--accent-cta);
 }
 
-:root[data-theme="dark"] .nav-brand-mark {
-  --fire-deep: #B8563A;
-  --fire-mid: #E08B6A;
-  --fire-ball: #C6613F;
-  --fire-bright: #EDA184;
-  --fire-core: #F4D0A6;
+.nav-brand-mark .mark-disc {
+  fill: var(--bg-page);
 }
 
-.nav-brand-mark .mark-flame--deep {
-  fill: var(--fire-deep);
-}
-
-.nav-brand-mark .mark-flame--mid {
-  fill: var(--fire-mid);
-}
-
-.nav-brand-mark .mark-ball {
-  fill: var(--fire-ball);
-}
-
-.nav-brand-mark .mark-flame--bright {
-  fill: var(--fire-bright);
-}
-
-.nav-brand-mark .mark-core {
-  fill: var(--fire-core);
+.nav-brand-mark .mark-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.03em;
+  fill: var(--accent-ink);
 }
 
 /* Touch targets — declared last so they win over the component defaults

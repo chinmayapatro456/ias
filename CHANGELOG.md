@@ -140,8 +140,7 @@ untouched. Stack is still plain HTML/CSS/vanilla JS with self-hosted fonts.
 
 - **New monogram**: italic serif "CP" inside a map-pin / compass head, used for
   the nav mark on every page and for `assets/img/favicon.svg`; the 192 and 512
-  PNG app icons were re-rendered from it. *(Replaced by the fireball on 27 Nov
-  2026 — see "Fireball brand mark" below.)*
+  PNG app icons were re-rendered from it.
 - **Custom 404** with the India outline as a watermark motif, and polished empty
   states (compass rose + one clear next step) across all four lists.
 - Micro-interactions: theme toggle already eases; new tick toast, ring pulse,
@@ -554,37 +553,3 @@ fixed.
 1512, 1024, 768, 390 and 360 plus the dark theme; front-face tap still opens
 `mains-pyqs/index.html?paper=GS%20Paper%20II`, drag still spins without
 navigating. Asset URLs bumped to `?v=20261127e`.
-
----
-
-## 11. Fireball brand mark (27 Nov 2026)
-
-The nav mark and the favicon were a map-pin / compass head with an italic "CP"
-in it. A pin reads as "location", which says nothing about the desk, so the mark
-is now a **fireball**: a terracotta ball of flame with three licking tongues
-swept back to the upper right and two sparks trailing it.
-
-* `assets/img/favicon.svg` — the fireball on the 64×64 ivory plate (`rx 14`), so
-  it still looks deliberate as a browser tab icon and as an installed app icon.
-  `icon-192.png` and `icon-512.png` were re-rasterised from it with `cairosvg`.
-* Nav mark — the same artwork as inline SVG (`viewBox="0 0 64 64"`) on Home,
-  Syllabus, Mains PYQs, Optional PYQs and Prelims Practice, and in the
-  `MONOGRAM` constant of `scripts/build-home.py` so a Home rebuild keeps it.
-* The fire ramp lives once, as local custom properties on `.nav-brand-mark`
-  (`--fire-deep/-mid/-ball/-bright/-core`), and the dark theme only lifts the
-  silhouette colour (`--fire-deep` `#A64728` → `#B8563A`) so the outer flames
-  stay legible on `#16130F`. The mark is drawn as a `<g>` translated to the
-  optical centre of the 64-box, measured from its rendered alpha bounding box
-  rather than guessed.
-* The mark is deliberately letter-free now: "CP" was illegible at 16px in a tab
-  anyway, and the wordmark sits right beside the mark in the nav. The old
-  `mark-pin` / `mark-disc` / `mark-text` classes and their CSS are gone.
-* Path data is sampled at 12 points per flame side with one-decimal coordinates,
-  so the whole mark is ~6.9 KB and gzips to roughly a fifth of that.
-* Asset URLs bumped to `?v=20261127h` (base.css changed).
-
-**Checked:** `node scripts/audit.js` 30/30 clean (0 overflow, 0 truncation,
-0 sub-44px targets, 0 page errors) across 360–1440; nav screenshotted at 1280
-and 360 in both themes and the mark measured at 34×34 with the dark ramp
-applying (`rgb(166,71,40)` light → `rgb(184,86,58)` dark); favicon and both PNG
-icons viewed at 16, 24, 34, 48 and 128px.
