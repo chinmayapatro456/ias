@@ -24,9 +24,9 @@
     --font-display:"Newsreader","Iowan Old Style",Georgia,serif;
     --font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
     --font-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
-    --s:clamp(168px,46vmin,320px);
+    --s:clamp(140px,min(46vmin,30vh),320px);
     --half:calc(var(--s)/2);
-    --r:clamp(9px,3.6%,16px);
+    --r:clamp(3px,1.4%,7px);
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -59,10 +59,12 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
-    gap:clamp(18px,4vh,38px);
+    justify-content:safe center;
+    gap:clamp(12px,3vh,38px);
     padding:clamp(20px,4vw,48px);
     min-height:100vh;
+    min-height:100svh;
+    overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
   }
   /* faint paper grid */
@@ -111,8 +113,9 @@
   /* ---------- 3D stage ---------- */
   .stage{
     perspective:1400px;
+    flex:none;
     width:min(calc(var(--s) * 1.9), 100%);
-    height:calc(var(--s) * 1.9);
+    height:calc(var(--s) * 1.6);
     display:grid;
     place-items:center;
     cursor:grab;
@@ -141,10 +144,31 @@
     will-change:transform;
   }
 
+  /* Solid interior. The faces are rounded and 1px short of the true edge, so
+     at the corners the page background used to show through as a notch - a
+     hairline on desktop, a visible bite on a phone-sized cube. Three inset
+     planes fill that volume, so a gap reads as the inside of the cube.
+     They sit 2px in from every face so they can never z-fight with one. */
+  .core{
+    position:absolute;
+    inset:0;
+    transform-style:preserve-3d;
+    pointer-events:none;
+  }
+  .core i{
+    position:absolute;
+    inset:2px;
+    background:color-mix(in srgb, var(--ink) 22%, var(--surface));
+    border-radius:var(--r);
+  }
+  .core i:nth-child(1){transform:translateZ(0)}
+  .core i:nth-child(2){transform:rotateY(90deg)}
+  .core i:nth-child(3){transform:rotateX(90deg)}
+
   .face{
     position:absolute;
     inset:0;
-    padding:clamp(14px,4%,22px);
+    padding:clamp(10px,4%,22px);
     display:grid;
     place-items:center;
     text-align:center;
@@ -203,7 +227,7 @@
   .face__name{
     font-family:var(--font-display);
     font-weight:400;
-    font-size:clamp(22px,calc(var(--s) * 0.115),38px);
+    font-size:clamp(15px,calc(var(--s) * 0.115),38px);
     line-height:1;
     letter-spacing:-0.015em;
     margin:0;
@@ -286,7 +310,10 @@
     font-size:11px;
     letter-spacing:0.08em;
   }
-  .back a{color:var(--ink-dim);text-decoration:none}
+  .back a{
+    color:var(--ink-dim);text-decoration:none;
+    display:inline-block;padding:15px 6px;   /* 44px-tall tap target on touch */
+  }
   .back a:hover{color:var(--ink)}
 
   @media (prefers-reduced-motion: reduce){
@@ -296,6 +323,39 @@
     .face__thought{display:none}
     .legend{gap:6px}
     .chip{padding:10px 11px;font-size:10px;min-height:44px}
+    header p{font-size:12.5px}
+  }
+
+  /* Touch: no keyboard, so the "arrow keys" hint is noise and the header has
+     to say tap, not click. */
+  @media (hover:none){
+    footer span:nth-child(2){display:none}
+  }
+
+  /* Short phones: the footer only repeats what the header already says, and
+     every pixel it frees goes to the cube. */
+  @media (max-height:640px) and (orientation:portrait){
+    footer{display:none}
+    body{gap:10px;padding:14px 16px}
+    .stage{height:calc(var(--s) * 1.55)}
+  }
+
+  /* Landscape phones: side-by-side, so the cube keeps a workable size instead
+     of being squeezed between a tall header and a two-row chip list. */
+  @media (max-height:520px) and (orientation:landscape){
+    body{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-content:center;
+      justify-items:center;
+      gap:10px 22px;
+      padding:14px 18px;
+    }
+    header,.legend,footer,.back{grid-column:1}
+    header p{font-size:12px;line-height:1.45}
+    h1{font-size:clamp(24px,3.4vw,34px);margin:6px 0 4px}
+    .stage{grid-column:2;grid-row:1 / span 4;align-self:center}
+    .chip{min-height:44px;padding:8px 12px}
   }
 </style>
 </head>
@@ -309,6 +369,7 @@
 
 <main class="stage" id="stage" aria-label="Rotatable cube with six subjects">
   <div class="cube" id="cube">
+    <div class="core" aria-hidden="true"><i></i><i></i><i></i></div>
     <section class="face f-front" data-face="0" style="--face-accent:var(--c-history)">
       <div class="face__top"><span class="face__dot"></span><span class="face__num">01</span></div>
       <div>
@@ -387,10 +448,20 @@
   const chips = Array.from(document.querySelectorAll('.chip'));
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // phones have no pointer, so say "tap" where the copy says "click"
+  if (window.matchMedia('(hover:none)').matches){
+    const lead = document.querySelector('header p');
+    if (lead) lead.textContent = 'Drag to turn it. Tap a subject below to bring that face forward.';
+    const hint = document.querySelector('footer span:nth-child(3)');
+    if (hint) hint.textContent = 'Tap a face';
+  }
+
   // rotation state (degrees)
   let rx = -18, ry = -32;
   let targetX = null, targetY = null;   // snap targets
   let dragging = false, lastX = 0, lastY = 0;
+  let travel = 0;                 // pixels moved during this gesture
+  let swallowClick = false;       // a drag just ended, ignore the click it leaves
   let autoSpin = !reduced;   // stops for good on first interaction
 
   // face -> (rx, ry) that brings it to the front
@@ -436,9 +507,12 @@
   function down(e){
     dragging = true;
     autoSpin = false;
+    setActive(-1);
     targetX = targetY = null;
     const p = e.touches ? e.touches[0] : e;
     lastX = p.clientX; lastY = p.clientY;
+    travel = 0;
+    swallowClick = false;
     stage.setPointerCapture && e.pointerId != null && stage.setPointerCapture(e.pointerId);
   }
   function move(e){
@@ -447,6 +521,8 @@
     const dx = p.clientX - lastX;
     const dy = p.clientY - lastY;
     lastX = p.clientX; lastY = p.clientY;
+    travel += Math.abs(dx) + Math.abs(dy);
+    if (travel > 8) swallowClick = true;
     ry += dx * 0.42;
     rx -= dy * 0.42;
     rx = Math.max(-90, Math.min(90, rx));
@@ -462,6 +538,8 @@
   // ---- click a face to bring it forward ----
   document.querySelectorAll('.face').forEach(face => {
     face.addEventListener('click', ev => {
+      // a drag that happens to end on a face is not a request to open it
+      if (swallowClick){ swallowClick = false; return; }
       const i = Number(face.dataset.face);
       snapTo(i);
       ev.stopPropagation();

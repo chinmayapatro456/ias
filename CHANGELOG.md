@@ -553,3 +553,62 @@ fixed.
 1512, 1024, 768, 390 and 360 plus the dark theme; front-face tap still opens
 `mains-pyqs/index.html?paper=GS%20Paper%20II`, drag still spins without
 navigating. Asset URLs bumped to `?v=20261127e`.
+
+---
+
+## 13. GS Cube: mobile fixes (27 Nov 2026)
+
+Scope: `cube/index.html` only. No change to the six faces, the copy, the
+snap targets or the storage keys; nothing else in the repo was touched.
+
+Found by rendering the page at 320×568, 360×640, 390×844, 740×360 landscape
+and 1280×800:
+
+* **The cube sat on top of the subject chips.** The stage was a flex item with
+  a fixed `1.9 × --s` height, so on a short phone the column squeezed it to
+  168px while the rotated cube still needed ~230px — it spilled over the chip
+  row. The stage is now `flex:none`, its height is `1.6 × --s` (close to the
+  rotated cube's real bounding box), and on very short phones `1.55 × --s`.
+* **The cube ignored the screen height.** `--s` was `clamp(168px,46vmin,320px)`,
+  which on a tall phone was fine but on a 320-wide phone produced a cube that
+  could not fit the column. It is now
+  `clamp(140px,min(46vmin,30vh),320px)`, so height counts as much as width.
+* **Landscape phones were clipped at the top.** `justify-content:center` on an
+  overflowing flex column cuts off the first item. It is now
+  `justify-content:safe center` (plus `min-height:100svh`, so iOS Safari's
+  toolbars no longer hide the footer). Landscape ≤520px tall switches to a
+  two-column grid: header, chips and footer on the left, cube on the right.
+* **Face type did not fit a small cube.** `.face__name` had a 22px floor, which
+  overflows a 140px face; the floor is 15px and the face padding starts at
+  10px.
+* **A notch at every cube corner.** The faces are `border-radius:var(--r)` with
+  `--r` up to 16px, and each rounded corner left a wedge where the page
+  background showed through the seam — a hairline on desktop, a visible bite on
+  a phone. `--r` is now `clamp(3px,1.4%,7px)`, and three inset planes
+  (`.core`) fill the interior so any remaining seam reads as the inside of the
+  cube rather than a hole.
+* **"Click" on a device with no pointer.** On `hover:none` the header says
+  "Tap a subject below", the footer drops the "Arrow keys" hint, and "Click a
+  face" becomes "Tap a face".
+* **A swipe that ended on a face opened it.** The drag handler now counts
+  travel and swallows the click that follows a gesture of more than 8px, so a
+  swipe turns the cube without snapping to whichever face it finished over.
+  Dragging also clears the active chip, which previously stayed lit after a
+  manual turn.
+* **"Back to Study Desk" was a 38px-tall tap target** (a bare inline link). It
+  is now an inline-block with 15px vertical padding — 44px.
+* Short phones (≤640px tall, portrait) drop the footer, which only repeats the
+  header, and tighten the body padding and gap.
+
+**Checked:** rendered at 320×568, 360×640, 390×844, 740×360 and 1280×800 —
+0 horizontal overflow and 0 vertical overflow at every size (320 was 59px over
+before this pass, now 0); no console errors; every `a` and `button` at least
+44px tall; chip tap snaps the correct face (`Polity` → `rotateY(-180deg)`); a
+swipe after that moves the cube to `-146deg` without snapping back or leaving
+the chip lit; light and dark both viewed at 360×640. `node scripts/audit.js`
+36/36 clean across the five desk pages.
+
+**Not checked:** a physical phone — all of the above is Chromium with
+`isMobile:true, hasTouch:true` at the listed viewports. iOS Safari's 3D
+`preserve-3d` rendering and its URL-bar behaviour should be confirmed on the
+device.
