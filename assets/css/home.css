@@ -229,17 +229,23 @@
   margin-bottom: var(--space-6);
 }
 
-/* One dominant CTA, three quiet links underneath */
+/* One dominant CTA plus a quiet secondary, then three text links underneath */
 .hero-actions {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  max-width: 30rem;
+  max-width: 36rem;
+}
+
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .hero-cta--primary {
-  min-height: 52px;
-  padding-inline: 1.35rem;
+  min-height: 54px;
+  padding-inline: 1.5rem;
   font-size: 1rem;
 }
 
@@ -332,10 +338,10 @@
 }
 
 .today-label {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-muted);
 }
@@ -441,16 +447,19 @@
 
 .timeline-name {
   grid-area: name;
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: 1.12rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
   color: var(--ink-primary);
 }
 
 .timeline-meta {
   grid-area: meta;
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--ink-muted);
 }
 
@@ -803,24 +812,90 @@
 /* Section headers — eyebrow, heading, lead in a fixed hierarchy
    ========================================================================== */
 
+/* The dark map band carries the same standfirst treatment as a section head,
+   so the page keeps one type hierarchy from top to bottom. */
+.band .lead {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.15rem, 1vw + 0.9rem, 1.5rem);
+  line-height: 1.42;
+  letter-spacing: -0.005em;
+}
+
 .section-head {
-  max-width: 62ch;
-  margin-bottom: clamp(1.75rem, 3vw, 2.5rem);
+  position: relative;
+  max-width: none;
+  margin-bottom: clamp(2rem, 3.4vw, 3rem);
+  padding-top: clamp(0.9rem, 1.4vw, 1.35rem);
+  border-top: 1px solid transparent;
+}
+
+/* The rule above a section draws in from the left as the head reveals — the
+   one piece of motion the desktop page needed to feel edited rather than flat. */
+.section-head::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-strong);
+  transform-origin: left center;
+}
+
+.js-motion .section-head.reveal::before {
+  transform: scaleX(0);
+  transition: transform 700ms var(--ease-out) 60ms;
+}
+
+.js-motion .section-head.reveal.is-visible::before {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-motion .section-head.reveal::before {
+    transform: none;
+    transition: none;
+  }
 }
 
 .section-head h2 {
   margin-bottom: var(--space-3);
+  max-width: 22ch;
+  letter-spacing: -0.03em;
+  font-size: clamp(2rem, 3.6vw, 3.6rem);
 }
 
+/* Standfirst — serif italic, the tier between the display heading and body
+   copy: the one line of a section a reader should be able to quote. */
 .section-head .lead {
   margin-bottom: 0;
-  max-width: 58ch;
-  font-size: clamp(1rem, 0.4vw + 0.94rem, 1.14rem);
+  max-width: 44ch;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.12rem, 0.9vw + 0.9rem, 1.42rem);
+  line-height: 1.42;
+  letter-spacing: -0.005em;
   color: var(--ink-secondary);
 }
 
 /* Desk inventory — stage-coloured cards with a meter and a skeleton state
    ========================================================================== */
+
+/* Desktop: the totals lift off the page on hover, so the grid has depth */
+@media (hover: hover) and (min-width: 768px) {
+  .stat-card {
+    transition: transform var(--dur-med) var(--ease-out),
+      box-shadow var(--dur-med) var(--ease-out),
+      border-color var(--dur-med) var(--ease-out);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-warm);
+    border-color: var(--border-warm);
+  }
+}
 
 .stats-grid {
   display: grid;
@@ -922,11 +997,11 @@
 }
 
 .stat-label {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--ink-muted);
   line-height: 1.25;
 }
@@ -934,7 +1009,7 @@
 .stat-value {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+  font-size: clamp(2.1rem, 3.2vw, 2.95rem);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.03em;
   line-height: 1.02;
@@ -1114,9 +1189,9 @@
 }
 
 .prep-stat-label {
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-muted);
 }
@@ -1129,18 +1204,30 @@
 .prep-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   min-height: 44px;
   font-family: var(--font-sans);
   font-size: var(--text-ui);
   font-weight: 600;
   color: var(--card-stage-ink);
   text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.prep-link span {
+  transition: transform var(--dur-fast) var(--ease-out);
 }
 
 .prep-link:hover {
   color: var(--accent-hover);
-  text-decoration: underline;
+  border-bottom-color: currentColor;
+  text-decoration: none;
+}
+
+.prep-link:hover span {
+  transform: translateX(3px);
 }
 
 /* Touch: the card presses in instead of tilting (tilt is desktop-only) */
