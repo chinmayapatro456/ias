@@ -1,5 +1,13 @@
 # Changelog — Study Desk visual & responsive upgrade
 
+Date: 27 November 2026
+Scope: Home, Syllabus Tracker, Mains PYQs, Optional PYQs, Prelims Practice
+Constraint honoured throughout: plain HTML/CSS/JS, no frameworks, no trackers, no
+accounts, no data-file edits, no changes to the +2 / −0.66 scoring, no changes to
+localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
+
+---
+
 ## New page — "About the exam" (27 Nov 2026)
 
 Scope: new `about/` page, `assets/css/about.css`, `assets/js/about.js`,
@@ -28,15 +36,35 @@ keys, data globals or scoring changed.
   errors on any of the seven pages. Charts verified at each width and in the
   dark theme.
 
+## About the exam — motion pass (27 Nov 2026)
+
+Scope: `about/index.html`, `assets/css/about.css`, `assets/js/about.js`. Content
+and figures unchanged; nothing outside the About page was touched.
+
+- **Scroll reveals.** Every block — section heads, cards, stage cards, tables,
+  the twelve notes, the timeline, the source notes — now uses the site-wide
+  `.reveal` observer from `assets/js/motion.js`, with per-grid stagger delays.
+  The page header rises in on load in four steps.
+- **Figures animate when they arrive.** The funnel rows wipe in one by one, the
+  cut-off line draws itself along its own length before the points pop in
+  sequence, the category bars grow from the left, the vacancy bars grow up from
+  the axis (2026 last), the service split wipes in and its legend follows, and
+  the 1,750 + 275 marks bar fills left to right.
+- **Numbers count up.** The four header facts and the three CSE 2026 figures
+  count to their value through `motion.js`'s `data-counter`, formatted in Indian
+  grouping.
+- **Interaction.** Cards, notes and optional-subject chips lift 2–3px on hover;
+  a small pulse marks the "Right now" status.
+- **Cheap by design.** Transform, opacity and clip-path only — no filters, no
+  layout thrash. Bars use clip-path wipes rather than width changes, so a
+  half-finished animation never clips a label.
+- **Degrades cleanly.** Every "before" state is gated on `.js-motion`, so with
+  JavaScript off the page renders complete; `prefers-reduced-motion: reduce`
+  turns every transition, transform and loop off. Switching a chart tab replays
+  that chart's draw.
+
 ---
 
-Date: 27 November 2026
-Scope: Home, Syllabus Tracker, Mains PYQs, Optional PYQs, Prelims Practice
-Constraint honoured throughout: plain HTML/CSS/JS, no frameworks, no trackers, no
-accounts, no data-file edits, no changes to the +2 / −0.66 scoring, no changes to
-localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
-
----
 
 ## 0. Redesign — "study cockpit" visual pass (27 Nov 2026, later same day)
 

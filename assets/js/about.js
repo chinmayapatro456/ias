@@ -4,6 +4,12 @@
    cut-off trend, the category bars, the vacancy chart and the service split.
    No dependencies: hand-built SVG, re-measured on resize so labels stay at
    their real pixel size on a phone.
+
+   Motion: every figure is drawn once its container scrolls into view — bars
+   grow from the axis, the cut-off line draws itself, points pop in sequence.
+   The initial "before" states are CSS (gated on .js-motion, which
+   assets/js/motion.js adds), so a visitor with JavaScript off, or with
+   prefers-reduced-motion set, sees the finished chart immediately.
    ========================================================================== */
 
 (function () {
@@ -14,6 +20,7 @@
 
   var NS = "http://www.w3.org/2000/svg";
   var charts = [];
+  var suppressAnim = false;
 
   /* ---------- helpers ---------------------------------------------------- */
 
@@ -68,6 +75,41 @@
     };
   }
 
+  /* ---------- motion ----------------------------------------------------- */
+
+  function animates() {
+    return (
+      !suppressAnim &&
+      document.documentElement.classList.contains("js-motion") &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }
+
+  /* Run `cb` the first time `host` is on screen. Falls back to running it at
+     once whenever motion is off, so the figures are never left half-drawn. */
+  function whenVisible(host, cb) {
+    if (!animates() || typeof IntersectionObserver === "undefined") {
+      cb();
+      return;
+    }
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          io.disconnect();
+          cb();
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -40px 0px" }
+    );
+    io.observe(host);
+  }
+
+  function play(node) {
+    if (!node) return;
+    node.classList.add("is-in");
+  }
+
   function tip(host) {
     var t = host.querySelector(".chart-tooltip");
     if (!t) {
@@ -93,7 +135,7 @@
 
   /* Redraw on container resize (phone rotation, window drag) */
   function watch(host, draw) {
-    charts.push({ host: host, draw: draw });
+    charts.push({ host: host, draw: draw, lastWidth: host.clientWidth });
     draw();
   }
 
@@ -101,6 +143,7 @@
   window.addEventListener("resize", function () {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(function () {
+      suppressAnim = true;
       charts.forEach(function (c) {
         var w = c.host.clientWidth;
         if (w && w !== c.lastWidth) {
@@ -109,6 +152,7 @@
           c.draw();
         }
       });
+      suppressAnim = false;
     }, 160);
   });
 
@@ -122,8 +166,9 @@
     var list = el("ol", "funnel");
     list.setAttribute("aria-label", "CSE " + D.funnel.year + " selection funnel");
 
-    stages.forEach(function (s) {
+    stages.forEach(function (s, i) {
       var li = el("li", "funnel-row");
+      li.style.setProperty("--rd", i * 90 + "ms");
       var head = el("div", "funnel-head");
       head.appendChild(el("span", "funnel-name", s.label));
       head.appendChild(el("span", "funnel-value", s.display));
@@ -147,6 +192,13 @@
       "One in roughly <strong>" + indian(Math.round(D.funnel.stages[0].value / D.funnel.stages[4].value)) +
       "</strong> applicants reached the final list in CSE " + D.funnel.year + ".";
     host.appendChild(cap);
+
+    var rows = list.querySelectorAll(".funnel-row");
+    whenVisible(list, function () {
+      Array.prototype.forEach.call(rows, function (row) {
+        row.classList.add("is-in");
+      });
+    });
   }
 
   /* ---------- 2. cut-off trend ------------------------------------------ */
@@ -157,6 +209,7 @@
     var stage = D.trend.stages[stageKey];
     var years = D.trend.years;
     var vals = stage.values;
+    var animate = animates();
 
     host.innerHTML = "";
 
@@ -226,10 +279,13 @@
     /* area + line */
     var dLine = vals.map(function (v, i) { return (i ? "L" : "M") + x(i) + " " + y(v); }).join(" ");
     var dArea = dLine + " L" + x(vals.length - 1) + " " + (pad.t + ih) + " L" + x(0) + " " + (pad.t + ih) + " Z";
-    svg("path", { d: dArea, fill: "url(#trendFill)", stroke: "none" }, root);
-    svg("path", {
+
+    svg("path", { d: dArea, fill: "url(#trendFill)", stroke: "none", class: "trend-area" }, root);
+
+    var line = svg("path", {
       d: dLine,
       fill: "none",
+      class: "trend-line",
       style: "stroke: var(--accent-cta)",
       "stroke-width": 2.2,
       "stroke-linejoin": "round",
@@ -240,8 +296,9 @@
     vals.forEach(function (v, i) {
       var cx = x(i);
       var cy = y(v);
+
       var hitPoint = svg("circle", {
-        cx: cx, cy: cy, r: 14, class: "chart-hit",
+        cx: cx, cy: cy, r: 14, class: "chart-hit", fill: "transparent",
         tabindex: 0,
         role: "button",
         "aria-label": years[i] + ": " + v + " " + stage.unit
@@ -260,21 +317,39 @@
       }
 
       var last = i === vals.length - 1;
-      svg("circle", {
+      var dot = svg("circle", {
         cx: cx, cy: cy, r: last ? 5 : 3.4,
         class: "chart-point",
-        style: "fill: " + (last ? "var(--accent-cta)" : "var(--bg-card)") + "; stroke: var(--accent-cta); stroke-width: " + (last ? 2 : 1.8)
+        style: "fill: " + (last ? "var(--accent-cta)" : "var(--bg-card)") +
+          "; stroke: var(--accent-cta); stroke-width: " + (last ? 2 : 1.8)
       }, root);
+      dot.style.setProperty("--rd", 300 + i * 45 + "ms");
 
       if (last) {
         var vl = svg("text", {
-          x: cx - 8, y: cy - 15, "text-anchor": "end", class: "chart-value"
+          x: cx - 8, y: cy - 15, "text-anchor": "end", class: "chart-value chart-value--last"
         }, root);
         vl.textContent = v;
       }
     });
 
+    /* the drawing itself: dash the line, then run the dash to zero */
+    if (animate) {
+      try {
+        var len = Math.ceil(line.getTotalLength());
+        line.style.setProperty("--len", len);
+      } catch (e) {
+        /* getTotalLength is unsupported on some engines — show it at once */
+        root.classList.add("is-in");
+      }
+    }
+
     host.appendChild(root);
+    if (animate && !root.classList.contains("is-in")) {
+      whenVisible(host, function () { play(root); });
+    } else {
+      play(root);
+    }
 
     /* caption line under the chart */
     var foot = el("div", "chart-foot");
@@ -303,11 +378,12 @@
 
     vals.forEach(function (v, i) {
       var row = el("li", "cat-row");
+      row.style.setProperty("--rd", i * 70 + "ms");
       row.appendChild(el("span", "cat-name", names[i]));
 
       var track = el("div", "cat-track");
       var fill = el("div", "cat-fill");
-      fill.style.width = Math.max(3, (v / stage.max) * 100) + "%";
+      fill.style.setProperty("--w", Math.max(3, (v / stage.max) * 100) + "%");
       track.appendChild(fill);
       row.appendChild(track);
 
@@ -322,6 +398,12 @@
     foot.innerHTML = "<span>Bars are drawn against the full paper (" + stage.unit +
       "), not against the highest category.</span>";
     host.appendChild(foot);
+
+    if (animates()) {
+      whenVisible(host, function () { play(list); });
+    } else {
+      play(list);
+    }
   }
 
   /* ---------- 4. vacancies ---------------------------------------------- */
@@ -374,6 +456,7 @@
       var cx = pad.l + band * i + band / 2;
       var isLast = i === rows.length - 1;
       var hasFinal = r.final != null;
+      var rd = i * 45 + "ms";
 
       var t = svg("text", {
         x: cx, y: pad.t + ih + 16, "text-anchor": "middle", class: "chart-axis-label"
@@ -385,14 +468,16 @@
         /* vacancies (behind) and recommended (in front), side by side */
         var vx = cx - barW - 1;
         var rx = cx + 1;
-        svg("rect", {
+        var vacBar = svg("rect", {
           x: vx, y: y(r.final), width: barW, height: Math.max(1, pad.t + ih - y(r.final)),
-          rx: 2, style: "fill: var(--st-mains-solid)", opacity: 0.5
+          rx: 2, class: "vac-bar", style: "fill: var(--st-mains-solid)", opacity: 0.5
         }, root);
-        svg("rect", {
+        var recBar = svg("rect", {
           x: rx, y: y(r.recommended), width: barW, height: Math.max(1, pad.t + ih - y(r.recommended)),
-          rx: 2, style: "fill: var(--accent-cta)"
+          rx: 2, class: "vac-bar", style: "fill: var(--accent-cta)"
         }, root);
+        vacBar.style.setProperty("--rd", rd);
+        recBar.style.setProperty("--rd", rd);
 
         var hit = svg("rect", {
           x: cx - band / 2, y: pad.t, width: band, height: ih,
@@ -413,25 +498,35 @@
 
         if (r.year === 2025) {
           var lbl = svg("text", {
-            x: cx, y: y(r.final) - 6, "text-anchor": "middle", class: "chart-value"
+            x: cx, y: y(r.final) - 6, "text-anchor": "middle", class: "chart-value vac-label"
           }, root);
           lbl.textContent = r.final;
+          lbl.style.setProperty("--rd", rd);
         }
       } else {
         /* CSE 2026 — notified estimate only, drawn as an outline */
         var h = pad.t + ih - y(r.notified);
-        svg("rect", {
+        var outBar = svg("rect", {
           x: cx - barW, y: y(r.notified), width: barW * 2, height: Math.max(1, h),
-          rx: 2, style: "fill: none; stroke: var(--ink-muted); stroke-width: 1.4; stroke-dasharray: 4 3"
+          rx: 2, class: "vac-bar",
+          style: "fill: none; stroke: var(--ink-muted); stroke-width: 1.4; stroke-dasharray: 4 3"
         }, root);
+        outBar.style.setProperty("--rd", rd);
         var nt = svg("text", {
-          x: cx, y: y(r.notified) - 6, "text-anchor": "middle", class: "chart-value"
+          x: cx, y: y(r.notified) - 6, "text-anchor": "middle", class: "chart-value vac-label"
         }, root);
         nt.textContent = indian(r.notified);
+        nt.style.setProperty("--rd", rd);
       }
     });
 
     host.appendChild(root);
+
+    if (animates()) {
+      whenVisible(host, function () { play(root); });
+    } else {
+      play(root);
+    }
 
     var foot = el("div", "chart-foot");
     foot.innerHTML =
@@ -471,12 +566,14 @@
 
     groups.forEach(function (g, i) {
       var seg = el("div", "service-seg", g.value);
-      seg.style.flex = g.value + " 0 0";
+      seg.style.setProperty("--g", g.value);
+      seg.style.setProperty("--rd", i * 80 + "ms");
       seg.style.background = shades[i % shades.length];
       seg.title = g.name + ": " + g.value;
       bar.appendChild(seg);
 
       var li = el("li");
+      li.style.setProperty("--rd", i * 80 + "ms");
       var sw = el("span", "swatch");
       sw.style.background = shades[i % shades.length];
       li.appendChild(sw);
@@ -492,6 +589,12 @@
     note.innerHTML = "<span>Total " + indian(total) +
       " · the IAS share has been exactly 180 in every cycle since 2015.</span>";
     host.appendChild(note);
+
+    if (animates()) {
+      whenVisible(host, function () { play(host); });
+    } else {
+      play(host);
+    }
   }
 
   /* ---------- tabs ------------------------------------------------------ */

@@ -178,7 +178,6 @@ body.page-about {
   border-radius: var(--radius-sm);
   background: linear-gradient(90deg, var(--accent-cta), var(--accent));
   transform-origin: left center;
-  animation: funnel-in 700ms var(--ease-out) both;
 }
 
 .funnel-row:last-child .funnel-fill {
@@ -188,15 +187,6 @@ body.page-about {
 .funnel-note {
   font-size: var(--text-xs);
   color: var(--ink-muted);
-}
-
-@keyframes funnel-in {
-  from { transform: scaleX(0.02); opacity: 0.4; }
-  to   { transform: scaleX(1); opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .funnel-fill { animation: none; }
 }
 
 .funnel-caption {
@@ -300,6 +290,7 @@ body.page-about {
 }
 
 .marks-seg {
+  flex: var(--fg, 1) 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -559,6 +550,8 @@ body.page-about {
 }
 
 .chart-point {
+  transform-box: fill-box;
+  transform-origin: center;
   transition: r 120ms var(--ease-out);
 }
 
@@ -679,9 +672,9 @@ body.page-about {
 
 .cat-fill {
   height: 100%;
+  width: var(--w, 0%);
   border-radius: var(--radius-pill);
   background: var(--accent);
-  animation: funnel-in 600ms var(--ease-out) both;
 }
 
 .cat-row:first-child .cat-fill {
@@ -724,6 +717,7 @@ body.page-about {
 }
 
 .service-seg {
+  flex: var(--g, 1) 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -995,5 +989,309 @@ body.page-about {
 
   .status-facts {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Motion layer
+   Static blocks ride the site-wide .reveal observer (assets/js/motion.js);
+   the figures built by about.js animate when their own container scrolls in.
+   Every "before" state is gated on .js-motion, which motion.js adds — so with
+   JavaScript off, or prefers-reduced-motion set, the page renders complete and
+   still.
+   ========================================================================== */
+
+.js-motion .reveal {
+  transition-delay: var(--rd, 0ms);
+}
+
+/* Stagger inside grids so a row of cards arrives one after another */
+.stage-grid > .stage-card:nth-child(2),
+.facts-grid > .fact-card:nth-child(2) { --rd: 90ms; }
+
+.stage-grid > .stage-card:nth-child(3),
+.facts-grid > .fact-card:nth-child(3) { --rd: 180ms; }
+
+.notes > .note:nth-child(even) { --rd: 80ms; }
+.notes > .note:nth-child(3n) { --rd: 150ms; }
+
+.chips-wrap li:nth-child(3n + 2) { --rd: 60ms; }
+.chips-wrap li:nth-child(3n) { --rd: 120ms; }
+
+/* Above the fold: the header rises in on load, no observer needed */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .intro > * {
+    animation: rise-in 620ms var(--ease-out) both;
+  }
+  .intro > *:nth-child(2) { animation-delay: 70ms; }
+  .intro > *:nth-child(3) { animation-delay: 140ms; }
+  .intro > *:nth-child(4) { animation-delay: 220ms; }
+}
+
+/* The "Right now" pulse */
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 0.45rem;
+  border-radius: 50%;
+  background: var(--accent-cta);
+}
+
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-cta);
+  opacity: 0;
+  animation: live-pulse 2.6s var(--ease-out) infinite;
+}
+
+@keyframes live-pulse {
+  0%        { transform: scale(0.6); opacity: 0.7; }
+  70%, 100% { transform: scale(1.7); opacity: 0; }
+}
+
+/* Funnel — each row lifts in, then its bar wipes out from the left */
+.js-motion .funnel-row {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 420ms var(--ease-out) var(--rd, 0ms),
+    transform 420ms var(--ease-out) var(--rd, 0ms);
+}
+
+.js-motion .funnel-row.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.js-motion .funnel-fill {
+  transform: scaleX(0);
+  transition: transform 820ms var(--ease-out) calc(var(--rd, 0ms) + 120ms);
+}
+
+.js-motion .funnel-row.is-in .funnel-fill {
+  transform: scaleX(1);
+}
+
+/* Cut-off line chart — the stroke draws itself, then the points pop */
+.js-motion .trend-line {
+  stroke-dasharray: var(--len, 0);
+  stroke-dashoffset: var(--len, 0);
+  transition: stroke-dashoffset 1200ms var(--ease-out);
+}
+
+.js-motion svg.is-in .trend-line {
+  stroke-dashoffset: 0;
+}
+
+.js-motion .trend-area {
+  opacity: 0;
+  transition: opacity 760ms var(--ease-out) 420ms;
+}
+
+.js-motion svg.is-in .trend-area {
+  opacity: 1;
+}
+
+.js-motion .chart-point {
+  transform: scale(0);
+  transition: transform 420ms var(--ease-out) var(--rd, 0ms),
+    r 120ms var(--ease-out);
+}
+
+.js-motion svg.is-in .chart-point {
+  transform: scale(1);
+}
+
+.js-motion .chart-value--last {
+  opacity: 0;
+  transition: opacity 420ms var(--ease-out) 900ms;
+}
+
+.js-motion svg.is-in .chart-value--last {
+  opacity: 1;
+}
+
+/* Category bars — grow to the right, one after another */
+.js-motion .cat-fill {
+  width: 0;
+  transition: width 780ms var(--ease-out) calc(var(--rd, 0ms) + 120ms);
+}
+
+.js-motion .cat-bars.is-in .cat-fill {
+  width: var(--w, 0%);
+}
+
+.js-motion .cat-row {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 400ms var(--ease-out) var(--rd, 0ms),
+    transform 400ms var(--ease-out) var(--rd, 0ms);
+}
+
+.js-motion .cat-bars.is-in .cat-row {
+  opacity: 1;
+  transform: none;
+}
+
+/* Vacancy bars — grow up from the axis, 2026 last */
+.js-motion .vac-bar {
+  transform: scaleY(0);
+  transform-box: fill-box;
+  transform-origin: bottom;
+  transition: transform 700ms var(--ease-out) var(--rd, 0ms);
+}
+
+.js-motion svg.is-in .vac-bar {
+  transform: scaleY(1);
+}
+
+.js-motion .vac-label {
+  opacity: 0;
+  transition: opacity 380ms var(--ease-out) calc(var(--rd, 0ms) + 520ms);
+}
+
+.js-motion svg.is-in .vac-label {
+  opacity: 1;
+}
+
+/* Service split — the bar wipes in from the left, then the list follows.
+   A clip-path wipe (not a width change) keeps every band at its true width
+   the whole time, so the numbers inside are never squeezed or clipped. */
+.js-motion .service-bar {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 900ms var(--ease-out) 120ms;
+}
+
+.js-motion #service-split.is-in .service-bar {
+  clip-path: inset(0 0 0 0);
+}
+
+.js-motion .service-list li {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 400ms var(--ease-out) calc(var(--rd, 0ms) + 260ms),
+    transform 400ms var(--ease-out) calc(var(--rd, 0ms) + 260ms);
+}
+
+.js-motion #service-split.is-in .service-list li {
+  opacity: 1;
+  transform: none;
+}
+
+/* Marks architecture — one wipe across 1,750 + 275, so the labels keep
+   their full width while the bar fills */
+.js-motion .marks-bar {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1000ms var(--ease-out) 140ms;
+}
+
+.js-motion .reveal.is-visible .marks-bar {
+  clip-path: inset(0 0 0 0);
+}
+
+/* CSE 2027 timeline — the rule draws down, the dots pop as it passes */
+.js-motion .cycle::before {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1100ms var(--ease-out) 120ms;
+}
+
+.js-motion .reveal.is-visible .cycle::before {
+  transform: scaleY(1);
+}
+
+.js-motion .cycle-step::before {
+  transform: scale(0);
+  transition: transform 380ms var(--ease-soft);
+}
+
+.js-motion .reveal.is-visible .cycle-step::before {
+  transform: scale(1);
+}
+
+.js-motion .reveal.is-visible .cycle-step:nth-child(2)::before { transition-delay: 180ms; }
+.js-motion .reveal.is-visible .cycle-step:nth-child(3)::before { transition-delay: 360ms; }
+.js-motion .reveal.is-visible .cycle-step:nth-child(4)::before { transition-delay: 540ms; }
+.js-motion .reveal.is-visible .cycle-step:nth-child(5)::before { transition-delay: 720ms; }
+.js-motion .reveal.is-visible .cycle-step:nth-child(6)::before { transition-delay: 900ms; }
+
+/* Hover — cards and chips lift a hair; nothing moves unless you point at it */
+.stage-card,
+.fact-card,
+.note,
+.quick-fact {
+  transition: transform 240ms var(--ease-out),
+    box-shadow 240ms var(--ease-out),
+    border-color 160ms var(--ease-out);
+}
+
+.stage-card:hover,
+.fact-card:hover,
+.note:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-strong);
+}
+
+.quick-fact:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.chips-wrap li {
+  transition: transform 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    background-color 180ms var(--ease-out);
+}
+
+.chips-wrap li:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  background: var(--bg-card-hover);
+}
+
+/* Reduced motion: nothing travels, nothing loops */
+@media (prefers-reduced-motion: reduce) {
+  .js-motion .funnel-row,
+  .js-motion .funnel-fill,
+  .js-motion .cat-row,
+  .js-motion .cat-fill,
+  .js-motion .vac-bar,
+  .js-motion .chart-point,
+  .js-motion .trend-line,
+  .js-motion .trend-area,
+  .js-motion .chart-value--last,
+  .js-motion .vac-label,
+  .js-motion .service-bar,
+  .js-motion .service-list li,
+  .js-motion .marks-bar,
+  .js-motion .cycle::before,
+  .js-motion .cycle-step::before,
+  .intro > * {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .live-dot::after {
+    display: none;
+  }
+
+  .stage-card:hover,
+  .fact-card:hover,
+  .note:hover,
+  .quick-fact:hover,
+  .chips-wrap li:hover {
+    transform: none;
   }
 }
