@@ -357,3 +357,36 @@ soft butter swipe — the "Ideas worth *thinking* about" treatment.
 **Checked:** `node scripts/audit.js` 30/30 clean; screenshots at 1512, 1024, 390
 and 360 for all five pages plus 404; accent text is `--sage-ink` on `--highlight`
 (≈6.9:1, well past AA). Asset URLs bumped to `?v=20261127d` site-wide.
+
+## 10. Hero rebuilt as a full-bleed photograph (27 Nov 2026)
+
+The two-column hero with the photo plate is gone. The gate photograph now runs
+full width under the navigation and fades into the page, and the opening copy
+sits beneath it — the layout from the reference screenshot, with its problems
+fixed.
+
+**What changed** (`index.html`, `home.css`, `tokens.css`):
+
+* `.hero-band` — full-bleed `<picture>` at `clamp(190px, 26vh, 330px)`,
+  `object-fit: cover` at `58% 30%`, with a `::after` gradient from transparent
+  to `--bg-page`. The fade reads from a new `--page-rgb` token (light and dark
+  values), so it lands on the right colour in both themes.
+* `.hero-band-tag` — the "Dholpur House · New Delhi" pill, on `--bg-card` so it
+  stays legible when the theme flips.
+* Identity row: profile ring, `Public Study Desk` eyebrow, then
+  "Geography Optional · Civil Services Examination".
+* The h1 is the name alone; the role sits under it as a block (`.hero-role`,
+  `0.45em`, `--ink-secondary`) carrying the one accent word — so no stranded
+  em-dash and no three-line display block.
+* The cube moved out of the photo into a `.hero-aside` column beside the copy
+  (right-aligned on desktop, below the CTAs on phones), with the caption
+  "Six pillars of the examination cycle" under the drag hint. Its ground shadow
+  was softened to 0.14 alpha now that it sits on flat ivory.
+* Hero height trimmed (`26vh` band, tighter `padding-top`) so the four CTAs sit
+  inside a 900px viewport instead of below the fold; mobile cube raised to
+  146px so every face clears the 44px tap target at any spin angle.
+
+**Checked:** `node scripts/audit.js` twice, 30/30 clean both runs; screenshots at
+1512, 1024, 768, 390 and 360 plus the dark theme; front-face tap still opens
+`mains-pyqs/index.html?paper=GS%20Paper%20II`, drag still spins without
+navigating. Asset URLs bumped to `?v=20261127e`.
