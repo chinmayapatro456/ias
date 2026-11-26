@@ -556,6 +556,69 @@ navigating. Asset URLs bumped to `?v=20261127e`.
 
 ---
 
+## 11. Standalone GS Cube page (27 Nov 2026)
+
+Scope: new `cube/index.html`, one link added on the home page, no changes to
+`assets/css`, `assets/js`, data files, storage keys or scoring.
+
+**What changed:**
+
+* `cube/index.html` — the six-sided syllabus cube as its own page: History,
+  Geography, Polity, Economy, Ethics, Environment on the six faces, each face
+  carrying the subject name, a short accent rule and a one-line thought. Drag,
+  arrow keys and the subject chips all turn it; clicking a chip or a face turns
+  the shortest way to bring that face forward. Idle drift stops for good on the
+  first interaction, and `prefers-reduced-motion` disables it from the start.
+* Fonts are the site's self-hosted families (`../assets/css/fonts.css`):
+  Newsreader for the display serif and the italic thought lines, Inter for body,
+  JetBrains Mono for the face numbers and chips. No Google Fonts request, so the
+  page keeps the "no external requests" rule.
+* `index.html` — the cube panel caption now links to `./cube/index.html`
+  ("open the full cube"), so the page is reachable from the home page.
+* The home-page cube is untouched: still the icon-and-label ceramic cube, still
+  the buttons that open the matching PYQ paper.
+
+**Checked:** page rendered at 1200×900, six faces present, no external asset
+requests beyond the repo's own fonts, no `[cite:...]` artefacts.
+
+---
+
+## 12. Desktop hero band: the whole frame, head to feet (27 Nov 2026)
+
+The band stretched a 4:3 photograph across the full window width, so `cover`
+cropped it to whatever the band height allowed — head to waist at 1440, a little
+lower at 1920. On a phone the band is narrow, so the same crop rule shows nearly
+the whole figure; that is the difference the desktop view was missing.
+
+**What changed** (`home.css`, two new images, `index.html` version bump):
+
+* Above 768px the photograph is no longer stretched to the band width. It keeps
+  its natural 967:728 ratio at the band's full height, pinned to the right edge,
+  so nothing of the figure is cut at any window width.
+* `assets/img/banner-backdrop.webp` / `.avif` (9 KB) — a pre-blurred, slightly
+  desaturated copy of the same frame, used as the band's background so the
+  remaining width still reads as the scene rather than a flat block. Blurred
+  once at build time instead of with a live `filter`: a filtered pseudo-element
+  painted over the photograph in Chrome.
+* The frame's left edge is feathered into the backdrop with a `mask-image`
+  gradient (30% of its width) instead of ending on a hard vertical seam.
+* `.hero` no longer sets `isolation: isolate`. Inside an isolated stacking
+  context Chrome dropped the masked photo layer entirely and the band rendered
+  as blur only. Nothing in the hero uses blend modes, so the isolation was not
+  doing any work.
+* Band heights: `clamp(440px, 64vh, 620px)` from 768px, `clamp(520px, 70vh,
+  700px)` from 1500px, so the figure keeps a similar share of a very wide window.
+* The "Dholpur House · New Delhi" tag moved to the left, since the figure now
+  holds the right edge, and the bottom fade starts at 90% so the trousers and
+  shoes are not washed out.
+* Phones (<768px) are untouched: the same full-bleed crop as before.
+
+**Checked:** `node scripts/audit.js` 36/36 clean; band screenshotted at 390, 768,
+800, 1024, 1568 and 1920 plus the dark theme, full figure visible in every
+desktop shot; asset URLs bumped to `?v=20261127j`.
+
+---
+
 ## 13. GS Cube: mobile fixes (27 Nov 2026)
 
 Scope: `cube/index.html` only. No change to the six faces, the copy, the

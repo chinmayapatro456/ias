@@ -11,7 +11,11 @@
 
 .hero {
   position: relative;
-  isolation: isolate;
+  /* No `isolation: isolate` here: inside an isolated stacking context Chrome
+     drops the masked photo layer in .hero-band and the band renders as blur
+     only. Nothing in the hero uses blend modes, so the isolation bought us
+     nothing. */
+  isolation: auto;
   padding-bottom: clamp(2.5rem, 5vw, 4rem);
   border-bottom: 1px solid var(--border-subtle);
   background: var(--bg-page);
@@ -55,28 +59,78 @@
   );
 }
 
-/* Desktop: a taller band that carries the figure from head to thigh.
-   The image is scaled to the band width, so the crop is decided by the band
-   height plus object-position-y; 50% centres the window on the body and the
-   bottom fade starts lower so the trousers are not washed out. */
-@media (min-width: 960px) {
+/* Desktop: the whole frame, head to feet.
+   A wide band cannot show a 4:3 photograph without cropping it, so the figure
+   is no longer stretched to the band width. Instead the frame keeps its natural
+   aspect ratio at the band's full height, pinned right, and the same frame —
+   blurred — fills the rest of the band behind it. Nothing of the figure is cut
+   off, at any window width, which is what the phone layout already did. */
+@media (min-width: 768px) {
   .hero-band {
-    height: clamp(440px, 64vh, 620px);
+    --band-h: clamp(440px, 64vh, 620px);
+    height: var(--band-h);
   }
 
-  /* 52% drops the window a little below centre so the frame runs from the
-     head to mid-thigh rather than stopping at the waist. */
+  /* Backdrop: a pre-blurred copy of the same frame, so the band stays
+     full-bleed behind the uncropped photograph. Generated once, not filtered
+     live — a filtered pseudo-element here sat on top of the photo in Chrome. */
+  .hero-band {
+    background-image: url("../img/banner-backdrop.webp");
+    background-size: cover;
+    background-position: center;
+  }
+
+  @supports (background-image: image-set(url("../img/banner-backdrop.avif") type("image/avif"))) {
+    .hero-band {
+      background-image: image-set(
+        url("../img/banner-backdrop.avif") type("image/avif"),
+        url("../img/banner-backdrop.webp") type("image/webp")
+      );
+    }
+  }
+
+  /* The frame itself: full height, uncropped, flush with the right edge and
+     feathered into the backdrop on its left side. */
+  .hero-band picture {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: var(--band-h);
+    width: calc(var(--band-h) * 967 / 728);
+    z-index: 1;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 30%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 30%);
+  }
+
   .hero-band img {
-    object-position: 58% 54%;
+    object-fit: cover;
+    object-position: center;
   }
 
-  /* Fade starts low so the trousers and thighs stay legible */
+  /* The figure now holds the right edge, so the tag moves out of its way.
+     Scoped to .hero-band so it outranks the base .hero-band-tag rule below. */
+  .hero-band .hero-band-tag {
+    left: clamp(1rem, 3vw, 1.75rem);
+    right: auto;
+  }
+
+  /* On very wide screens the uncropped frame would otherwise leave a large
+     blurred expanse, so the band grows with the window and the figure keeps a
+     similar share of the width. */
+  @media (min-width: 1500px) {
+    .hero-band {
+      --band-h: clamp(520px, 70vh, 700px);
+    }
+  }
+
+  /* Fade kept low so the legs and feet stay legible */
   .hero-band::after {
+    z-index: 2;
     background: linear-gradient(
       to bottom,
       rgba(var(--page-rgb), 0) 0%,
-      rgba(var(--page-rgb), 0) 76%,
-      rgba(var(--page-rgb), 0.4) 93%,
+      rgba(var(--page-rgb), 0) 90%,
+      rgba(var(--page-rgb), 0.28) 97%,
       var(--bg-page) 100%
     );
   }
