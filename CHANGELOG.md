@@ -8,6 +8,17 @@ localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
 
 ---
 
+## Home — role line becomes an eyebrow (27 Nov 2026)
+
+Scope: `index.html`, `assets/css/home.css`, cache stamp bumped to `20261127q`.
+
+- **The line under the name** now reads **"A Civil Services Aspirant"** (was
+  "a UPSC Aspirant") and uses the site's eyebrow treatment — uppercase mono,
+  wide tracking, short rule on the left, accent ink — instead of the italic
+  serif, so it matches the kicker style used across the About page.
+
+---
+
 ## Desktop fix — the filter block gets out of the way (27 Nov 2026)
 
 Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, a
