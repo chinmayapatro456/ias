@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UPSC CSE Mains Previous Year Questions (2013–2026) across 19 subject groups. Filter by subject, topic, year, or keyword and track written answers locally.">
+  <title>Mains PYQs — Chinmaya Patro UPSC Study Desk</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/mains.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-nav">
+    <div class="container nav-inner">
+      <a class="nav-brand" href="../index.html">
+        <span class="nav-brand-mark" aria-hidden="true">CP</span>
+        <span>Chinmaya Patro</span>
+      </a>
+
+      <nav aria-label="Primary navigation">
+        <ul class="nav-links">
+          <li><a class="nav-link" href="../index.html">Home</a></li>
+          <li><a class="nav-link" href="../syllabus/index.html">Syllabus</a></li>
+          <li><a class="nav-link" href="./index.html" aria-current="page">Mains PYQs</a></li>
+          <li><a class="nav-link" href="../optional-pyqs/index.html">Optional PYQs</a></li>
+          <li><a class="nav-link" href="../prelims-practice/index.html">Prelims Practice</a></li>
+        </ul>
+      </nav>
+
+      <button
+        type="button"
+        class="nav-toggle"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav-drawer"
+        aria-label="Open navigation menu"
+      >
+        <svg data-icon-menu viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+        <svg data-icon-close style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-backdrop" data-nav-backdrop></div>
+  <nav id="mobile-nav-drawer" class="nav-drawer" data-nav-drawer aria-label="Mobile navigation" aria-hidden="true">
+    <ul class="nav-drawer-list">
+      <li><a class="nav-link" href="../index.html">Home</a></li>
+      <li><a class="nav-link" href="../syllabus/index.html">Syllabus</a></li>
+      <li><a class="nav-link" href="./index.html" aria-current="page">Mains PYQs</a></li>
+      <li><a class="nav-link" href="../optional-pyqs/index.html">Optional PYQs</a></li>
+      <li><a class="nav-link" href="../prelims-practice/index.html">Prelims Practice</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <section class="page-header">
+      <div class="container">
+        <span class="eyebrow">General Studies I–IV · 2013–2026</span>
+        <h1>Mains PYQs</h1>
+        <p class="lead">
+          Browse and filter UPSC Mains previous year questions by paper, topic, year range, or keyword.
+          Bookmark high-yield themes and tick off every answer you write.
+        </p>
+
+        <div class="mains-stats" aria-live="polite">
+          <span class="tag tag--accent" id="mains-total-badge">0 questions</span>
+          <span class="tag tag--sage" id="mains-written-badge">0 written</span>
+          <span class="tag tag--sky" id="mains-bookmarked-badge">0 bookmarked</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <!-- Filter & Grouping Panel -->
+        <div class="card mains-controls" aria-label="Filter Mains questions">
+          <div class="controls-grid">
+            <div>
+              <label class="field-label" for="mains-subject">Paper / Subject</label>
+              <select id="mains-subject" class="select">
+                <option value="all">All papers & subjects</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="field-label" for="mains-topic">Topic Group</label>
+              <select id="mains-topic" class="select">
+                <option value="all">All topic groups</option>
+              </select>
+            </div>
+
+            <div class="year-pair">
+              <div>
+                <label class="field-label" for="mains-year-from">From year</label>
+                <select id="mains-year-from" class="select"></select>
+              </div>
+              <div>
+                <label class="field-label" for="mains-year-to">To year</label>
+                <select id="mains-year-to" class="select"></select>
+              </div>
+            </div>
+
+            <div>
+              <label class="field-label" for="mains-search">Keyword search</label>
+              <input
+                type="search"
+                id="mains-search"
+                class="input"
+                placeholder="e.g. federalism, monsoon, ethics, MSP…"
+                autocomplete="off"
+              >
+            </div>
+          </div>
+
+          <div class="controls-bar">
+            <div class="chip-row" role="group" aria-label="Filter by personal status">
+              <button type="button" class="chip is-active" data-mains-status="all" aria-pressed="true">All</button>
+              <button type="button" class="chip" data-mains-status="unwritten" aria-pressed="false">Unwritten</button>
+              <button type="button" class="chip" data-mains-status="written" aria-pressed="false">Answer written</button>
+              <button type="button" class="chip" data-mains-status="bookmarked" aria-pressed="false">Bookmarked</button>
+            </div>
+
+            <div class="bar-right">
+              <div class="group-switch" role="group" aria-label="Group questions by">
+                <span class="group-label">Group by:</span>
+                <button type="button" class="chip is-active" data-group-mode="topic" aria-pressed="true">Topic</button>
+                <button type="button" class="chip" data-group-mode="year" aria-pressed="false">Year</button>
+              </div>
+
+              <button type="button" class="btn btn-ghost btn-sm" id="mains-reset">Reset filters</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-meta" id="mains-results-meta" aria-live="polite"></div>
+
+        <!-- Grouped Question List -->
+        <div id="mains-list" class="mains-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-top">
+        <span class="footer-brand">Chinmaya Patro · UPSC Study Desk</span>
+        <ul class="footer-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../syllabus/index.html">Syllabus</a></li>
+          <li><a href="./index.html">Mains PYQs</a></li>
+          <li><a href="../optional-pyqs/index.html">Optional PYQs</a></li>
+          <li><a href="../prelims-practice/index.html">Prelims Practice</a></li>
+        </ul>
+      </div>
+      <p class="footer-disclaimer">
+        Personal open study workspace built for self-preparation. <strong>Not affiliated with UPSC</strong> (Union Public Service Commission) or any government body. All progress is stored locally in your browser.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../data/mains-data.js" defer></script>
+  <script src="../assets/js/storage.js" defer></script>
+  <script src="../assets/js/nav.js" defer></script>
+  <script src="../assets/js/motion.js" defer></script>
+  <script src="../assets/js/mains.js" defer></script>
+</body>
+</html>
