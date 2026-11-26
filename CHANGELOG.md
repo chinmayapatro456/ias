@@ -148,6 +148,17 @@ untouched. Stack is still plain HTML/CSS/vanilla JS with self-hosted fonts.
   and all disabled under `prefers-reduced-motion`.
 - Every asset link carries `?v=20261127f`.
 
+### Note on the superseded institutional pass
+
+Three commits landed on `main` while this work was in progress (`d4bc61b`,
+`d3fbece`, `8d18758` — "institutional redesign: ruled geometry, consolidated
+palette"). That pass moved to 2–4px radii, replaced shadows with hairlines, and
+deleted the count-up counters, the tilt handler and the butter swipe. This
+redesign supersedes it per the brief: the counters, the desktop tilt and the
+butter swipe are restored, and the ruled-geometry styling is replaced by the
+warm editorial system described above. The institutional commits stay in the
+history through the merge.
+
 ### Verification
 
 - `node scripts/audit.js` across 360 / 390 / 412 / 768 / 1280 / 1440 for all five
