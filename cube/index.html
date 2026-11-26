@@ -139,8 +139,9 @@
     position:relative;
     width:var(--s);
     height:var(--s);
+    -webkit-transform-style:preserve-3d;
     transform-style:preserve-3d;
-    transform:rotateX(-18deg) rotateY(-32deg);
+    transform:rotateX(-18deg) rotateY(-32deg) translateZ(0);
     will-change:transform;
   }
 
@@ -162,8 +163,8 @@
       inset 0 0 0 1px rgba(255,255,255,0.5),
       inset 0 0 0 1.5px color-mix(in srgb, var(--face-accent) 55%, transparent),
       inset 0 -18px 26px -22px rgba(31,27,22,0.55);
+    -webkit-backface-visibility:hidden;
     backface-visibility:hidden;
-    overflow:hidden;
   }
   .face::before{
     content:"";
@@ -228,7 +229,7 @@
   .face__thought{
     font-family:var(--font-display);
     font-style:italic;
-    font-size:clamp(11px,calc(var(--s) * 0.047),15px);
+    font-size:clamp(10px,calc(var(--s) * 0.047),15px);
     line-height:1.35;
     color:var(--ink-dim);
     margin:0;
@@ -307,7 +308,6 @@
   }
 
   @media (max-width:420px){
-    .face__thought{display:none}
     .legend{gap:6px}
     .chip{padding:10px 11px;font-size:10px;min-height:44px}
     header p{font-size:12.5px}
@@ -448,7 +448,7 @@
   let dragging = false, lastX = 0, lastY = 0;
   let travel = 0;                 // pixels moved during this gesture
   let swallowClick = false;       // a drag just ended, ignore the click it leaves
-  let autoSpin = !reduced;   // stops for good on first interaction
+  let autoSpin = false;      // the cube holds still until the visitor turns it
 
   // face -> (rx, ry) that brings it to the front
   const SNAP = [
@@ -461,7 +461,7 @@
   ];
 
   function render(){
-    cube.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+    cube.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateZ(0)';
   }
 
   function tick(){

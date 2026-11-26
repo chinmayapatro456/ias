@@ -680,6 +680,15 @@ and 1280×800:
 * **Face type did not fit a small cube.** `.face__name` had a 22px floor, which
   overflows a 140px face; the floor is 15px and the face padding starts at
   10px.
+* **Phones showed a stripped cube.** A `max-width:420px` rule hid the italic
+  line under each subject name, so a phone got a different, emptier cube than a
+  desktop. That rule is gone: every face carries the number, the name, the rule
+  and the line at every size, and the line's floor is 10px so it still fits a
+  217px face (measured: no face overflows its box at 320, 360 or 390).
+* **The cube drifted on load.** It auto-spun until the first interaction, which
+  made a still image of it impossible to catch. It now sits at its authored
+  `rotateX(-18deg) rotateY(-32deg)` from the first paint and only moves when
+  the visitor drags, taps a chip, or presses an arrow key.
 * **A notch at every cube corner.** The faces carried
   `border-radius:clamp(9px,3.6%,16px)`, so each rounded corner left a wedge
   where the page background showed through the seam between two faces — a
