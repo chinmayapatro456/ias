@@ -17,11 +17,13 @@
   background: var(--bg-page);
 }
 
-/* Photograph band: full width, cropped wide, fading into the page so the name
-   and the copy sit on clean ivory (and on --bg-page in the dark theme). */
+/* Photograph band: full width, fading into the page so the name and the copy
+   sit on clean ivory (and on --bg-page in the dark theme).
+   DESKTOP (>= 960px): the band is tall enough to show the full figure down to
+   the thighs, so the frame reads as a portrait rather than a cropped face. */
 .hero-band {
   position: relative;
-  height: clamp(190px, 26vh, 330px);
+  height: clamp(210px, 30vh, 340px);
   overflow: hidden;
   background: var(--bg-sand-deep);
 }
@@ -51,6 +53,33 @@
     rgba(var(--page-rgb), 0.6) 74%,
     var(--bg-page) 100%
   );
+}
+
+/* Desktop: a taller band that carries the figure from head to thigh.
+   The image is scaled to the band width, so the crop is decided by the band
+   height plus object-position-y; 50% centres the window on the body and the
+   bottom fade starts lower so the trousers are not washed out. */
+@media (min-width: 960px) {
+  .hero-band {
+    height: clamp(440px, 64vh, 620px);
+  }
+
+  /* 52% drops the window a little below centre so the frame runs from the
+     head to mid-thigh rather than stopping at the waist. */
+  .hero-band img {
+    object-position: 58% 54%;
+  }
+
+  /* Fade starts low so the trousers and thighs stay legible */
+  .hero-band::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(var(--page-rgb), 0) 0%,
+      rgba(var(--page-rgb), 0) 76%,
+      rgba(var(--page-rgb), 0.4) 93%,
+      var(--bg-page) 100%
+    );
+  }
 }
 
 .hero-band-tag {
