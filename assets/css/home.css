@@ -140,7 +140,7 @@
 
 @media (min-width: 960px) {
   .hero-grid {
-    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-columns: minmax(0, 1fr) 320px;
     gap: clamp(2.5rem, 4.5vw, 3.5rem);
   }
 }
@@ -506,16 +506,21 @@
 }
 
 /* Interactive 3D subject cube — larger now that it has its own panel.
-   Rotation, drag, hover-pause and off-screen pause live in home.js. */
+   Rotation, drag, hover-pause and off-screen pause live in home.js.
+   The stage is the cube's *swept* box, not the cube's own box: spun at the
+   resting X tilt a cube of side s covers about 1.42s across and 1.39s down,
+   so the stage reserves 1.45s and the cube is centred inside it. Nothing the
+   cube does while spinning can then reach the panel's padding. */
 .cube-pedestal {
-  --cube-size: 212px;
-  --cube-half: 106px;
+  --cube-size: 180px;
+  --cube-half: calc(var(--cube-size) / 2);
+  --cube-sweep: calc(var(--cube-size) * 1.45);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding-block: var(--space-3) var(--space-1);
+  padding-block: var(--space-2) var(--space-1);
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
@@ -525,9 +530,9 @@
 .cube-pedestal::after {
   content: "";
   position: absolute;
-  top: calc(var(--cube-size) - 4px);
+  top: calc(var(--cube-sweep) * 0.955);
   left: 50%;
-  width: 62%;
+  width: 54%;
   height: 14px;
   transform: translateX(-50%);
   border-radius: 50%;
@@ -538,10 +543,10 @@
 }
 
 .cube-stage {
-  width: var(--cube-size);
-  height: var(--cube-size);
-  /* Space for the cube's near-bottom corner, which foreshortens past the box */
-  margin-bottom: 30px;
+  width: var(--cube-sweep);
+  height: var(--cube-sweep);
+  display: grid;
+  place-items: center;
   perspective: 1000px;
   cursor: grab;
 }
@@ -552,8 +557,8 @@
 
 .cube {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: var(--cube-size);
+  height: var(--cube-size);
   transform-style: preserve-3d;
   /* Default pose: also the no-JS fallback */
   transform: rotateX(-18deg) rotateY(-28deg);
@@ -725,13 +730,26 @@
 
 @media (max-width: 959px) {
   .cube-pedestal {
-    --cube-size: 196px;
-    --cube-half: 98px;
+    --cube-size: 200px;
   }
 
   .cube-panel {
     max-width: 34rem;
     margin-inline: auto;
+  }
+}
+
+/* Size the cube from the panel it lives in, so the spin envelope always fits
+   whatever the column ends up being. 68cqw keeps 1.42 x size inside 100cqw. */
+@supports (container-type: inline-size) {
+  .cube-panel {
+    container-type: inline-size;
+    /* a size container stops stretching on its own; keep the panel full-width */
+    width: 100%;
+  }
+
+  .cube-pedestal {
+    --cube-size: min(240px, 68cqw);
   }
 }
 
@@ -746,8 +764,7 @@
   }
 
   .cube-pedestal {
-    --cube-size: 178px;
-    --cube-half: 89px;
+    --cube-size: 190px;
   }
 
   .today-grid {
