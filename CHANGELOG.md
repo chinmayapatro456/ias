@@ -557,12 +557,15 @@ navigating. Asset URLs bumped to `?v=20261127e`.
 
 ---
 
-## 11. Fireball brand mark (27 Nov 2026)
+## 11. Fireball brand mark around the CP monogram (27 Nov 2026)
 
 The nav mark and the favicon were a map-pin / compass head with an italic "CP"
-in it. A pin reads as "location", which says nothing about the desk, so the mark
-is now a **fireball**: a terracotta ball of flame with three licking tongues
-swept back to the upper right and two sparks trailing it.
+in it. A pin reads as "location", which says nothing about the desk, so the
+mark is now a **fireball wrapped around the monogram**: the initials sit on an
+ivory plate at the centre while terracotta flame tongues curl around its rim,
+leaning up and to the right, with two embers trailing the tips. The fire covers
+the top, right and left of the rim and tapers away at the lower left, so the
+plate stays open and "CP" is never crossed by a tongue.
 
 * `assets/img/favicon.svg` — the fireball on the 64×64 ivory plate (`rx 14`), so
   it still looks deliberate as a browser tab icon and as an installed app icon.
@@ -570,21 +573,28 @@ swept back to the upper right and two sparks trailing it.
 * Nav mark — the same artwork as inline SVG (`viewBox="0 0 64 64"`) on Home,
   Syllabus, Mains PYQs, Optional PYQs and Prelims Practice, and in the
   `MONOGRAM` constant of `scripts/build-home.py` so a Home rebuild keeps it.
-* The fire ramp lives once, as local custom properties on `.nav-brand-mark`
-  (`--fire-deep/-mid/-ball/-bright/-core`), and the dark theme only lifts the
-  silhouette colour (`--fire-deep` `#A64728` → `#B8563A`) so the outer flames
-  stay legible on `#16130F`. The mark is drawn as a `<g>` translated to the
-  optical centre of the 64-box, measured from its rendered alpha bounding box
-  rather than guessed.
-* The mark is deliberately letter-free now: "CP" was illegible at 16px in a tab
-  anyway, and the wordmark sits right beside the mark in the nav. The old
-  `mark-pin` / `mark-disc` / `mark-text` classes and their CSS are gone.
+* Layers, back to front: eight deep tongues, six shorter mid tongues on top of
+  them, the plate, a hairline rim, then the letters. Tongue bases start *under*
+  the plate, so the fire reads as growing out of the rim.
+* The ramp lives once, as local custom properties on `.nav-brand-mark`
+  (`--fire-deep`, `--fire-mid`), and the dark theme only lifts them
+  (`#A64728`→`#B8563A`, `#D97757`→`#E08B6A`) so the flames stay legible on
+  `#16130F`. The plate is `--bg-page` and the letters are `--accent-ink`, so the
+  disc turns dark with the theme and the monogram glows instead of sitting on a
+  bright white circle. The mark is drawn as a `<g>` translated to the optical
+  centre of the 64-box, measured from its rendered alpha bounding box rather
+  than guessed.
+* Classes: `mark-flame--deep`, `mark-flame--mid`, `mark-plate`,
+  `mark-plate-ring`, `mark-text`; the old `mark-pin` / `mark-disc` rules are
+  gone.
 * Path data is sampled at 12 points per flame side with one-decimal coordinates,
-  so the whole mark is ~6.9 KB and gzips to roughly a fifth of that.
-* Asset URLs bumped to `?v=20261127h` (base.css changed).
+  so the whole mark is ~7 KB and gzips to a fraction of that.
+* Asset URLs bumped to `?v=20261127i` (base.css changed).
 
 **Checked:** `node scripts/audit.js` 30/30 clean (0 overflow, 0 truncation,
 0 sub-44px targets, 0 page errors) across 360–1440; nav screenshotted at 1280
-and 360 in both themes and the mark measured at 34×34 with the dark ramp
-applying (`rgb(166,71,40)` light → `rgb(184,86,58)` dark); favicon and both PNG
-icons viewed at 16, 24, 34, 48 and 128px.
+and 360 in both themes with the mark measured at 34×34 and the theme ramp
+applying (`rgb(166,71,40)` / plate `rgb(250,248,245)` light →
+`rgb(184,86,58)` / plate `rgb(22,19,15)` dark); favicon and both PNG icons
+viewed at 16, 24, 34, 48 and 128px, where the letters stay clear of every
+flame.
