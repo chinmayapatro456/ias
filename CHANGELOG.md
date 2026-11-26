@@ -390,3 +390,26 @@ fixed.
 1512, 1024, 768, 390 and 360 plus the dark theme; front-face tap still opens
 `mains-pyqs/index.html?paper=GS%20Paper%20II`, drag still spins without
 navigating. Asset URLs bumped to `?v=20261127e`.
+
+## 11. Larger banner, bigger cube beside the heading (27 Nov 2026)
+
+* `.hero-band` grows from `26vh` to `clamp(280px, 44vh, 500px)` and the crop moves
+  to `58% 38%`, so the frame holds his bust **and** the संघ लोक सेवा आयोग board at
+  1512, 1024 and 768 instead of slicing him off at the chin. The gradient reaches
+  solid `--bg-page` at 92%, so the copy can overlap it.
+* `.hero-grid` became a named-area grid: the identity row spans both columns and
+  the cube sits in an `aside` column whose top is level with the heading's cap
+  line (`"identity identity" / "text aside"`). The copy is pulled up
+  `clamp(-3.5rem, -4vh, -1.75rem)` onto the fade, which wins back the height the
+  taller band costs.
+* Cube enlarged: 196px on desktop (was 148), 152px on phones (was 146). Face type
+  scales with it — 0.78rem labels and 26px icons on desktop, 0.72rem/22px under
+  960px — and the stage's bottom margin goes to 34px so the near-bottom corner
+  clears the "Drag · tap a face" hint at the 900px perspective.
+* Ground shadow dropped to `calc(var(--cube-size) + 12px)` to sit under the new
+  overhang.
+
+**Checked:** `node scripts/audit.js` 30/30 clean; screenshots at 1512, 1024, 768,
+390 and 360 plus the dark theme; front-face tap still opens
+`mains-pyqs/index.html?paper=GS%20Paper%20II`, drag still spins without
+navigating. Asset URLs bumped to `?v=20261127f`.
