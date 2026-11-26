@@ -751,3 +751,34 @@ snapping back or leaving the chip lit. Light and dark both viewed at 360×640.
 `isMobile:true, hasTouch:true` at the listed viewports. iOS Safari's 3D
 `preserve-3d` rendering and its URL-bar behaviour should be confirmed on the
 device.
+
+---
+
+## 14. Home: the hero cube is now the whole cube (27 Nov 2026)
+
+Scope: `index.html` (the hero panel), `assets/css/home.css`, cache stamp. The
+GS Cube page, the desk pages and every link target are untouched.
+
+The hero panel showed a six-face cube carrying only an icon and a subject name,
+with the line "The examination cycle, one face per subject · open the full
+cube" underneath — so the page's own cube was a teaser and the real one lived
+on another URL. That is now one cube, shown in place:
+
+* Every face carries the full entry the GS Cube page uses: the number in mono,
+  the subject in the display serif, a hairline rule, and the italic line
+  ("Rules outlive the people who wrote them.", "Terrain writes the first draft
+  of every story.", …). Nothing is hidden on small screens.
+* The icons are gone from the faces — the same four-part entry on all six, so
+  the top and bottom faces are no longer the odd ones out (they previously
+  suppressed their label).
+* The cube grew to 212px on desktop (196px under 959px, 178px under 767px) to
+  carry the extra line without crowding.
+* The "open the full cube" link is removed; the caption is now just
+  "The examination cycle, one face per subject." The standalone
+  `cube/index.html` still exists and is still in the audit, but nothing on the
+  home page points at it any more.
+* Cache stamp `?v=20261127l` (home.css changed).
+
+**Checked:** `node scripts/audit.js` 42/42 clean across the seven pages and six
+widths; the panel rendered at 1280×900, 390×844 and 360×800 — every face shows
+number, name, rule and line, nothing clipped inside a face, no console errors.

@@ -508,8 +508,8 @@
 /* Interactive 3D subject cube — larger now that it has its own panel.
    Rotation, drag, hover-pause and off-screen pause live in home.js. */
 .cube-pedestal {
-  --cube-size: 176px;
-  --cube-half: 88px;
+  --cube-size: 212px;
+  --cube-half: 106px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -567,8 +567,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 0.5rem;
+  gap: 5px;
+  padding: 0.55rem 0.5rem;
   margin: 0;
   border-radius: 16px;
   border: 1px solid var(--ceramic-rim);
@@ -637,19 +637,45 @@
   background: linear-gradient(158deg, var(--ceramic-bottom-a) 0%, var(--ceramic-bottom-b) 100%);
 }
 
-/* Top and bottom labels would read upside-down at the resting pose, so those
-   two faces carry their icon only; the name stays in the button's aria-label
-   and in the subject chips below the cube. */
-.cube-face--top span,
-.cube-face--bottom span {
-  display: none;
+/* Every face carries the same entry — number, name, rule and the italic line —
+   so the cube in the hero is the whole cube, not a teaser for one. */
+.cube-face-num {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  color: var(--ink-muted);
 }
 
-.cube-face--top svg,
-.cube-face--bottom svg {
-  width: 30px;
-  height: 30px;
+.cube-face-name {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
 }
+
+.cube-face-rule {
+  display: block;
+  width: 42%;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+.cube-face-line {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.66rem;
+  line-height: 1.25;
+  font-weight: 400;
+  color: var(--ink-muted);
+  max-width: 15ch;
+  text-wrap: balance;
+}
+
 
 /* Always visible, at every breakpoint — this is the only affordance that
    tells a first-time visitor the cube can be spun. */
@@ -699,8 +725,8 @@
 
 @media (max-width: 959px) {
   .cube-pedestal {
-    --cube-size: 168px;
-    --cube-half: 84px;
+    --cube-size: 196px;
+    --cube-half: 98px;
   }
 
   .cube-panel {
@@ -720,8 +746,8 @@
   }
 
   .cube-pedestal {
-    --cube-size: 160px;
-    --cube-half: 80px;
+    --cube-size: 178px;
+    --cube-half: 89px;
   }
 
   .today-grid {
