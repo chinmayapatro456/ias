@@ -8,6 +8,158 @@ localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
 
 ---
 
+## 0. Redesign — "study cockpit" visual pass (27 Nov 2026, later same day)
+
+Scope: tokens, base components, Home, Syllabus, Mains PYQs, Optional PYQs,
+Prelims Practice, 404, favicon. No data file, storage key, data global or
+JS-dependent element ID was renamed; scoring, filters and saved progress are
+untouched. Stack is still plain HTML/CSS/vanilla JS with self-hosted fonts.
+
+### Colour system (`assets/css/tokens.css`)
+
+- **One job per colour.** Terracotta = primary action + active state + Prelims.
+  Sage = progress and success only. Sky = Geography/Optional only. Butter = the
+  highlight swipe only. The italic accent word is no longer sage — it is ink with
+  a butter swipe, which is what freed sage to mean progress everywhere.
+- **A stage triplet per exam stage**, defined once and aliased per page through
+  `body.page-*`: Prelims `#FBF0EC/#EEC8BA/#A64728/#B8563A`, Mains
+  `#EFF1F2/#D2D7DA/#333B42/#3A444C`, Optional `#ECF2F8/#C5D8EA/#2A5278/#2F5F8A`
+  (bg / border / ink / solid), each with a dark-theme counterpart. Tags, ring
+  strokes, card header bands and chart bars all read `--stage-*`, so a stage
+  colour cannot drift between pages.
+- Tags are neutral by default; only the **year** tag (`.tag--year`) and the
+  status tags carry colour, and the year tag takes the page's stage colour.
+- **Contrast re-verified at WCAG AA in both themes**: 17.4:1 ink-on-ivory,
+  5.1:1 muted, 4.7:1 white-on-CTA, 7.5:1 sage-on-sage-bg, 7.2:1 sky-on-sky-bg,
+  10.1:1 slate ink on slate bg, 15.6:1 band ink on band bg. Dark theme: 16.5:1,
+  6.9:1, 9.8:1, 9.3:1, 9.8:1, 9.9:1, 15.9:1. Every pair is commented beside the
+  value in `tokens.css`.
+- New tokens for the redesign: `--st-*` stage triplets, `--band-*` (deep ink
+  section), `--skeleton-*`, `--meter-track`, and a slightly tightened type scale
+  (`--text-hero`, `--text-h2`, `--text-eyebrow`, `--measure` 64ch).
+
+### Shared components (`assets/css/base.css`)
+
+- `.tag--year`, `.tag--stage`, `.meter`, `.skeleton`, `.filterbar` +
+  `.filterbar-count`, `.density-toggle`, `.keynav-hint`, `.band`, `.toast--tick`,
+  `.is-celebrating` ring pulse, `.empty-state` compass motif, monogram styles.
+- Type hierarchy: eyebrow 11px caps at 0.14em tracking with a fixed 12px gap to
+  the heading, then the serif heading, then a smaller lead — three clear tiers.
+- Scroll anchoring: `.pyq-item`, `.opt-card`, `.mains-group`, `.unit-details`
+  carry `scroll-margin-top` so the sticky bars never swallow the row you jumped
+  to.
+- Touch targets re-asserted last in the file (44px) for the density chips,
+  filter-bar toggle and Today-strip link.
+
+### Home (`index.html`, `assets/css/home.css`, `assets/js/home.js`)
+
+- **H1 is the name** — `Chinmaya *Patro*` — and "UPSC Civil Services Aspirant —
+  Geography Optional" moved into the eyebrow/subtitle row, so the heading is one
+  line at 360px instead of three.
+- **One dominant CTA** ("Start today's Prelims drill"); Syllabus, Mains PYQs and
+  Optional PYQs became quiet text links underneath.
+- **New "Today" strip** under the intro: streak, topics touched this week, and a
+  "continue where you left off" shortcut. All three read from the existing
+  localStorage keys and say so in words ("No streak yet", "No drills yet",
+  "Start your first drill") when empty. `prelims.js` now also records a `topics`
+  array on each new attempt (additive field, no key or schema change) so the
+  weekly figure is real rather than estimated.
+- **Cube moved off the portrait** into its own 300px panel with a 176px cube
+  (160px on phones), an always-visible "Drag to spin · tap a face" hint at every
+  breakpoint, and the tap-friendly subject chips kept for mobile. Idle rotation,
+  drag, keyboard focus-snap and reduced-motion behaviour are unchanged.
+- **Desk inventory** cards are stage-coloured (Prelims terracotta, Mains slate,
+  Optional sky, Syllabus a tri-colour band because it spans all three) with an
+  icon, a count-up number, and a thin sage meter for the personal metric
+  (covered / written / attempted / streak). Cards load in a `loading` state with
+  shimmer skeletons and switch to a plain "Data file missing — add …" message
+  when a dataset is absent; a stuck dash is no longer possible.
+- **Three stages** cards shortened to one sentence plus three micro-stats
+  ("100 Q · 2 hrs · +2 / −0.66"), with a stage header band and a large faint
+  numeral. Tilt stays on desktop; touch gets a press/scale state instead.
+- **Contrast band**: a deep ink section now carries the India map, larger, with a
+  faint Optional-zone wash clipped to the outline and three pulsing location
+  dots (Mumbai, Kolkata, Chennai — positions derived from the repo's own Albers
+  projection in `scripts/build-geo.py`, calibrated against the two reference
+  points already in the file). The technical boundary-data sentence moved out of
+  the map caption and into the footer.
+- **Exam-timeline strip** (Prelims · Mains · Written · Interview) sits between
+  hero and inventory as a visual anchor.
+- The italic highlighted word is kept on Home and Syllabus only; other headings
+  are plain.
+
+### Mains PYQs (`mains-pyqs/index.html`, `mains.css`, `mains.js`)
+
+- **Sticky compact filter bar** under the nav holding a live result count
+  ("120 of 1,165 shown · by topic"), the density toggle, a j/k hint, and the full
+  filter panel one tap away on every width (open by default on desktop).
+- **Density toggle** (Comfortable / Compact) tightens row padding, type and the
+  action pills without hiding anything.
+- **Collapsible groups** with per-group progress ("0/6 written" + a sage meter)
+  that updates in place when you tick an answer written.
+- **j / k keyboard navigation** moves a focus cursor down/up the visible
+  questions and scrolls them into view.
+- Only the year tag is coloured now; subject, topic and marks tags are neutral.
+
+### Optional PYQs (`optional-pyqs/index.html`, `optional.css`, `optional.js`)
+
+- **Ranked horizontal bar chart**: topics sorted by questions asked, each row
+  carrying a rank number, a bar in the Optional sky, the count, and a tiny
+  sparkline of the years that topic appeared. Click-to-filter, the collapse
+  toggle and the width-change re-render all still work.
+- Same sticky filter bar, live count, density toggle and j/k navigation as Mains.
+- Year tag coloured; paper/topic/marks tags neutral.
+
+### Syllabus (`syllabus/index.html`, `syllabus.css`, `syllabus.js`)
+
+- **Stage-coloured rings**: the ring stroke, card header band and paper code take
+  the colour of the active tab (Prelims terracotta, Mains slate, Optional sky).
+- **Sticky mini overall-progress bar** under the nav so "how far along am I?" is
+  always on screen.
+- **Completion celebration**: ticking the last topic of a unit pulses that
+  paper's ring and shows a tick toast ("Unit complete — Geomorphology 8/8"),
+  fired only on the tick that completes the unit. Skipped under reduced motion.
+- The toast helper gained an optional `variant` argument (`'tick'`), used only
+  for this.
+
+### Prelims Practice (`prelims-practice/index.html`, `prelims.css`, `prelims.js`)
+
+- **Thin top progress bar** pinned under the nav during a paper.
+- **Timer pulses** in the last five minutes (`transform`/`opacity` only, off
+  under reduced motion).
+- **Larger option cards** (60px min, 34px key) with a smooth selection motion and
+  a matching press state.
+- **Optional instant-feedback mode**: a new checkbox in the setup card reveals
+  the key as you answer (correct/incorrect option styling plus a one-line
+  verdict). Off by default, so normal practice is unchanged.
+- **Results open with a large score ring** (percentage in the middle, marks and
+  the correct/wrong/skipped line beside it) before the KPI cards and subject
+  bars.
+
+### Brand and polish
+
+- **New monogram**: italic serif "CP" inside a map-pin / compass head, used for
+  the nav mark on every page and for `assets/img/favicon.svg`; the 192 and 512
+  PNG app icons were re-rendered from it.
+- **Custom 404** with the India outline as a watermark motif, and polished empty
+  states (compass rose + one clear next step) across all four lists.
+- Micro-interactions: theme toggle already eases; new tick toast, ring pulse,
+  skeleton sweep, meter fill and score-ring draw — all transform/opacity based
+  and all disabled under `prefers-reduced-motion`.
+- Every asset link carries `?v=20261127f`.
+
+### Verification
+
+- `node scripts/audit.js` across 360 / 390 / 412 / 768 / 1280 / 1440 for all five
+  pages: **0 horizontal overflow, 0 clipped text, 0 sub-44px touch targets,
+  0 page errors**.
+- Functional pass: Mains density + group collapse + j/k, Optional chart
+  click-to-filter, Syllabus tick → mini bar, Prelims full quiz run with instant
+  feedback and the score ring.
+- Screenshots: light and dark, 390 and 1440, for all five pages.
+
+---
+
 ## 1. Question-count mismatch (Home 1,572 vs Optional PYQs 1,372)
 
 **Result: 1,372 is correct. The 1,572 figure does not exist in the current source

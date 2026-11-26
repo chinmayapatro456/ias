@@ -34,18 +34,24 @@
       }
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127e">
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127e">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20261127e">
-  <link rel="stylesheet" href="../assets/css/mains.css?v=20261127e">
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127f">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127f">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20261127f">
+  <link rel="stylesheet" href="../assets/css/mains.css?v=20261127f">
 </head>
-<body>
+<body class="page-mains">
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <header class="site-nav">
     <div class="container nav-inner">
       <a class="nav-brand" href="../index.html">
-        <span class="nav-brand-mark" aria-hidden="true">CP</span>
+        <span class="nav-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" focusable="false" aria-hidden="true">
+            <path class="mark-pin" d="M20 1.8c-8.2 0-14.9 6.5-14.9 14.5 0 10.3 11.9 20 13.8 21.5a1.7 1.7 0 0 0 2.2 0C23 36.3 34.9 26.6 34.9 16.3 34.9 8.3 28.2 1.8 20 1.8Z"></path>
+            <circle class="mark-disc" cx="20" cy="15.8" r="10.4"></circle>
+            <text class="mark-text" x="20" y="20.2" text-anchor="middle">CP</text>
+          </svg>
+        </span>
         <span>Chinmaya Patro</span>
       </a>
 
@@ -122,7 +128,7 @@
     <section class="page-header">
       <div class="container">
         <span class="eyebrow">General Studies I–IV · 2013–2026</span>
-        <h1>Mains <span class="accent">PYQs</span></h1>
+        <h1>Mains PYQs</h1>
         <p class="lead">
           Browse and filter UPSC Mains previous year questions by paper, topic, year range, or keyword.
           Bookmark high-yield themes and tick off every answer you write.
@@ -138,84 +144,94 @@
 
     <section class="section">
       <div class="container">
-        <!-- Filter & Grouping Panel -->
-        <div class="card mains-controls" aria-label="Filter Mains questions">
-          <!-- Collapsed behind a Filters button below 768px so questions sit
-               above the fold; always open on desktop. -->
-          <button
-            type="button"
-            class="filters-toggle"
-            data-filters-toggle
-            aria-expanded="false"
-            aria-controls="mains-filters-panel"
-          >
-            <span>Filters<span class="filters-toggle-meta" id="mains-filters-meta"> · all papers</span></span>
-            <svg class="filters-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+        <!-- Sticky filter bar: live result count, density toggle and the full
+             filter panel one tap away on every width. -->
+        <div class="filterbar" data-filterbar aria-label="Filter Mains questions">
+          <div class="filterbar-row">
+            <button
+              type="button"
+              class="filters-toggle"
+              data-panel-toggle
+              aria-expanded="false"
+              aria-controls="mains-filters-panel"
+            >
+              <span>Filters<span class="filters-toggle-meta" id="mains-filters-meta"> · all papers</span></span>
+              <svg class="filters-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <p class="results-meta filterbar-count" id="mains-results-meta" aria-live="polite"></p>
+
+            <span class="filterbar-spacer"></span>
+
+            <span class="keynav-hint" aria-hidden="true"><kbd>j</kbd><kbd>k</kbd> to move</span>
+
+            <div class="density-toggle" role="group" aria-label="Question density">
+              <button type="button" class="chip is-active" data-density="comfortable" aria-pressed="true">Comfortable</button>
+              <button type="button" class="chip" data-density="compact" aria-pressed="false">Compact</button>
+            </div>
+          </div>
 
           <div class="filters-panel" id="mains-filters-panel">
-          <div class="controls-grid">
-            <div>
-              <label class="field-label" for="mains-subject">Paper / Subject</label>
-              <select id="mains-subject" class="select">
-                <option value="all">All papers & subjects</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="field-label" for="mains-topic">Topic Group</label>
-              <select id="mains-topic" class="select">
-                <option value="all">All topic groups</option>
-              </select>
-            </div>
-
-            <div class="year-pair">
+            <div class="controls-grid">
               <div>
-                <label class="field-label" for="mains-year-from">From year</label>
-                <select id="mains-year-from" class="select"></select>
+                <label class="field-label" for="mains-subject">Paper / Subject</label>
+                <select id="mains-subject" class="select">
+                  <option value="all">All papers & subjects</option>
+                </select>
               </div>
+
               <div>
-                <label class="field-label" for="mains-year-to">To year</label>
-                <select id="mains-year-to" class="select"></select>
+                <label class="field-label" for="mains-topic">Topic Group</label>
+                <select id="mains-topic" class="select">
+                  <option value="all">All topic groups</option>
+                </select>
+              </div>
+
+              <div class="year-pair">
+                <div>
+                  <label class="field-label" for="mains-year-from">From year</label>
+                  <select id="mains-year-from" class="select"></select>
+                </div>
+                <div>
+                  <label class="field-label" for="mains-year-to">To year</label>
+                  <select id="mains-year-to" class="select"></select>
+                </div>
+              </div>
+
+              <div>
+                <label class="field-label" for="mains-search">Keyword search</label>
+                <input
+                  type="search"
+                  id="mains-search"
+                  class="input"
+                  placeholder="e.g. federalism, monsoon, ethics, MSP…"
+                  autocomplete="off"
+                >
               </div>
             </div>
 
-            <div>
-              <label class="field-label" for="mains-search">Keyword search</label>
-              <input
-                type="search"
-                id="mains-search"
-                class="input"
-                placeholder="e.g. federalism, monsoon, ethics, MSP…"
-                autocomplete="off"
-              >
-            </div>
-          </div>
-
-          <div class="controls-bar">
-            <div class="chip-row" role="group" aria-label="Filter by personal status">
-              <button type="button" class="chip is-active" data-mains-status="all" aria-pressed="true">All</button>
-              <button type="button" class="chip" data-mains-status="unwritten" aria-pressed="false">Unwritten</button>
-              <button type="button" class="chip" data-mains-status="written" aria-pressed="false">Answer written</button>
-              <button type="button" class="chip" data-mains-status="bookmarked" aria-pressed="false">Bookmarked</button>
-            </div>
-
-            <div class="bar-right">
-              <div class="group-switch" role="group" aria-label="Group questions by">
-                <span class="group-label">Group by:</span>
-                <button type="button" class="chip is-active" data-group-mode="topic" aria-pressed="true">Topic</button>
-                <button type="button" class="chip" data-group-mode="year" aria-pressed="false">Year</button>
+            <div class="controls-bar">
+              <div class="chip-row" role="group" aria-label="Filter by personal status">
+                <button type="button" class="chip is-active" data-mains-status="all" aria-pressed="true">All</button>
+                <button type="button" class="chip" data-mains-status="unwritten" aria-pressed="false">Unwritten</button>
+                <button type="button" class="chip" data-mains-status="written" aria-pressed="false">Answer written</button>
+                <button type="button" class="chip" data-mains-status="bookmarked" aria-pressed="false">Bookmarked</button>
               </div>
 
-              <button type="button" class="btn btn-ghost btn-sm" id="mains-reset">Reset filters</button>
+              <div class="bar-right">
+                <div class="group-switch" role="group" aria-label="Group questions by">
+                  <span class="group-label">Group by:</span>
+                  <button type="button" class="chip is-active" data-group-mode="topic" aria-pressed="true">Topic</button>
+                  <button type="button" class="chip" data-group-mode="year" aria-pressed="false">Year</button>
+                </div>
+
+                <button type="button" class="btn btn-ghost btn-sm" id="mains-reset">Reset filters</button>
+              </div>
             </div>
-          </div>
           </div><!-- /.filters-panel -->
         </div>
-
-        <div class="results-meta" id="mains-results-meta" aria-live="polite"></div>
 
         <!-- Grouped Question List -->
         <div id="mains-list" class="mains-list"></div>
@@ -241,11 +257,11 @@
     </div>
   </footer>
 
-  <script src="../data/mains-data.js?v=20261127e" defer></script>
-  <script src="../assets/js/storage.js?v=20261127e" defer></script>
-  <script src="../assets/js/theme.js?v=20261127e" defer></script>
-  <script src="../assets/js/nav.js?v=20261127e" defer></script>
-  <script src="../assets/js/motion.js?v=20261127e" defer></script>
-  <script src="../assets/js/mains.js?v=20261127e" defer></script>
+  <script src="../data/mains-data.js?v=20261127f" defer></script>
+  <script src="../assets/js/storage.js?v=20261127f" defer></script>
+  <script src="../assets/js/theme.js?v=20261127f" defer></script>
+  <script src="../assets/js/nav.js?v=20261127f" defer></script>
+  <script src="../assets/js/motion.js?v=20261127f" defer></script>
+  <script src="../assets/js/mains.js?v=20261127f" defer></script>
 </body>
 </html>

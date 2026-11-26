@@ -50,9 +50,9 @@
   display: none;
 }
 
-/* Topic-frequency rows: full topic name above the bar (left), question count
-   right-aligned on the same line, progress bar underneath. No ellipsis at any
-   width — the label wraps instead of truncating. */
+/* Ranked horizontal bars (REDESIGN): rank + topic name, bar, count, and a
+   tiny sparkline of the years that topic was asked. The whole row stays a
+   button so click-to-filter works exactly as before. */
 .freq-list {
   display: flex;
   flex-direction: column;
@@ -60,17 +60,29 @@
 }
 
 .freq-row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "label count"
+    "bar   spark";
+  align-items: center;
+  gap: 6px 10px;
   width: 100%;
-  padding: 8px;
+  padding: 8px 8px;
   border: 1px solid transparent;
   border-radius: 9px;
   background: none;
   text-align: left;
   transition: background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
+}
+
+@media (min-width: 720px) {
+  .freq-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr) 38px 56px;
+    grid-template-areas: "label bar count spark";
+    gap: 12px;
+  }
 }
 
 .freq-row:hover {
@@ -83,14 +95,8 @@
   outline-offset: 1px;
 }
 
-.freq-row-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-3);
-}
-
 .freq-label {
+  grid-area: label;
   min-width: 0;
   font-family: var(--font-sans);
   font-size: 0.83rem;
@@ -100,31 +106,68 @@
   overflow-wrap: anywhere;
 }
 
+/* Rank number — a quiet mono figure before the topic name */
+.freq-rank {
+  display: inline-block;
+  min-width: 1.6em;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .freq-count {
+  grid-area: count;
   flex-shrink: 0;
+  text-align: right;
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  font-weight: 500;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--ink-muted);
+  color: var(--ink-secondary);
 }
 
 .freq-bar-track {
+  grid-area: bar;
   display: block;
-  height: 8px;
+  height: 9px;
   border-radius: 999px;
-  background-color: var(--bg-sand);
+  background-color: var(--meter-track);
   overflow: hidden;
 }
 
+/* Bars take the page's stage colour (sky on Optional) */
 .freq-bar-fill {
   display: block;
   height: 100%;
   border-radius: 999px;
-  background-color: var(--chart-ink);
+  background-color: var(--stage-solid);
   transform-origin: left center;
   transition: width var(--dur-slow) var(--ease-out),
     background-color var(--dur-fast) var(--ease-out);
+}
+
+.freq-spark-wrap {
+  grid-area: spark;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.freq-spark {
+  display: block;
+  overflow: visible;
+}
+
+.freq-spark polyline {
+  fill: none;
+  stroke: var(--stage-ink);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.75;
 }
 
 .freq-row.is-active .freq-label {
@@ -132,12 +175,25 @@
   color: var(--accent-ink);
 }
 
+.freq-row.is-active .freq-rank,
 .freq-row.is-active .freq-count {
   color: var(--accent-ink);
 }
 
 .freq-row.is-active .freq-bar-fill {
   background-color: var(--accent);
+}
+
+.freq-row.is-active .freq-spark polyline {
+  stroke: var(--accent);
+  opacity: 1;
+}
+
+.freq-legend {
+  margin: var(--space-3) 0 0;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  color: var(--ink-muted);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -149,11 +205,8 @@
 /* Filters: Search, Year Slider, Toggles & Topic Chips
    ========================================================================== */
 
-.opt-controls {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-  margin-bottom: var(--space-6);
+.filterbar .opt-top-controls {
+  margin-bottom: var(--space-4);
 }
 
 .opt-top-controls {
@@ -262,6 +315,10 @@
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: var(--ink-muted);
+}
+
+.filterbar .results-meta {
+  margin: 0;
 }
 
 /* Question Cards
@@ -512,4 +569,32 @@
   .opt-card-actions .btn {
     min-height: 44px;
   }
+}
+
+/* ==========================================================================
+   NEW (2026-11 redesign) — compact density for the question cards
+   ========================================================================== */
+
+.opt-list.is-compact {
+  gap: var(--space-2);
+}
+
+.opt-list.is-compact .opt-card {
+  padding: var(--space-3) var(--space-4);
+}
+
+.opt-list.is-compact .opt-card-top {
+  margin-bottom: var(--space-2);
+}
+
+.opt-list.is-compact .opt-card-text {
+  font-size: 0.98rem;
+  line-height: 1.5;
+  margin-bottom: var(--space-2);
+}
+
+.opt-list.is-compact .action-toggle {
+  min-height: 32px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.7rem;
 }

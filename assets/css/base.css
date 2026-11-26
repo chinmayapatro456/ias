@@ -168,14 +168,16 @@ h4 {
   letter-spacing: -0.01em;
 }
 
-/* Editorial accent — one italic word per display heading, sage green, with a
-   soft butter swipe sitting behind its lower half (the "Ideas worth *thinking*
-   about" treatment). Keep it to h1/h2: one per heading, never two. */
+/* Editorial accent — one italic word per display heading, ink with a soft
+   butter swipe behind its lower half (the "Ideas worth *thinking* about"
+   treatment). CHANGED: the word is no longer sage, because sage now means
+   progress/success only; butter is the one colour allowed to swipe.
+   Keep it to h1/h2 and only on Home and Syllabus: one per heading, never two. */
 .accent {
   position: relative;
   display: inline;
   font-style: italic;
-  color: var(--sage-ink);
+  color: var(--ink-primary);
   white-space: nowrap;
   padding-inline: 0.1em;
   margin-inline: -0.02em;
@@ -223,16 +225,18 @@ p:last-child {
   color: var(--ink-muted);
 }
 
+/* Section eyebrow: 11px caps, 0.14em tracking, a 22px rule, and a fixed
+   12px gap to the heading below — the first of the three hierarchy tiers. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: var(--space-4);
+  margin-bottom: 0.75rem;
   font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-size: var(--text-eyebrow);
   font-weight: 600;
   line-height: 1.2;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-ink);
 }
@@ -269,10 +273,13 @@ p:last-child {
   border-bottom: 1px solid var(--border-subtle);
 }
 
+/* Page header — each inner page washes in its own stage tint (terracotta /
+   slate / sky) so you can tell at a glance which stage you are looking at. */
 .page-header {
   padding-block: clamp(2.25rem, 5vw, 3.75rem) clamp(1.5rem, 3vw, 2.25rem);
   border-bottom: 1px solid var(--border-subtle);
-  background: linear-gradient(180deg, var(--bg-sand) 0%, var(--bg-page) 100%);
+  background:
+    linear-gradient(180deg, var(--stage-bg) 0%, var(--bg-page) 92%);
 }
 
 .page-header h1 {
@@ -323,19 +330,34 @@ p:last-child {
   color: var(--accent-ink);
 }
 
+/* Nav monogram — an italic serif "CP" set inside a map-pin / compass ring.
+   The mark is inline SVG (see index.html) so the letters use Newsreader and
+   the pin keeps its shape at any size. Falls back to a plain terracotta
+   roundel if the SVG is ever removed. */
 .nav-brand-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-cta);
-  color: var(--ink-on-accent);
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-cta);
+  color: var(--ink-on-accent);
   font-family: var(--font-serif);
   font-size: 0.95rem;
   font-weight: 700;
-  flex-shrink: 0;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.nav-brand:hover .nav-brand-mark {
+  transform: rotate(-6deg) scale(1.04);
+}
+
+.nav-brand-mark svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 .nav-links {
@@ -1063,13 +1085,42 @@ p:last-child {
   color: var(--sage-ink);
 }
 
+/* Empty state — a quiet compass rose, a serif line and one clear next step. */
 .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
   text-align: center;
   padding: var(--space-12) var(--space-6);
   background: var(--bg-card);
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius-lg);
   color: var(--ink-muted);
+}
+
+.empty-state h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--ink-primary);
+}
+
+.empty-state p {
+  margin: 0;
+  max-width: 46ch;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+}
+
+.empty-state::before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--space-2);
+  border-radius: 50%;
+  border: 1px dashed var(--stage-border);
+  background:
+    radial-gradient(circle at 50% 50%, var(--stage-solid) 0 2px, transparent 3px);
 }
 
 .toast {
@@ -1279,7 +1330,9 @@ p:last-child {
   .filters-toggle,
   .notice-dismiss,
   .nav-brand,
-  .nav-toggle {
+  .nav-toggle,
+  .density-toggle .chip,
+  .filterbar .filters-toggle {
     min-height: 44px;
   }
 
@@ -1307,4 +1360,325 @@ p:last-child {
   input[type="text"] {
     font-size: 16px;
   }
+}
+
+/* ==========================================================================
+   NEW (2026-11 redesign) — shared components
+   Everything below is reused by at least two pages: stage tags, thin meters,
+   loading skeletons, the sticky filter bar, density toggles, keyboard
+   navigation focus, the deep ink band and the celebration pulse.
+   ========================================================================== */
+
+/* Tags — neutral by default (see .tag above). Only the year tag and the
+   status tags carry colour, and the year tag takes the page's stage colour. */
+.tag--year {
+  background-color: var(--stage-bg);
+  border-color: var(--stage-border);
+  color: var(--stage-ink);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+}
+
+.tag--stage {
+  background-color: var(--stage-bg);
+  border-color: var(--stage-border);
+  color: var(--stage-ink);
+}
+
+/* Thin progress meter — sage is the progress colour, so the fill is sage on
+   every page; only the track changes with the theme. */
+.meter {
+  position: relative;
+  display: block;
+  height: 5px;
+  width: 100%;
+  border-radius: var(--radius-pill);
+  background-color: var(--meter-track);
+  overflow: hidden;
+}
+
+.meter-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--sage-ink);
+  transform-origin: left center;
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
+.meter--stage .meter-fill {
+  background-color: var(--stage-solid);
+}
+
+/* Loading skeleton — a moving sheen, no filters, no layout thrash. */
+.skeleton {
+  position: relative;
+  display: block;
+  border-radius: 6px;
+  background-color: var(--skeleton-base);
+  background-image: linear-gradient(
+    90deg,
+    var(--skeleton-base) 0%,
+    var(--skeleton-shine) 50%,
+    var(--skeleton-base) 100%
+  );
+  background-size: 220% 100%;
+  background-position: 140% 0;
+  animation: skeleton-sweep 1.25s linear infinite;
+}
+
+@keyframes skeleton-sweep {
+  from { background-position: 140% 0; }
+  to { background-position: -40% 0; }
+}
+
+.skeleton--line { height: 0.7rem; }
+.skeleton--value { height: 2.1rem; width: 62%; border-radius: 8px; }
+.skeleton--meta { height: 0.6rem; width: 78%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background-image: none;
+  }
+}
+
+/* Sticky filter bar (Mains PYQs, Optional PYQs)
+   Sits directly under the nav, holds the live result count and the density
+   toggle, and keeps the full filter panel one tap away on every width. */
+.filterbar {
+  position: sticky;
+  top: var(--nav-height);
+  z-index: var(--z-sticky);
+  margin-bottom: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--sheet-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-xs);
+}
+
+.filterbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.filterbar-spacer {
+  flex: 1 1 auto;
+}
+
+/* The live count: monospace digits so it never jitters while filtering */
+.filterbar-count {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.filterbar-count strong {
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.filterbar .filters-toggle {
+  display: inline-flex;
+  width: auto;
+  min-height: 40px;
+  padding: 0.35rem 0.8rem;
+  box-shadow: none;
+  background: transparent;
+  border-color: var(--border-subtle);
+}
+
+.filterbar .filters-panel {
+  display: none;
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.filterbar .filters-panel.is-open {
+  display: block;
+}
+
+/* Density toggle — two-state segmented control, comfortable | compact */
+.density-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 9px;
+  background-color: var(--bg-sand);
+  border: 1px solid var(--border-subtle);
+}
+
+.density-toggle .chip {
+  min-height: 30px;
+  padding: 0.15rem 0.65rem;
+  border-radius: 7px;
+  background: transparent;
+  border-color: transparent;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.density-toggle .chip.is-active,
+.density-toggle .chip[aria-pressed="true"] {
+  background-color: var(--bg-card);
+  border-color: var(--border-subtle);
+  color: var(--ink-primary);
+  box-shadow: var(--hairline-shadow);
+}
+
+/* Keyboard navigation (j / k) — the focused row gets a stage-coloured rail
+   so it is obvious which question Enter or Space will act on. */
+.keynav-target:focus-visible,
+.pyq-item:focus-visible,
+.opt-card:focus-visible {
+  outline: 2px solid var(--stage-solid);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Deep ink band — the one strong-contrast section on the home page. */
+.band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--band-bg);
+  background-image: linear-gradient(180deg, var(--band-bg) 0%, var(--band-bg-deep) 100%);
+  color: var(--band-ink);
+}
+
+.band h2,
+.band h3 {
+  color: var(--band-ink);
+}
+
+.band .eyebrow {
+  color: var(--band-accent);
+}
+
+.band .lead,
+.band p {
+  color: var(--band-muted);
+}
+
+.band a {
+  color: var(--band-accent);
+}
+
+/* Celebration pulse — one short ring pulse when a unit hits 100% */
+@keyframes ring-pulse {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+
+.is-celebrating {
+  animation: ring-pulse 620ms var(--ease-out) 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-celebrating { animation: none; }
+}
+
+/* Toast with a tick — used for "unit complete" and "topic covered" moments */
+.toast--tick {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--sage-ink);
+  color: #fff;
+}
+
+.toast--tick::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: inset 0 0 0 3px var(--sage-ink);
+}
+
+/* Press feedback on touch: cards settle instead of shrinking away */
+@media (hover: none) {
+  .pressable:active {
+    transform: scale(0.985);
+    transition-duration: 90ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pressable:active { transform: none; }
+}
+
+/* Screen-reader-only live region for filter counts */
+.live-region {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* Monogram artwork — italic serif "CP" inside a map-pin / compass head.
+   Colours come from tokens so the mark follows the theme. */
+.nav-brand-mark:has(svg) {
+  background: transparent;
+}
+
+.nav-brand-mark .mark-pin {
+  fill: var(--accent-cta);
+}
+
+.nav-brand-mark .mark-disc {
+  fill: var(--bg-page);
+}
+
+.nav-brand-mark .mark-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.03em;
+  fill: var(--accent-ink);
+}
+
+/* Touch targets — declared last so they win over the component defaults
+   above (density chips, filter bar toggle, Today strip link). */
+@media (max-width: 767px) {
+  .filterbar .filters-toggle,
+  .density-toggle .chip {
+    min-height: 44px;
+  }
+
+  .today-continue {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+/* Scroll anchoring: sticky bars must not swallow the row you just focused
+   (j / k navigation, skip links, in-page anchors). */
+.pyq-item,
+.opt-card,
+.mains-group,
+.unit-details,
+.question-stage,
+.paper-block {
+  scroll-margin-top: calc(var(--nav-height) + 104px);
 }

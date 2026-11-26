@@ -70,11 +70,20 @@
     var pctEl = document.getElementById('overall-pct');
     if (badge) badge.textContent = covered + ' / ' + total + ' topics covered';
     if (pctEl) pctEl.textContent = pct + '% complete overall';
+
+    /* Sticky mini bar (NEW): same numbers, always in view */
+    var fill = document.querySelector('[data-mini-fill]');
+    var miniPct = document.querySelector('[data-mini-pct]');
+    if (fill) fill.style.width = pct + '%';
+    if (miniPct) miniPct.textContent = pct + '%';
   }
 
   function renderRings(stage, coveredSet) {
     var container = document.getElementById('syllabus-rings');
     if (!container) return;
+
+    /* Stage-coloured rings: the container tells CSS which triplet to use */
+    container.setAttribute('data-stage', stage.id || 'prelims');
 
     var html = (stage.papers || [])
       .map(function (paper) {
@@ -202,6 +211,28 @@
     container.innerHTML = renderedPapers.join('');
   }
 
+  /* Short celebration: the paper's ring pulses and a tick toast confirms it.
+     transform/opacity only, and skipped entirely for reduced motion. */
+  function celebrateUnit(paperId, unitTitle, done, total) {
+    var card = document.querySelector('[data-ring-paper="' + paperId + '"]');
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (card && !reduce) {
+      card.classList.remove('is-celebrating');
+      /* Force a reflow so the animation can replay on a second completion */
+      void card.offsetWidth;
+      card.classList.add('is-celebrating');
+      setTimeout(function () {
+        card.classList.remove('is-celebrating');
+      }, 1400);
+    }
+    if (window.StudyUI && window.StudyUI.toast) {
+      window.StudyUI.toast(
+        'Unit complete — ' + (unitTitle || 'topics') + ' ' + done + '/' + total,
+        'tick'
+      );
+    }
+  }
+
   function getActiveStage(data) {
     var stages = data.stages || [];
     for (var i = 0; i < stages.length; i++) {
@@ -310,8 +341,28 @@
         updateOverallSummary(data, coveredSet);
         renderRings(stage, coveredSet);
 
-        /* Update unit count badge in place */
+        /* NEW: a unit that just reached 100% gets a ring pulse and a tick
+           toast. Only fires on the tick that completes the unit, never on
+           an untick or a re-render. */
         var unitId = box.getAttribute('data-unit-id');
+        var paperId = box.getAttribute('data-paper-id');
+        if (nowCovered && unitId && stage) {
+          (stage.papers || []).forEach(function (p) {
+            if (p.id !== paperId) return;
+            (p.units || []).forEach(function (u) {
+              if (u.id !== unitId) return;
+              var topics = u.topics || [];
+              var done = topics.filter(function (t) {
+                return coveredSet.has(String(t.id));
+              }).length;
+              if (topics.length && done === topics.length) {
+                celebrateUnit(paperId, u.title, done, topics.length);
+              }
+            });
+          });
+        }
+
+        /* Update unit count badge in place */
         if (unitId) {
           var unitCountEl = treeEl.querySelector('[data-unit-count="' + unitId + '"]');
           if (unitCountEl && stage) {

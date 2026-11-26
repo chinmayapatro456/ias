@@ -203,7 +203,9 @@
       });
   }
 
-  /* Animated SVG Topic-Frequency Chart */
+  /* Ranked horizontal bar chart + per-topic year sparkline.
+     Rows are sorted by question count so recurring themes surface at a
+     glance; each row keeps data-chart-topic so click-to-filter is unchanged. */
   function renderChart() {
     var wrap = document.getElementById('opt-chart-wrap');
     if (!wrap) return;
@@ -216,25 +218,67 @@
     }
 
     var counts = {};
-    topics.forEach(function (t) { counts[t] = 0; });
+    var yearCounts = {};
+    topics.forEach(function (t) {
+      counts[t] = 0;
+      yearCounts[t] = {};
+    });
     pool.forEach(function (q) {
-      counts[q.topic] = (counts[q.topic] || 0) + 1;
+      if (typeof counts[q.topic] !== 'number') {
+        counts[q.topic] = 0;
+        yearCounts[q.topic] = {};
+      }
+      counts[q.topic] += 1;
+      if (q.year) {
+        yearCounts[q.topic][q.year] = (yearCounts[q.topic][q.year] || 0) + 1;
+      }
+    });
+
+    var ranked = topics.slice().sort(function (a, b) {
+      return (counts[b] || 0) - (counts[a] || 0) || String(a).localeCompare(String(b));
     });
 
     var maxCount = Math.max.apply(
       null,
-      topics.map(function (t) { return counts[t] || 0; }).concat([1])
+      ranked.map(function (t) { return counts[t] || 0; }).concat([1])
     );
+
+    var yStart = datasetMinYear;
+    var yEnd = datasetMaxYear;
+
+    /* Tiny sparkline: one point per year, height = questions that year */
+    function sparkline(topic) {
+      var w = 56;
+      var h = 16;
+      var pad = 1.5;
+      var vals = [];
+      for (var y = yStart; y <= yEnd; y += 1) {
+        vals.push(yearCounts[topic][y] || 0);
+      }
+      var max = Math.max.apply(null, vals.concat([1]));
+      var step = vals.length > 1 ? (w - pad * 2) / (vals.length - 1) : 0;
+      var pts = vals
+        .map(function (v, i) {
+          var x = pad + i * step;
+          var py = h - pad - (v / max) * (h - pad * 2);
+          return x.toFixed(1) + ',' + py.toFixed(1);
+        })
+        .join(' ');
+      return (
+        '<svg class="freq-spark" viewBox="0 0 ' + w + ' ' + h + '" width="' + w + '" height="' + h +
+          '" aria-hidden="true" focusable="false">' +
+          '<polyline points="' + pts + '"></polyline>' +
+        '</svg>'
+      );
+    }
 
     var reduceMotion =
       window.StudyMotion && typeof window.StudyMotion.prefersReducedMotion === 'function'
         ? window.StudyMotion.prefersReducedMotion()
         : false;
 
-    /* Stacked rows: full topic name above the bar, count right-aligned on the
-       same line, bar underneath. Nothing is truncated at any width. */
-    var rowsHtml = topics
-      .map(function (topic) {
+    var rowsHtml = ranked
+      .map(function (topic, i) {
         var c = counts[topic] || 0;
         var pct = maxCount ? Math.round((c / maxCount) * 100) : 0;
         var isActive = state.topic === topic;
@@ -244,20 +288,22 @@
             'data-chart-topic="' + escapeHtml(topic) + '" ' +
             'aria-pressed="' + String(isActive) + '" ' +
             'aria-label="Filter by ' + escapeHtml(topic) + ' (' + c + ' questions)">' +
-            '<span class="freq-row-head">' +
-              '<span class="freq-label">' + escapeHtml(topic) + '</span>' +
-              '<span class="freq-count">' + c + '</span>' +
-            '</span>' +
+            '<span class="freq-label"><span class="freq-rank">' + (i + 1) + '</span>' + escapeHtml(topic) + '</span>' +
             '<span class="freq-bar-track" aria-hidden="true">' +
               '<span class="freq-bar-fill" style="width:' + (reduceMotion ? pct : 0) + '%"></span>' +
             '</span>' +
+            '<span class="freq-count">' + c + '</span>' +
+            '<span class="freq-spark-wrap" aria-hidden="true">' + sparkline(topic) + '</span>' +
           '</button>'
         );
       })
       .join('');
 
-    wrap.innerHTML = '<div class="freq-list" role="group" aria-label="Topic frequency bar chart">' +
-      rowsHtml + '</div>';
+    wrap.innerHTML =
+      '<div class="freq-list" role="group" aria-label="Topic frequency, ranked by question count">' +
+        rowsHtml +
+      '</div>' +
+      '<p class="freq-legend" aria-hidden="true">Ranked by questions asked · sparkline shows the years each topic appeared</p>';
 
     if (!reduceMotion) {
       requestAnimationFrame(function () {
@@ -267,7 +313,7 @@
           var pct = maxCount ? Math.round(((counts[topic] || 0) / maxCount) * 100) : 0;
           setTimeout(function () {
             bar.style.width = pct + '%';
-          }, Math.min(i * 18, 220));
+          }, Math.min(i * 14, 200));
         });
       });
     }
@@ -318,19 +364,12 @@
     var bmSet = getBookmarkSet();
     var qTrim = state.query.trim();
 
+    /* Live result count for the sticky filter bar */
     if (metaEl) {
-      metaEl.textContent =
-        'Showing ' +
-        Math.min(filtered.length, state.visibleLimit).toLocaleString('en-IN') +
-        ' of ' +
-        filtered.length.toLocaleString('en-IN') +
-        ' Geography Optional question' +
-        (filtered.length === 1 ? '' : 's') +
-        ' (' +
-        state.minYear +
-        '–' +
-        state.maxYear +
-        ').';
+      metaEl.innerHTML =
+        '<strong>' + Math.min(filtered.length, state.visibleLimit).toLocaleString('en-IN') +
+        '</strong> of ' + filtered.length.toLocaleString('en-IN') +
+        ' shown · ' + state.minYear + '–' + state.maxYear;
     }
 
     if (!filtered.length) {
@@ -349,10 +388,10 @@
         var isBm = bmSet.has(item.id);
 
         return (
-          '<article class="card opt-card' + (isAtt ? ' is-attempted' : '') + '">' +
+          '<article class="card opt-card' + (isAtt ? ' is-attempted' : '') + '" tabindex="-1">' +
             '<div class="opt-card-top">' +
-              (item.year ? '<span class="tag tag--accent">' + item.year + '</span>' : '') +
-              '<span class="tag tag--sky">' + escapeHtml(item.paper) + '</span>' +
+              (item.year ? '<span class="tag tag--year">' + item.year + '</span>' : '') +
+              '<span class="tag">' + escapeHtml(item.paper) + '</span>' +
               '<span class="tag">' + escapeHtml(item.topic) + '</span>' +
               (item.marks ? '<span class="tag">' + escapeHtml(item.marks) + '</span>' : '') +
             '</div>' +
@@ -383,6 +422,7 @@
     }
 
     listEl.innerHTML = html;
+    applyDensity();
 
     var loadBtn = document.getElementById('opt-load-more');
     if (loadBtn) {
@@ -594,6 +634,72 @@
     renderAll();
   }
 
+  /* --- NEW: density toggle, filter panel toggle and j/k navigation ------ */
+  var density = 'comfortable';
+
+  function applyDensity() {
+    var listEl = document.getElementById('opt-list');
+    if (listEl) listEl.classList.toggle('is-compact', density === 'compact');
+  }
+
+  function initPanelToggle() {
+    var btn = document.querySelector('[data-panel-toggle]');
+    var panel = document.getElementById('opt-filters-panel');
+    if (!btn || !panel) return;
+    var wide = window.matchMedia('(min-width: 768px)');
+
+    function sync() {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      panel.classList.toggle('is-open', open);
+    }
+
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      sync();
+    });
+
+    btn.setAttribute('aria-expanded', String(wide.matches));
+    sync();
+  }
+
+  function initDensity() {
+    var buttons = document.querySelectorAll('[data-density]');
+    if (!buttons.length) return;
+    Array.prototype.forEach.call(buttons, function (btn) {
+      btn.addEventListener('click', function () {
+        density = btn.getAttribute('data-density') === 'compact' ? 'compact' : 'comfortable';
+        Array.prototype.forEach.call(buttons, function (b) {
+          var active = b === btn;
+          b.classList.toggle('is-active', active);
+          b.setAttribute('aria-pressed', String(active));
+        });
+        applyDensity();
+      });
+    });
+  }
+
+  function initKeyNav() {
+    document.addEventListener('keydown', function (event) {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      var tag = (event.target && event.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA' || event.target.isContentEditable) return;
+      if (event.key !== 'j' && event.key !== 'k') return;
+
+      var items = document.querySelectorAll('#opt-list .opt-card');
+      if (!items.length) return;
+
+      var idx = Array.prototype.indexOf.call(items, document.activeElement);
+      var next = event.key === 'j' ? (idx < 0 ? 0 : idx + 1) : (idx <= 0 ? 0 : idx - 1);
+      if (next >= items.length) next = items.length - 1;
+      event.preventDefault();
+      items[next].focus();
+      if (items[next].scrollIntoView) {
+        items[next].scrollIntoView({ block: 'center' });
+      }
+    });
+  }
+
   function initOptional() {
     var listEl = document.getElementById('opt-list');
     allQuestions = normalizeData();
@@ -630,6 +736,9 @@
 
     updateHeaderStats();
     renderAll();
+    initPanelToggle();
+    initDensity();
+    initKeyNav();
 
     /* Paper Tabs */
     var paperTabs = document.querySelectorAll('#opt-paper-tabs [data-paper]');

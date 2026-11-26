@@ -333,6 +333,7 @@
     }
 
     var negBox = document.getElementById('pre-neg-marking');
+    var fbBox = document.getElementById('pre-instant-feedback');
     session = {
       label: modeLabel,
       questions: questions,
@@ -340,6 +341,7 @@
       flagged: new Set(),
       index: 0,
       negativeMarking: negBox ? negBox.checked : true,
+      instantFeedback: fbBox ? fbBox.checked : false,
       isCountdown: Boolean(isCountdown),
       remainingSec: isCountdown ? YEAR_SIM_DURATION_SEC : 0,
       elapsedSec: 0
@@ -402,6 +404,12 @@
     var progEl = document.getElementById('quiz-progress-text');
     if (progEl) progEl.textContent = 'Question ' + (session.index + 1) + ' of ' + total;
 
+    /* Thin top progress bar (NEW) */
+    var barEl = document.querySelector('[data-quiz-progress]');
+    if (barEl) {
+      barEl.style.width = Math.round(((session.index + 1) / total) * 100) + '%';
+    }
+
     var metaEl = document.getElementById('q-meta-row');
     if (metaEl) {
       metaEl.innerHTML =
@@ -423,16 +431,39 @@
     var chosen = session.answers[q.id] || '';
     var optsEl = document.getElementById('q-options');
     if (optsEl) {
+      var instant = Boolean(session.instantFeedback) && Boolean(chosen) && Boolean(q.answer);
       optsEl.innerHTML = (q.options || []).map(function (opt) {
         var isSel = chosen === opt.key;
+        var extra = '';
+        if (instant) {
+          if (opt.key === q.answer) extra += ' is-correct';
+          else if (isSel) extra += ' is-wrong';
+        }
         return (
-          '<button type="button" class="option-btn' + (isSel ? ' is-selected' : '') + '" ' +
+          '<button type="button" class="option-btn' + (isSel ? ' is-selected' : '') + extra + '" ' +
             'role="radio" aria-checked="' + String(isSel) + '" data-opt-key="' + escapeHtml(opt.key) + '">' +
             '<span class="option-key">' + escapeHtml(opt.key) + '</span>' +
             '<span class="option-text">' + escapeHtml(opt.text) + '</span>' +
           '</button>'
         );
       }).join('');
+    }
+
+    /* Instant feedback line */
+    var fbEl = document.getElementById('q-feedback');
+    if (fbEl) {
+      if (session.instantFeedback && chosen && q.answer && !isUnscored(q)) {
+        fbEl.hidden = false;
+        fbEl.textContent = chosen === q.answer
+          ? 'Correct — key ' + q.answer
+          : 'Not quite — the key is ' + q.answer;
+        fbEl.classList.toggle('is-correct', chosen === q.answer);
+        fbEl.classList.toggle('is-wrong', chosen !== q.answer);
+      } else {
+        fbEl.hidden = true;
+        fbEl.textContent = '';
+        fbEl.classList.remove('is-correct', 'is-wrong');
+      }
     }
 
     var flagBtn = document.getElementById('btn-flag-review');
@@ -561,13 +592,21 @@
     if (window.StudyStorage) {
       st.streak = window.StudyStorage.updateStreak(st.streak);
     }
+    /* `topics` is additive: the Home "Today" strip counts unique topics
+       touched this week from it. Existing keys and fields are untouched. */
+    var attemptTopics = [];
+    session.questions.forEach(function (q) {
+      if (q.topic && attemptTopics.indexOf(q.topic) === -1) attemptTopics.push(q.topic);
+    });
+
     st.attempts.unshift({
       date: new Date().toISOString(),
       label: session.label,
       score: score,
       maxScore: maxScore,
       accuracy: accuracy,
-      total: session.questions.length
+      total: session.questions.length,
+      topics: attemptTopics
     });
     st.attempts = st.attempts.slice(0, 30);
     saveState(st);
@@ -603,6 +642,47 @@
 
     var retryBtn = document.getElementById('btn-retry-wrong');
     if (retryBtn) retryBtn.disabled = !lastReport.wrongQuestions.length;
+
+    /* Large score ring first, then the four KPI cards (NEW) */
+    var scoreEl = document.getElementById('results-score');
+    if (scoreEl) {
+      var ringR = 52;
+      var ringC = 2 * Math.PI * ringR;
+      var pct = lastReport.maxScore > 0
+        ? Math.max(0, Math.min(100, Math.round((lastReport.score / lastReport.maxScore) * 100)))
+        : 0;
+      var offset = ringC * (1 - pct / 100);
+      var grade = pct >= 60 ? 'Strong session' : pct >= 40 ? 'Solid base' : 'Keep drilling';
+      var reduce = window.StudyMotion && typeof window.StudyMotion.prefersReducedMotion === 'function'
+        ? window.StudyMotion.prefersReducedMotion()
+        : false;
+
+      scoreEl.innerHTML =
+        '<div class="score-ring" role="img" aria-label="Score ' + lastReport.score +
+          ' out of ' + lastReport.maxScore + ', ' + pct + ' percent">' +
+          '<svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">' +
+            '<circle class="score-ring-track" cx="60" cy="60" r="' + ringR + '"></circle>' +
+            '<circle class="score-ring-fill' + (reduce ? ' is-set' : '') + '" cx="60" cy="60" r="' + ringR + '" ' +
+              'stroke-dasharray="' + ringC.toFixed(1) + '" ' +
+              'stroke-dashoffset="' + (reduce ? offset.toFixed(1) : ringC.toFixed(1)) + '" ' +
+              'data-offset="' + offset.toFixed(1) + '"></circle>' +
+          '</svg>' +
+          '<span class="score-ring-value">' + pct + '%</span>' +
+        '</div>' +
+        '<div class="score-copy">' +
+          '<span class="eyebrow">' + grade + '</span>' +
+          '<p class="score-figure"><strong>' + lastReport.score + '</strong> / ' + lastReport.maxScore + ' marks</p>' +
+          '<p class="score-sub">' + lastReport.correct + ' correct · ' + lastReport.wrong + ' wrong · ' +
+            lastReport.skipped + ' skipped · ' + lastReport.accuracy + '% accuracy</p>' +
+        '</div>';
+
+      if (!reduce) {
+        requestAnimationFrame(function () {
+          var fill = scoreEl.querySelector('.score-ring-fill');
+          if (fill) fill.style.strokeDashoffset = fill.getAttribute('data-offset');
+        });
+      }
+    }
 
     var kpisEl = document.getElementById('results-kpis');
     if (kpisEl) {

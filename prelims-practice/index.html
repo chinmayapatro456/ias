@@ -34,18 +34,24 @@
       }
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127e">
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127e">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20261127e">
-  <link rel="stylesheet" href="../assets/css/prelims.css?v=20261127e">
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127f">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127f">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20261127f">
+  <link rel="stylesheet" href="../assets/css/prelims.css?v=20261127f">
 </head>
-<body>
+<body class="page-prelims">
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <header class="site-nav">
     <div class="container nav-inner">
       <a class="nav-brand" href="../index.html">
-        <span class="nav-brand-mark" aria-hidden="true">CP</span>
+        <span class="nav-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" focusable="false" aria-hidden="true">
+            <path class="mark-pin" d="M20 1.8c-8.2 0-14.9 6.5-14.9 14.5 0 10.3 11.9 20 13.8 21.5a1.7 1.7 0 0 0 2.2 0C23 36.3 34.9 26.6 34.9 16.3 34.9 8.3 28.2 1.8 20 1.8Z"></path>
+            <circle class="mark-disc" cx="20" cy="15.8" r="10.4"></circle>
+            <text class="mark-text" x="20" y="20.2" text-anchor="middle">CP</text>
+          </svg>
+        </span>
         <span>Chinmaya Patro</span>
       </a>
 
@@ -122,7 +128,7 @@
     <section class="page-header">
       <div class="container">
         <span class="eyebrow">General Studies Paper I · Objective Practice</span>
-        <h1>Prelims <span class="accent">Practice</span></h1>
+        <h1>Prelims Practice</h1>
         <p class="lead">
           Practice topic quizzes, full year-wise paper simulations (100 questions from 2011,
           150 in the older papers) with a 2-hour countdown, custom drills, or targeted
@@ -207,10 +213,16 @@
             </div>
 
             <div class="setup-footer">
-              <label class="neg-toggle">
-                <input type="checkbox" id="pre-neg-marking" checked>
-                <span>Enable UPSC negative marking (<strong>+2</strong> correct, <strong>−0.66</strong> wrong, <strong>0</strong> skipped)</span>
-              </label>
+              <div class="setup-options">
+                <label class="neg-toggle">
+                  <input type="checkbox" id="pre-neg-marking" checked>
+                  <span>Enable UPSC negative marking (<strong>+2</strong> correct, <strong>−0.66</strong> wrong, <strong>0</strong> skipped)</span>
+                </label>
+                <label class="neg-toggle">
+                  <input type="checkbox" id="pre-instant-feedback">
+                  <span>Instant feedback — reveal the key as you answer</span>
+                </label>
+              </div>
 
               <div class="start-row">
                 <span class="muted match-count" id="pre-match-count">0 matching questions</span>
@@ -248,6 +260,11 @@
 
         <!-- VIEW 2: ACTIVE QUIZ -->
         <div id="view-quiz" hidden>
+          <!-- Thin progress bar: how far through the paper you are -->
+          <div class="quiz-progressbar" aria-hidden="true">
+            <span class="quiz-progressbar-fill" data-quiz-progress></span>
+          </div>
+
           <div class="card quiz-topbar">
             <div class="quiz-top-left">
               <span class="tag tag--accent" id="quiz-mode-label">Practice</span>
@@ -268,6 +285,9 @@
               <div class="q-stem" id="q-stem"></div>
 
               <div class="options-list" id="q-options" role="radiogroup" aria-label="Answer choices"></div>
+
+              <!-- Instant-feedback line: only filled when that mode is on -->
+              <p class="q-feedback" id="q-feedback" role="status" aria-live="polite" hidden></p>
 
               <div class="q-tools-row">
                 <button type="button" class="btn btn-ghost btn-sm" id="btn-clear-choice">Clear answer</button>
@@ -313,6 +333,9 @@
             </div>
           </div>
 
+          <!-- Large score ring, shown before the subject bars -->
+          <div class="score-hero" id="results-score" aria-live="polite"></div>
+
           <div class="results-kpis" id="results-kpis"></div>
 
           <section class="card results-breakdown" aria-labelledby="breakdown-heading">
@@ -354,11 +377,11 @@
     </div>
   </footer>
 
-  <script src="../data/prelims-data.js?v=20261127e" defer></script>
-  <script src="../assets/js/storage.js?v=20261127e" defer></script>
-  <script src="../assets/js/theme.js?v=20261127e" defer></script>
-  <script src="../assets/js/nav.js?v=20261127e" defer></script>
-  <script src="../assets/js/motion.js?v=20261127e" defer></script>
-  <script src="../assets/js/prelims.js?v=20261127e" defer></script>
+  <script src="../data/prelims-data.js?v=20261127f" defer></script>
+  <script src="../assets/js/storage.js?v=20261127f" defer></script>
+  <script src="../assets/js/theme.js?v=20261127f" defer></script>
+  <script src="../assets/js/nav.js?v=20261127f" defer></script>
+  <script src="../assets/js/motion.js?v=20261127f" defer></script>
+  <script src="../assets/js/prelims.js?v=20261127f" defer></script>
 </body>
 </html>

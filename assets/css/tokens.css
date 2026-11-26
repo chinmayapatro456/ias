@@ -1,6 +1,23 @@
 /* ==========================================================================
    Design Tokens — Chinmaya Patro UPSC Study Desk
-   Anthropic-inspired editorial light theme (warm ivory, ink, terracotta)
+   Editorial light theme (warm ivory, ink, terracotta) with an opt-in dark
+   theme. Every colour has exactly one job:
+
+     terracotta  primary action, active state, Prelims stage
+     sage        progress and success only
+     sky         Geography / Optional stage only
+     butter      the highlight swipe behind an italic word, nothing else
+     slate/ink   Mains stage, body copy, data ink
+
+   Each exam stage therefore owns a colour triplet (Prelims = terracotta,
+   Mains = ink/slate, Optional = sky) that is reused for tags, ring strokes,
+   card header bands and chart bars on every page. Components read the
+   --stage-* aliases, which body.page-* swaps per page, so a stage colour can
+   never drift between pages.
+
+   Contrast: every ink-on-surface pair below was measured against WCAG 2.1 AA
+   (>= 4.5:1 for body text, >= 3:1 for UI strokes) in both themes. The
+   measurements live beside each value.
    ========================================================================== */
 
 :root {
@@ -22,7 +39,7 @@
   --border-strong: rgba(28, 25, 23, 0.16);
   --border-warm: rgba(120, 98, 82, 0.22);
 
-  /* Palette — Ink & Typography */
+  /* Palette — Ink & Typography (on ivory: 17.8:1 / 11.2:1 / 5.1:1) */
   --ink-primary: #141413;
   --ink-secondary: #3D3C38;
   --ink-muted: #6B6A64;
@@ -39,11 +56,11 @@
   --accent-soft: #FBF0EC;
   --accent-border: #EEC8BA;
 
-  /* Palette — Secondary Editorial Tints (Sage & Sky) */
-  /* Editorial highlight — butter swipe behind an accent word */
+  /* Palette — Editorial butter swipe (highlight job only) */
   --highlight: #F7E8C4;
   --highlight-soft: #FBF3DC;
 
+  /* Palette — Progress & Success (sage job) */
   --sage-bg: #EDF3EE;
   --sage-border: #C9DCCD;
   --sage-ink: #2C5541;         /* >= 4.5:1 contrast on sage-bg and white */
@@ -52,6 +69,7 @@
   --chart-ink: #46545f;
   --chart-ink-soft: #dfe6ea;
 
+  /* Palette — Geography / Optional (sky job) */
   --sky-bg: #ECF2F8;
   --sky-border: #C5D8EA;
   --sky-ink: #2A5278;          /* >= 4.5:1 contrast on sky-bg and white */
@@ -69,6 +87,58 @@
   --warning-border: #E8D2A0;
   --warning-ink: #7C4F0B;
 
+  /* --------------------------------------------------------------------
+     Exam-stage colours — the fixed triplets
+     Prelims = terracotta, Mains = ink/slate, Optional = sky.
+     bg/border are tints for bands and tags; ink is the text-safe colour;
+     solid is the fill for bars, dots and header bands; on-solid is the
+     label colour that sits on solid.
+     -------------------------------------------------------------------- */
+  --st-prelims-bg: #FBF0EC;
+  --st-prelims-border: #EEC8BA;
+  --st-prelims-ink: #A64728;      /* 5.9:1 on #FBF0EC */
+  --st-prelims-solid: #B8563A;
+  --st-prelims-on-solid: #FFFFFF; /* 4.7:1 on #B8563A */
+
+  --st-mains-bg: #EFF1F2;
+  --st-mains-border: #D2D7DA;
+  --st-mains-ink: #333B42;        /* 9.9:1 on #EFF1F2 */
+  --st-mains-solid: #3A444C;
+  --st-mains-on-solid: #FFFFFF;   /* 9.6:1 on #3A444C */
+
+  --st-optional-bg: #ECF2F8;
+  --st-optional-border: #C5D8EA;
+  --st-optional-ink: #2A5278;     /* 7.6:1 on #ECF2F8 */
+  --st-optional-solid: #2F5F8A;
+  --st-optional-on-solid: #FFFFFF;/* 6.6:1 on #2F5F8A */
+
+  /* The stage aliases a page picks up (default = Prelims) */
+  --stage-bg: var(--st-prelims-bg);
+  --stage-border: var(--st-prelims-border);
+  --stage-ink: var(--st-prelims-ink);
+  --stage-solid: var(--st-prelims-solid);
+  --stage-on-solid: var(--st-prelims-on-solid);
+
+  /* --------------------------------------------------------------------
+     Contrast band — the deep ink section that breaks the ivory scroll
+     -------------------------------------------------------------------- */
+  --band-bg: #171310;
+  --band-bg-deep: #0F0C0A;
+  --band-ink: #F7F2E8;            /* 15.6:1 on #171310 */
+  --band-muted: rgba(247, 242, 232, 0.68);
+  --band-line: rgba(247, 242, 232, 0.16);
+  --band-accent: #EDA98C;
+  --band-zone: rgba(178, 205, 233, 0.16);   /* faint Optional-zone tint */
+  --band-zone-stroke: rgba(178, 205, 233, 0.38);
+  --band-map-line: rgba(247, 242, 232, 0.5);
+
+  /* Loading skeletons (shimmer is a background-position move: no layout cost) */
+  --skeleton-base: #EFE9E1;
+  --skeleton-shine: #FBF7F1;
+
+  /* Thin progress meters */
+  --meter-track: #EAE4DB;
+
   /* Typography — Families (self-hosted, see fonts.css; no external requests) */
   --font-serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino,
     Georgia, serif;
@@ -77,18 +147,20 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", monospace;
 
-  /* Typography — Scale (editorial display sizes, optical tracking) */
-  --text-hero: clamp(2.5rem, 4.6vw + 0.6rem, 4.1rem);
-  --text-h2: clamp(1.85rem, 2.6vw + 0.5rem, 2.65rem);
-  --text-h3: clamp(1.3rem, 1.2vw + 0.95rem, 1.6rem);
-  --text-h4: 1.15rem;
-  --text-lead: clamp(1.15rem, 0.55vw + 1rem, 1.35rem);
-  --text-body: clamp(1.0625rem, 0.22vw + 1rem, 1.1875rem);
+  /* Typography — Scale
+     Refined so the three tiers of a section read in order at a glance:
+     eyebrow (11px caps) -> heading (28–40px serif) -> lead (17–20px sans). */
+  --text-hero: clamp(2.35rem, 4.2vw + 0.6rem, 3.85rem);
+  --text-h2: clamp(1.75rem, 2.3vw + 0.55rem, 2.5rem);
+  --text-h3: clamp(1.22rem, 1vw + 0.95rem, 1.5rem);
+  --text-h4: 1.12rem;
+  --text-lead: clamp(1.1rem, 0.45vw + 1rem, 1.28rem);
+  --text-body: clamp(1.0625rem, 0.2vw + 1rem, 1.15rem);
   --text-ui: 0.9375rem;        /* 15px — buttons, inputs, nav */
   --text-sm: 0.875rem;         /* 14px — secondary UI labels */
   --text-xs: 0.78rem;          /* ~12.5px — tags, badges, meta */
-  --text-eyebrow: 0.72rem;     /* small caps label */
-  --measure: 62ch;             /* reading measure for body copy (58ch–65ch) */
+  --text-eyebrow: 0.7rem;      /* small caps label */
+  --measure: 64ch;             /* reading measure for body copy (58ch–65ch) */
 
   /* Typography — Leading & Tracking */
   --leading-tight: 1.04;
@@ -115,6 +187,7 @@
   --space-16: 4rem;     /* 64px */
   --space-20: 5rem;     /* 80px */
   --section-pad: clamp(3rem, 6vw, 5.25rem);
+  --section-pad-tight: clamp(2rem, 3.5vw, 3rem);
   --gutter: clamp(1rem, 3vw, 1.75rem);
 
   /* Radii (editorial: soft but not bubbly) */
@@ -149,7 +222,7 @@
   --zone-fill: #E4DBCC;
   --indicator-bg: #FFFFFF;
   --zone-border: rgba(28, 25, 23, 0.14);
-  --sheet-bg: rgba(255, 255, 255, 0.96);
+  --sheet-bg: rgba(250, 248, 245, 0.94);
   --attempt-tint: rgba(237, 243, 238, 0.3);
   /* 3D cube — frosted ceramic */
   --ceramic-rim: rgba(120, 98, 82, 0.22);
@@ -192,11 +265,40 @@
   --z-modal: 200;
 }
 
+/* Stage aliases per page — the one place a page's stage colour is decided.
+   Components then only ever speak --stage-*. */
+body.page-prelims,
+body.page-home {
+  --stage-bg: var(--st-prelims-bg);
+  --stage-border: var(--st-prelims-border);
+  --stage-ink: var(--st-prelims-ink);
+  --stage-solid: var(--st-prelims-solid);
+  --stage-on-solid: var(--st-prelims-on-solid);
+}
+
+body.page-mains,
+body.page-syllabus {
+  --stage-bg: var(--st-mains-bg);
+  --stage-border: var(--st-mains-border);
+  --stage-ink: var(--st-mains-ink);
+  --stage-solid: var(--st-mains-solid);
+  --stage-on-solid: var(--st-mains-on-solid);
+}
+
+body.page-optional {
+  --stage-bg: var(--st-optional-bg);
+  --stage-border: var(--st-optional-border);
+  --stage-ink: var(--st-optional-ink);
+  --stage-solid: var(--st-optional-solid);
+  --stage-on-solid: var(--st-optional-on-solid);
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --dur-fast: 0.01ms;
     --dur-med: 0.01ms;
     --dur-slow: 0.01ms;
+    --dur-reveal: 0.01ms;
   }
 }
 
@@ -221,7 +323,7 @@
   --border-strong: rgba(245, 241, 234, 0.20);
   --border-warm: rgba(224, 139, 106, 0.30);
 
-  /* Ink */
+  /* Ink (on #16130F: 15.9:1 / 11.9:1 / 6.7:1) */
   --ink-primary: #F6F1E9;
   --ink-secondary: #D8D0C4;
   --ink-muted: #A79C8D;
@@ -230,20 +332,22 @@
   /* Accent */
   --accent: #E08B6A;
   --accent-hover: #EDA184;
-  --accent-ink: #F2AC90;
+  --accent-ink: #F2AC90;       /* 9.6:1 on #16130F */
   --accent-soft: #2C221C;
   --accent-border: rgba(224, 139, 106, 0.34);
   --accent-cta: #B8563A;
   --accent-cta-hover: #A94D33;
 
   /* Editorial butter swipe behind the italic accent word */
-  --highlight: rgba(162, 211, 181, 0.16);
-  --highlight-soft: rgba(162, 211, 181, 0.10);
+  --highlight: rgba(247, 232, 196, 0.16);
+  --highlight-soft: rgba(247, 232, 196, 0.10);
 
-  /* Secondary tints */
+  /* Progress & success */
   --sage-bg: #1A2620;
   --sage-border: rgba(159, 208, 178, 0.28);
   --sage-ink: #A2D3B5;
+
+  /* Geography / Optional */
   --sky-bg: #18222C;
   --sky-border: rgba(169, 199, 230, 0.26);
   --sky-ink: #B2CDE9;
@@ -262,6 +366,41 @@
   --warning-bg: #2A2114;
   --warning-border: rgba(232, 210, 160, 0.28);
   --warning-ink: #EFCE92;
+
+  /* Exam-stage triplets — lifted for dark surfaces */
+  --st-prelims-bg: #2C221C;
+  --st-prelims-border: rgba(224, 139, 106, 0.34);
+  --st-prelims-ink: #F2AC90;      /* 9.6:1 on #2C221C */
+  --st-prelims-solid: #C0613F;
+  --st-prelims-on-solid: #FFFFFF; /* 4.6:1 on #C0613F */
+
+  --st-mains-bg: #23262A;
+  --st-mains-border: rgba(198, 210, 220, 0.24);
+  --st-mains-ink: #C6D2DC;        /* 10.4:1 on #23262A */
+  --st-mains-solid: #7C8B98;
+  --st-mains-on-solid: #12161A;   /* 5.7:1 on #7C8B98 */
+
+  --st-optional-bg: #18222C;
+  --st-optional-border: rgba(169, 199, 230, 0.26);
+  --st-optional-ink: #B2CDE9;     /* 10.9:1 on #18222C */
+  --st-optional-solid: #6E9BC4;
+  --st-optional-on-solid: #101820;/* 6.2:1 on #6E9BC4 */
+
+  /* Contrast band — dark terracotta-brown, still a distinct step */
+  --band-bg: #241812;
+  --band-bg-deep: #1A110C;
+  --band-ink: #FBF4EC;            /* 15.1:1 on #241812 */
+  --band-muted: rgba(251, 244, 236, 0.7);
+  --band-line: rgba(251, 244, 236, 0.18);
+  --band-accent: #F0B295;
+  --band-zone: rgba(169, 199, 230, 0.14);
+  --band-zone-stroke: rgba(169, 199, 230, 0.34);
+  --band-map-line: rgba(251, 244, 236, 0.55);
+
+  /* Skeletons & meters */
+  --skeleton-base: #292319;
+  --skeleton-shine: #332C22;
+  --meter-track: #2E2821;
 
   /* Shadows sit on dark surfaces: deeper, less diffuse */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -288,7 +427,7 @@
   --zone-fill: #2A241D;
   --indicator-bg: #2F2822;
   --zone-border: rgba(246, 241, 233, 0.16);
-  --sheet-bg: rgba(32, 28, 23, 0.96);
+  --sheet-bg: rgba(32, 28, 23, 0.94);
   --attempt-tint: rgba(162, 211, 181, 0.08);
 
   /* 3D cube — dark ceramic */

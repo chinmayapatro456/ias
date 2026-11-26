@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Home Page — live desk counts + interactive 3D subject cube
+   Home Page — live desk counts, the Today strip, and the 3D subject cube
    Counts come from assets/js/data-counts.js (one shared source of truth, also
    used by the Optional PYQs header banner). The cube is pure CSS 3D: idle
    rotation, hover pause, drag to spin, keyboard-focus snap, off-screen pause.
@@ -61,6 +61,27 @@
     return window.StudyCounts ? window.StudyCounts.prelimsQuestions() : null;
   }
 
+  /* --- Desk inventory: cards carry a state so the UI never sits on a
+     "Loading…" line or a bare dash. loading -> ready | missing. --------- */
+  function cardOf(kind) {
+    return document.querySelector('[data-stat="' + kind + '"]');
+  }
+
+  function setCardState(kind, state) {
+    var card = cardOf(kind);
+    if (card) card.setAttribute('data-state', state);
+  }
+
+  function setMeter(kind, done, total, label) {
+    var card = cardOf(kind);
+    if (!card) return;
+    var fill = card.querySelector('[data-stat-meter]');
+    var text = card.querySelector('[data-stat-meter-label]');
+    var pct = total > 0 ? Math.max(0, Math.min(100, Math.round((done / total) * 100))) : 0;
+    if (fill) fill.style.width = pct + '%';
+    if (text) text.textContent = label;
+  }
+
   function initHomeCounts() {
     var storage = window.StudyStorage;
 
@@ -72,10 +93,15 @@
       setCounter(syllabusEl, syllabusTotal);
       var covered = storage ? storage.getSet(storage.KEYS.syllabusCovered).length : 0;
       if (syllabusMeta) {
-        syllabusMeta.textContent = covered + ' covered locally across Prelims, Mains & Optional';
+        syllabusMeta.textContent =
+          covered + ' covered locally across Prelims, Mains & Optional';
       }
-    } else if (syllabusMeta) {
-      syllabusMeta.textContent = 'Add data/syllabus-data.js to populate';
+      setMeter('syllabus', covered, syllabusTotal,
+        covered + ' of ' + syllabusTotal.toLocaleString('en-IN') + ' covered');
+      setCardState('syllabus', 'ready');
+    } else {
+      if (syllabusMeta) syllabusMeta.textContent = 'Data file missing — add data/syllabus-data.js';
+      setCardState('syllabus', 'missing');
     }
 
     /* 2. Mains PYQs */
@@ -92,8 +118,12 @@
           ' answers written' +
           (groupCount ? ' · ' + groupCount + ' subject groups' : '');
       }
-    } else if (mainsMeta) {
-      mainsMeta.textContent = 'Add data/mains-data.js to populate';
+      setMeter('mains', written, mainsTotal,
+        written + ' of ' + mainsTotal.toLocaleString('en-IN') + ' written');
+      setCardState('mains', 'ready');
+    } else {
+      if (mainsMeta) mainsMeta.textContent = 'Data file missing — add data/mains-data.js';
+      setCardState('mains', 'missing');
     }
 
     /* 3. Geography Optional PYQs */
@@ -106,11 +136,16 @@
       if (optMeta) {
         optMeta.textContent = attempted + ' attempted · Paper I & II (1986–2026)';
       }
-    } else if (optMeta) {
-      optMeta.textContent = 'Add data/optional-data.js to populate';
+      setMeter('optional', attempted, optTotal,
+        attempted + ' of ' + optTotal.toLocaleString('en-IN') + ' attempted');
+      setCardState('optional', 'ready');
+    } else {
+      if (optMeta) optMeta.textContent = 'Data file missing — add data/optional-data.js';
+      setCardState('optional', 'missing');
     }
 
-    /* 4. Prelims Practice */
+    /* 4. Prelims Practice — the personal metric here is the streak, so the
+       meter reads against a seven-day week rather than the question pool. */
     var prelimsEl = document.getElementById('count-prelims');
     var prelimsMeta = document.getElementById('meta-prelims');
     var prelimsTotal = countPrelimsQuestions();
@@ -123,8 +158,102 @@
         prelimsMeta.textContent =
           attempts + ' quiz attempt' + (attempts === 1 ? '' : 's') + ' · ' + streak + '-day streak';
       }
-    } else if (prelimsMeta) {
-      prelimsMeta.textContent = 'Add data/prelims-data.js to populate';
+      setMeter('prelims', Math.min(streak, 7), 7, streak + '-day streak');
+      setCardState('prelims', 'ready');
+    } else {
+      if (prelimsMeta) prelimsMeta.textContent = 'Data file missing — add data/prelims-data.js';
+      setCardState('prelims', 'missing');
+    }
+  }
+
+  /* --- Today strip: streak, topics touched this week, and a resume link.
+     Everything is read from the existing keys; when a value is absent the
+     cell says so in words instead of showing a dash. -------------------- */
+  var WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+  function startOfWeek(now) {
+    /* Monday-based week, so "this week" matches how a study week is planned */
+    var d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var day = (d.getDay() + 6) % 7;
+    d.setDate(d.getDate() - day);
+    return d;
+  }
+
+  function initToday() {
+    var strip = document.querySelector('[data-today]');
+    if (!strip) return;
+
+    var dateEl = strip.querySelector('[data-today-date]');
+    var streakEl = strip.querySelector('[data-today-streak]');
+    var topicsEl = strip.querySelector('[data-today-topics]');
+    var contEl = strip.querySelector('[data-today-continue]');
+
+    var now = new Date();
+    if (dateEl) {
+      try {
+        dateEl.textContent = now.toLocaleDateString('en-IN', {
+          weekday: 'short', day: 'numeric', month: 'short'
+        });
+      } catch (e) {
+        dateEl.textContent = '';
+      }
+    }
+
+    var storage = window.StudyStorage;
+    if (!storage) {
+      if (streakEl) streakEl.textContent = 'Unavailable';
+      if (topicsEl) topicsEl.textContent = 'Unavailable';
+      return;
+    }
+
+    var state = storage.getPrelimsState();
+    var attempts = Array.isArray(state.attempts) ? state.attempts : [];
+    var streak = state.streak ? Number(state.streak.count) || 0 : 0;
+
+    /* Streak */
+    if (streakEl) {
+      if (streak > 0) {
+        streakEl.innerHTML = streak + '<span class="today-unit"> ' + (streak === 1 ? 'day' : 'days') + '</span>';
+      } else {
+        streakEl.textContent = 'No streak yet';
+      }
+    }
+
+    /* Topics this week — unique topics across drills since Monday. Attempts
+       saved before this build carry no topic list, so they simply do not
+       count and the cell stays honest. */
+    var weekStart = startOfWeek(now).getTime();
+    var seen = {};
+    attempts.forEach(function (a) {
+      if (!a || !a.date) return;
+      var t = Date.parse(a.date);
+      if (isNaN(t) || t < weekStart || t > now.getTime() + WEEK_MS) return;
+      (Array.isArray(a.topics) ? a.topics : []).forEach(function (topic) {
+        if (topic) seen[topic] = true;
+      });
+    });
+    var topicCount = Object.keys(seen).length;
+    if (topicsEl) {
+      if (topicCount > 0) {
+        topicsEl.innerHTML = topicCount + '<span class="today-unit"> ' + (topicCount === 1 ? 'topic' : 'topics') + '</span>';
+      } else {
+        topicsEl.textContent = 'No drills yet';
+      }
+    }
+
+    /* Continue where you left off */
+    if (contEl) {
+      var last = attempts[0];
+      if (last && last.label) {
+        contEl.textContent = last.label;
+        contEl.setAttribute(
+          'aria-label',
+          'Continue where you left off: ' + last.label
+        );
+      } else {
+        contEl.textContent = 'Start your first drill';
+      }
+      contEl.setAttribute('href', './prelims-practice/index.html');
     }
   }
 
@@ -334,6 +463,7 @@
 
   function initHome() {
     initHomeCounts();
+    initToday();
     initCube();
   }
 

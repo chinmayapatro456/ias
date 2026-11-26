@@ -247,7 +247,8 @@
   /* Lightweight Toast Notification (window.StudyUI.toast) */
   var toastTimer = null;
 
-  function showToast(message) {
+  /* variant: optional modifier, e.g. 'tick' -> .toast--tick */
+  function showToast(message, variant) {
     if (!message) return;
     var el = document.getElementById('study-toast');
     if (!el) {
@@ -258,6 +259,7 @@
       el.setAttribute('aria-live', 'polite');
       document.body.appendChild(el);
     }
+    el.className = 'toast' + (variant ? ' toast--' + variant : '');
     el.textContent = message;
     el.classList.add('is-visible');
 

@@ -697,3 +697,252 @@
   line-height: 1.65;
   max-width: 68ch;
 }
+
+/* ==========================================================================
+   NEW (2026-11 redesign) — progress bar, timer pulse, bigger options,
+   instant feedback, and the score ring that opens the results screen.
+   ========================================================================== */
+
+/* Thin progress bar pinned under the nav while a paper is open */
+.quiz-progressbar {
+  position: sticky;
+  top: var(--nav-height);
+  z-index: var(--z-sticky);
+  height: 4px;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--meter-track);
+  overflow: hidden;
+}
+
+.quiz-progressbar-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-pill);
+  background: var(--stage-solid);
+  transition: width var(--dur-med) var(--ease-out);
+}
+
+/* Timer pulses in the last five minutes (transform + opacity only) */
+@keyframes timer-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.045); opacity: 0.82; }
+}
+
+.quiz-timer.is-urgent {
+  animation: timer-pulse 1.4s var(--ease-in-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quiz-timer.is-urgent { animation: none; }
+  .quiz-progressbar-fill { transition: none; }
+}
+
+/* Larger option cards with a smooth selection motion */
+.options-list {
+  gap: var(--space-3);
+}
+
+.option-btn {
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: var(--space-3);
+  min-height: 60px;
+  padding: 1rem 1.05rem;
+  border-width: 1.5px;
+  border-radius: 14px;
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-med) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.option-btn:hover {
+  border-color: var(--border-strong);
+  background-color: var(--bg-card);
+  transform: translateY(-1px);
+}
+
+.option-btn:active {
+  transform: scale(0.995);
+}
+
+.option-btn.is-selected {
+  border-color: var(--stage-solid);
+  background-color: var(--stage-bg);
+  box-shadow: 0 0 0 1px var(--stage-solid), var(--shadow-sm);
+}
+
+.option-key {
+  width: 34px;
+  height: 34px;
+  font-size: var(--text-ui);
+  transition: transform var(--dur-med) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.option-btn.is-selected .option-key {
+  background-color: var(--stage-solid);
+  border-color: var(--stage-solid);
+  color: var(--stage-on-solid);
+  transform: scale(1.06);
+}
+
+.option-text {
+  font-size: 1.06rem;
+  line-height: 1.5;
+}
+
+/* Instant feedback states */
+.option-btn.is-correct {
+  border-color: var(--success-ink);
+  background-color: var(--success-bg);
+  box-shadow: 0 0 0 1px var(--success-ink), var(--shadow-sm);
+}
+
+.option-btn.is-correct .option-key {
+  background-color: var(--success-ink);
+  border-color: var(--success-ink);
+  color: #fff;
+}
+
+.option-btn.is-wrong {
+  border-color: var(--danger-ink);
+  background-color: var(--danger-bg);
+}
+
+.option-btn.is-wrong .option-key {
+  background-color: var(--danger-ink);
+  border-color: var(--danger-ink);
+  color: #fff;
+}
+
+.q-feedback {
+  margin: 0;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--border-strong);
+  background: var(--bg-subtle);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.q-feedback.is-correct {
+  border-left-color: var(--success-ink);
+  background: var(--success-bg);
+  color: var(--success-ink);
+}
+
+.q-feedback.is-wrong {
+  border-left-color: var(--danger-ink);
+  background: var(--danger-bg);
+  color: var(--danger-ink);
+}
+
+/* Setup options stack the two checkboxes */
+.setup-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Results: large score ring opens the screen */
+.score-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+  margin-bottom: var(--space-6);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--card-grad-a) 0%, var(--card-grad-b) 100%);
+  box-shadow: var(--shadow-xs);
+}
+
+.score-hero:empty {
+  display: none;
+}
+
+.score-ring {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  flex-shrink: 0;
+}
+
+.score-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.score-ring-track {
+  fill: none;
+  stroke: var(--meter-track);
+  stroke-width: 8;
+}
+
+.score-ring-fill {
+  fill: none;
+  stroke: var(--stage-solid);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 900ms var(--ease-out);
+}
+
+.score-ring-fill.is-set {
+  transition: none;
+}
+
+.score-ring-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--ink-primary);
+}
+
+.score-copy {
+  min-width: 0;
+}
+
+.score-copy .eyebrow {
+  margin-bottom: 0.35rem;
+}
+
+.score-figure {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--ink-primary);
+}
+
+.score-figure strong {
+  font-weight: 600;
+}
+
+.score-sub {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option-btn,
+  .option-key,
+  .score-ring-fill {
+    transition: none;
+  }
+}

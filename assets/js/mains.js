@@ -197,17 +197,12 @@
     var writtenSet = getWrittenSet();
     var bmSet = getBookmarkSet();
 
+    /* Live result count for the sticky filter bar: shown / matching */
     if (metaEl) {
-      metaEl.textContent =
-        'Showing ' +
-        Math.min(filtered.length, state.visibleLimit).toLocaleString('en-IN') +
-        ' of ' +
-        filtered.length.toLocaleString('en-IN') +
-        ' matching question' +
-        (filtered.length === 1 ? '' : 's') +
-        ' (grouped by ' +
-        state.groupMode +
-        ').';
+      metaEl.innerHTML =
+        '<strong>' + Math.min(filtered.length, state.visibleLimit).toLocaleString('en-IN') +
+        '</strong> of ' + filtered.length.toLocaleString('en-IN') +
+        ' shown · by ' + state.groupMode;
     }
 
     if (!filtered.length) {
@@ -242,8 +237,10 @@
 
     var queryTrimmed = state.query.trim();
 
+    var groupIndex = 0;
     var html = groupOrder
       .map(function (groupName) {
+        groupIndex += 1;
         var items = groups[groupName].slice().sort(function (a, b) {
           return b.year - a.year;
         });
@@ -254,11 +251,11 @@
             var isBm = bmSet.has(item.id);
 
             return (
-              '<article class="pyq-item' + (isWritten ? ' is-written' : '') + '" data-qid="' + escapeHtml(item.id) + '">' +
+              '<article class="pyq-item' + (isWritten ? ' is-written' : '') + '" data-qid="' + escapeHtml(item.id) + '" tabindex="-1">' +
                 '<div class="pyq-top">' +
-                  (item.year ? '<span class="tag tag--accent">' + item.year + '</span>' : '') +
+                  (item.year ? '<span class="tag tag--year">' + item.year + '</span>' : '') +
                   '<span class="tag">' + escapeHtml(item.subject) + '</span>' +
-                  (state.groupMode === 'year' ? '<span class="tag tag--sky">' + escapeHtml(item.topic) + '</span>' : '') +
+                  (state.groupMode === 'year' ? '<span class="tag">' + escapeHtml(item.topic) + '</span>' : '') +
                   (item.marks ? '<span class="tag">' + escapeHtml(item.marks) + '</span>' : '') +
                 '</div>' +
                 '<p class="pyq-text">' + highlightText(item.text, queryTrimmed) + '</p>' +
@@ -277,15 +274,31 @@
           })
           .join('');
 
+        var writtenInGroup = items.filter(function (item) {
+          return writtenSet.has(item.id);
+        }).length;
+        var groupPct = items.length ? Math.round((writtenInGroup / items.length) * 100) : 0;
+        var groupId = 'mains-group-' + groupIndex;
+
         return (
-          '<section class="mains-group">' +
+          '<section class="mains-group" data-group>' +
             '<div class="mains-group-head">' +
-              '<h2 class="mains-group-title">' + escapeHtml(groupName) + '</h2>' +
+              '<button type="button" class="group-toggle" aria-expanded="true" aria-controls="' + groupId + '">' +
+                '<svg class="group-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                  '<polyline points="7 5 13 10 7 15"></polyline>' +
+                '</svg>' +
+                '<h2 class="mains-group-title">' + escapeHtml(groupName) + '</h2>' +
+              '</button>' +
               '<div class="mains-group-meta">' +
-                '<span class="tag">' + items.length + ' shown</span>' +
+                '<span class="group-progress">' +
+                  '<strong data-group-written>' + writtenInGroup + '</strong>/' + items.length + ' written' +
+                '</span>' +
+                '<span class="meter group-meter" aria-hidden="true">' +
+                  '<span class="meter-fill" data-group-meter style="width:' + groupPct + '%"></span>' +
+                '</span>' +
               '</div>' +
             '</div>' +
-            '<div class="mains-group-items">' + itemsHtml + '</div>' +
+            '<div class="mains-group-items" id="' + groupId + '">' + itemsHtml + '</div>' +
           '</section>'
         );
       })
@@ -304,6 +317,7 @@
     listEl.innerHTML = html;
 
     updateFiltersMeta();
+    applyDensity();
 
     var loadMoreBtn = document.getElementById('mains-load-more');
     if (loadMoreBtn) {
@@ -312,6 +326,87 @@
         renderList();
       });
     }
+  }
+
+  /* --- NEW: density, collapsible groups and j/k navigation -------------- */
+  var density = 'comfortable';
+
+  function applyDensity() {
+    var listEl = document.getElementById('mains-list');
+    if (listEl) listEl.classList.toggle('is-compact', density === 'compact');
+  }
+
+  function refreshGroupProgress(groupEl) {
+    if (!groupEl) return;
+    var items = groupEl.querySelectorAll('.pyq-item');
+    var done = groupEl.querySelectorAll('.pyq-item.is-written').length;
+    var pct = items.length ? Math.round((done / items.length) * 100) : 0;
+    var label = groupEl.querySelector('[data-group-written]');
+    var meter = groupEl.querySelector('[data-group-meter]');
+    if (label) label.textContent = String(done);
+    if (meter) meter.style.width = pct + '%';
+  }
+
+  function initPanelToggle() {
+    var btn = document.querySelector('[data-panel-toggle]');
+    var panel = document.getElementById('mains-filters-panel');
+    if (!btn || !panel) return;
+
+    var wide = window.matchMedia('(min-width: 768px)');
+
+    function sync() {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      panel.classList.toggle('is-open', open);
+    }
+
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      sync();
+    });
+
+    /* Desktop opens with the panel already expanded; phones start compact */
+    btn.setAttribute('aria-expanded', String(wide.matches));
+    sync();
+  }
+
+  function initDensity() {
+    var buttons = document.querySelectorAll('[data-density]');
+    if (!buttons.length) return;
+    Array.prototype.forEach.call(buttons, function (btn) {
+      btn.addEventListener('click', function () {
+        density = btn.getAttribute('data-density') === 'compact' ? 'compact' : 'comfortable';
+        Array.prototype.forEach.call(buttons, function (b) {
+          var active = b === btn;
+          b.classList.toggle('is-active', active);
+          b.setAttribute('aria-pressed', String(active));
+        });
+        applyDensity();
+      });
+    });
+  }
+
+  /* j / k moves the reading cursor down and up the visible question list */
+  function initKeyNav() {
+    document.addEventListener('keydown', function (event) {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      var tag = (event.target && event.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA' || event.target.isContentEditable) return;
+      if (event.key !== 'j' && event.key !== 'k') return;
+
+      var items = document.querySelectorAll('#mains-list .pyq-item');
+      if (!items.length) return;
+
+      var current = document.activeElement;
+      var idx = Array.prototype.indexOf.call(items, current);
+      var next = event.key === 'j' ? (idx < 0 ? 0 : idx + 1) : (idx <= 0 ? 0 : idx - 1);
+      if (next >= items.length) next = items.length - 1;
+      event.preventDefault();
+      items[next].focus();
+      if (items[next].scrollIntoView) {
+        items[next].scrollIntoView({ block: 'center' });
+      }
+    });
   }
 
   function initMains() {
@@ -353,6 +448,9 @@
 
     updateHeaderStats();
     renderList();
+    initPanelToggle();
+    initDensity();
+    initKeyNav();
 
     var subjectSel = document.getElementById('mains-subject');
     var topicSel = document.getElementById('mains-topic');
@@ -465,6 +563,18 @@
       });
     }
 
+    /* Collapsible groups */
+    if (listEl) {
+      listEl.addEventListener('click', function (event) {
+        var toggle = event.target.closest('.group-toggle');
+        if (!toggle) return;
+        var group = toggle.closest('.mains-group');
+        var open = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!open));
+        if (group) group.classList.toggle('is-collapsed', open);
+      });
+    }
+
     /* Bookmark & Written Action Delegation */
     if (listEl) {
       listEl.addEventListener('click', function (event) {
@@ -481,6 +591,7 @@
           btn.textContent = on ? '✓ Answer written' : '○ Mark answer written';
           var card = btn.closest('.pyq-item');
           if (card) card.classList.toggle('is-written', on);
+          refreshGroupProgress(btn.closest('.mains-group'));
           updateHeaderStats();
           if (state.status === 'written' || state.status === 'unwritten') renderList();
         } else if (action === 'bookmark') {
