@@ -277,3 +277,23 @@ no truncation, no small tap targets). Screenshots at 1512, 1024, 390 and 360.
 Tap on the front face still opens `mains-pyqs/index.html?paper=GS%20Paper%20II`
 and a 90px drag still spins the cube without navigating — both identical to the
 previous build.
+
+## 8. Hero cube: card removed (27 Nov 2026, follow-up)
+
+The white plate around the cube read as a panel stuck onto the photograph. The
+cube now stands on its own:
+
+* `.cube-pedestal` lost its border, background, shadow, blur and padding — it is
+  only a positioning box for the cube and its ground shadow. Desktop keeps the
+  cube anchored inside the photo's bottom-left corner (108px, 20px in), where the
+  cream faces and the soft ground shadow sit directly on the scene.
+* The "Drag · tap a face" line is hidden at ≥960px: over the fence it was
+  unreadable and the grab cursor plus the four CTAs already carry the
+  affordance. On phones the cube sits on the page background, so the hint stays
+  there in muted ink.
+* Phones: the plate is gone too — the cube (132px, still a 44px+ tap target per
+  face) floats centred under the photo with a little more breathing room
+  (`space-5`).
+
+**Checked:** `node scripts/audit.js` 30/30 clean; screenshots at 1512, 1024, 390;
+front-face tap and 90px drag behave exactly as before.

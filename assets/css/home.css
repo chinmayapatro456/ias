@@ -204,15 +204,13 @@
   flex-shrink: 0;
 }
 
-/* Interactive 3D subject cube — frosted ceramic on a corner pedestal
+/* Interactive 3D subject cube — the cube itself, no card around it.
    Rotation, drag, hover-pause and off-screen pause live in assets/js/home.js.
    ========================================================================== */
 
 .cube-pedestal {
   --cube-size: 108px;
   --cube-half: 54px;
-  /* Wide enough that the rotated cube's corners stay inside the plate */
-  --cube-pad: 18px;
   /* Sits inside the photo's bottom-left corner, clear of the frame lines */
   position: absolute;
   left: 20px;
@@ -222,14 +220,6 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  /* Room for the rotated cube's corners to overhang the stage box */
-  padding: var(--cube-pad) var(--cube-pad) 8px;
-  border: 1px solid var(--border-warm);
-  border-radius: 18px;
-  background: linear-gradient(165deg, #ffffff 0%, #fdfaf6 100%);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
@@ -239,7 +229,7 @@
 .cube-pedestal::after {
   content: "";
   position: absolute;
-  top: calc(var(--cube-pad) + var(--cube-size) - 6px);
+  top: calc(var(--cube-size) - 6px);
   left: 50%;
   width: 64%;
   height: 14px;
@@ -367,14 +357,25 @@
   height: 26px;
 }
 
+/* On the photo the hint needs to hold its own against the scene behind it */
 .cube-hint {
   margin: 2px 0 0;
   font-family: var(--font-mono);
   font-size: 0.62rem;
   letter-spacing: 0.02em;
-  color: var(--ink-muted);
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 1px 4px rgba(18, 20, 16, 0.75), 0 0 1px rgba(18, 20, 16, 0.6);
   text-align: center;
   max-width: none;
+}
+
+/* On the photo the hint would sit on the fence and be unreadable, so the
+   cube stands on its own there (grab cursor + the CTAs carry the affordance);
+   the hint returns wherever the cube sits on the page background. */
+@media (min-width: 960px) {
+  .cube-hint {
+    display: none;
+  }
 }
 
 /* Tap-friendly subject shortcuts — the Android alternative to cube faces */
@@ -418,11 +419,16 @@
   .cube-pedestal {
     position: static;
     width: max-content;
-    margin: var(--space-4) auto 0;
+    margin: var(--space-5) auto 0;
     /* Keeps every face at a comfortable 44px+ tap target once rotated */
     --cube-size: 132px;
     --cube-half: 66px;
-    --cube-pad: 22px;
+  }
+
+  /* Off the photo and onto the page, so the hint goes back to muted ink */
+  .cube-hint {
+    color: var(--ink-muted);
+    text-shadow: none;
   }
 
   .hero-figure figcaption {
