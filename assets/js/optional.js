@@ -708,7 +708,6 @@
     var btn = document.querySelector('[data-panel-toggle]');
     var panel = document.getElementById('opt-filters-panel');
     if (!btn || !panel) return;
-    var wide = window.matchMedia('(min-width: 768px)');
     var anchor = 0;
 
     function sync() {
@@ -729,15 +728,30 @@
       anchor = window.scrollY;
     });
 
-    /* Desktop floats the panel over the list (base.css), so it must not follow
-       the reader down the page: close it on scroll or Escape. */
+    /* The open panel takes real estate above the list, so it folds away as soon
+       as the questions are scrolled — you can never get stuck behind the
+       filters. Browsers with scroll anchoring keep the question you were
+       reading in place as the panel closes. */
     window.addEventListener('scroll', function () {
-      if (wide.matches && Math.abs(window.scrollY - anchor) > 80) close();
+      if (btn.getAttribute('aria-expanded') !== 'true') return;
+      if (Math.abs(window.scrollY - anchor) > 24) close();
     }, { passive: true });
 
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') close();
     });
+
+    /* "Hide filters" at the bottom of the panel: the obvious way back to the
+       questions once the filters are set. */
+    Array.prototype.forEach.call(
+      panel.querySelectorAll('[data-panel-close]'),
+      function (el) {
+        el.addEventListener('click', function () {
+          close();
+          btn.focus();
+        });
+      }
+    );
 
     /* Start compact on every width: the panel is one tap away behind the
        Filters button, so questions sit above the fold. */

@@ -8,6 +8,33 @@ localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
 
 ---
 
+## Desktop fix — the filter block gets out of the way (27 Nov 2026)
+
+Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, a
+"Hide filters" button in the panel on both PYQ pages, cache stamp bumped to
+`20261127u`. No data, storage-key or scoring change.
+
+- **What was wrong.** On a wide screen the filter panel started expanded, so the
+  sticky bar was ~230px (Optional: ~430px) tall and stayed pinned under the nav
+  while the question list scrolled behind it — a third of a laptop screen gone,
+  and the block never moved out of the way.
+- **Compact by default.** The panel starts collapsed on every width: the bar is
+  a 66px strip with the Filters button, the live count and the density toggle,
+  and the first question begins right under it.
+- **Nothing is covered.** The open panel sits in the flow inside the bar, so it
+  pushes the questions down instead of lying on top of them.
+- **It folds away on scroll.** Scrolling the list closes the panel again (24px
+  threshold; `Escape` also closes), so one wheel tick is enough to get past the
+  filters. Browsers with scroll anchoring keep the question being read in place
+  as it closes.
+- **Explicit way out.** A "Hide filters" button at the foot of the panel returns
+  to the questions and puts focus back on the Filters button.
+- **Short windows and phones.** The open panel is capped at
+  `100dvh − nav − 180px` and scrolls inside itself; scrolling inside the panel
+  does not close it.
+
+---
+
 ## Home — role line under the name (27 Nov 2026)
 
 Scope: `index.html`, `assets/css/home.css` (`?v=20261127t`). No data, storage-key,
@@ -21,30 +48,6 @@ scoring or copy change elsewhere.
   beside the display name at 360px and on a wide screen. Tight top margin keeps
   it tucked under the H1; it inherits the existing dark-theme accent ink, so it
   needs no separate dark rule.
-
----
-
-## Desktop fix — filter bar no longer eats the PYQ list (27 Nov 2026)
-
-Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, cache
-stamp bumped to `20261127p` in every page. No markup, data, storage-key or
-scoring change; phones behave exactly as before.
-
-- **What was wrong.** On a wide screen the filter panel started expanded, so the
-  sticky bar was ~230px tall and stayed pinned under the nav while the question
-  list scrolled behind it — a third of a laptop screen gone, and the block never
-  moved out of the way.
-- **Compact by default.** The panel now starts collapsed on every width: the bar
-  is a 66px strip with the Filters button, the live count and the density
-  toggle, and questions begin right under it.
-- **Floating panel on desktop.** At 768px and wider the open panel is positioned
-  absolutely below the bar (own background, border, shadow, full bar width), so
-  opening filters never grows the sticky bar or shifts the list.
-- **It gets out of the way.** The panel closes itself once the page is scrolled
-  more than 80px, or on `Escape`; a small scroll keeps it open. Below 768px the
-  panel still expands in flow inside the bar.
-- **Short windows.** The open panel is capped at `100dvh − nav − 140px` and
-  scrolls inside itself instead of pushing the list off the page.
 
 ---
 
@@ -104,7 +107,6 @@ and figures unchanged; nothing outside the About page was touched.
   that chart's draw.
 
 ---
-
 
 ## 0. Redesign — "study cockpit" visual pass (27 Nov 2026, later same day)
 
