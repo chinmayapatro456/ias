@@ -365,15 +365,34 @@
   function startTimer() {
     stopTimer();
     var timerEl = document.getElementById('quiz-timer');
+    var trackEl = document.querySelector('[data-timer-track]');
+    var fillEl = document.querySelector('[data-timer-fill]');
+    var progressTextEl = document.getElementById('quiz-progress-text');
 
     function paint() {
       if (!timerEl || !session) return;
+
       if (session.isCountdown) {
+        var urgent = session.remainingSec <= 300;
         timerEl.textContent = formatDuration(session.remainingSec);
-        timerEl.classList.toggle('is-urgent', session.remainingSec <= 300);
+        timerEl.classList.toggle('is-urgent', urgent);
+
+        /* Depleting bar: scaleX only, so it never triggers layout. The bar is
+           hidden in stopwatch mode, where there is nothing to deplete. */
+        if (trackEl && fillEl) {
+          trackEl.hidden = false;
+          trackEl.classList.toggle('is-urgent', urgent);
+          var frac = session.remainingSec / YEAR_SIM_DURATION_SEC;
+          fillEl.style.transform = 'scaleX(' + Math.max(0, Math.min(1, frac)) + ')';
+        }
+
+        /* The urgent state also pulses the progress text, not just the clock */
+        if (progressTextEl) progressTextEl.classList.toggle('is-urgent', urgent);
       } else {
         timerEl.textContent = formatDuration(session.elapsedSec);
         timerEl.classList.remove('is-urgent');
+        if (trackEl) trackEl.hidden = true;
+        if (progressTextEl) progressTextEl.classList.remove('is-urgent');
       }
     }
 

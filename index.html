@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg">
   <link rel="canonical" href="https://chinmayapatro456.github.io/ias/">
   <meta name="theme-color" content="#FAF8F5">
+  <meta name="theme-color" content="#16130F" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./assets/img/icon-192.png">
   <meta property="og:type" content="website">
@@ -15,14 +16,15 @@
   <meta property="og:title" content="Chinmaya Patro — UPSC Civil Services Aspirant">
   <meta property="og:description" content="Chinmaya Patro — UPSC Civil Services Aspirant (Geography Optional). Public study desk with interactive syllabus tracker, Mains PYQs, Geography Optional PYQs, and Prelims practice.">
   <meta property="og:url" content="https://chinmayapatro456.github.io/ias/">
-  <meta property="og:image" content="https://chinmayapatro456.github.io/ias/assets/img/banner.webp">
-  <meta property="og:image:width" content="967">
-  <meta property="og:image:height" content="728">
-  <meta property="og:image:alt" content="Chinmaya Patro at the UPSC gate, Dholpur House, New Delhi">
+  <meta property="og:image" content="https://chinmayapatro456.github.io/ias/assets/img/banner-share.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Chinmaya Patro — UPSC Civil Services Study Desk, Geography Optional">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Chinmaya Patro — UPSC Civil Services Aspirant">
   <meta name="twitter:description" content="Chinmaya Patro — UPSC Civil Services Aspirant (Geography Optional). Public study desk with interactive syllabus tracker, Mains PYQs, Geography Optional PYQs, and Prelims practice.">
-  <meta name="twitter:image" content="https://chinmayapatro456.github.io/ias/assets/img/banner.webp">
+  <meta name="twitter:image" content="https://chinmayapatro456.github.io/ias/assets/img/banner-share.webp">
 
   <link rel="preload" href="./assets/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="./assets/fonts/inter-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -32,13 +34,19 @@
     try {
       if (localStorage.getItem('cp_theme') === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
+        /* Keep the browser chrome dark from the first paint, not just after
+           theme.js runs. Both metas are set, so the colour wins whatever the
+           OS preference says. */
+        var m = document.querySelectorAll('meta[name="theme-color"]');
+        for (var i = 0; i < m.length; i++) m[i].setAttribute('content', '#16130F');
       }
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="./assets/css/fonts.css?v=20261127u">
-  <link rel="stylesheet" href="./assets/css/tokens.css?v=20261127u">
-  <link rel="stylesheet" href="./assets/css/base.css?v=20261127u">
-  <link rel="stylesheet" href="./assets/css/home.css?v=20261127u">
+  <link rel="stylesheet" href="./assets/css/fonts.css?v=20261127v">
+  <link rel="stylesheet" href="./assets/css/tokens.css?v=20261127v">
+  <link rel="stylesheet" href="./assets/css/base.css?v=20261127v">
+  <link rel="stylesheet" href="./assets/css/home.css?v=20261127v">
+  <link rel="stylesheet" href="./assets/css/print.css?v=20261127v" media="print">
 </head>
 <body class="page-home">
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -643,7 +651,7 @@
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer site-footer--band">
     <div class="container footer-inner">
       <div class="footer-top">
         <span class="footer-brand">Chinmaya Patro · UPSC Study Desk</span>
@@ -666,16 +674,16 @@
   </footer>
 
   <!-- Deferred data scripts for live desk counts (page remains fully functional if empty/pending) -->
-  <script src="./data/syllabus-data.js?v=20261127u" defer></script>
-  <script src="./data/mains-data.js?v=20261127u" defer></script>
-  <script src="./data/optional-data.js?v=20261127u" defer></script>
-  <script src="./data/prelims-data.js?v=20261127u" defer></script>
+  <script src="./data/syllabus-data.js?v=20261127v" defer></script>
+  <script src="./data/mains-data.js?v=20261127v" defer></script>
+  <script src="./data/optional-data.js?v=20261127v" defer></script>
+  <script src="./data/prelims-data.js?v=20261127v" defer></script>
 
-  <script src="./assets/js/storage.js?v=20261127u" defer></script>
-  <script src="./assets/js/theme.js?v=20261127u" defer></script>
-  <script src="./assets/js/data-counts.js?v=20261127u" defer></script>
-  <script src="./assets/js/nav.js?v=20261127u" defer></script>
-  <script src="./assets/js/motion.js?v=20261127u" defer></script>
-  <script src="./assets/js/home.js?v=20261127u" defer></script>
+  <script src="./assets/js/storage.js?v=20261127v" defer></script>
+  <script src="./assets/js/theme.js?v=20261127v" defer></script>
+  <script src="./assets/js/data-counts.js?v=20261127v" defer></script>
+  <script src="./assets/js/nav.js?v=20261127v" defer></script>
+  <script src="./assets/js/motion.js?v=20261127v" defer></script>
+  <script src="./assets/js/home.js?v=20261127v" defer></script>
 </body>
 </html>

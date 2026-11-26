@@ -1,0 +1,359 @@
+/* ==========================================================================
+   Print Stylesheet — Chinmaya Patro UPSC Study Desk
+   Depends on: assets/css/tokens.css, assets/css/base.css
+   Loaded with media="print" from every page, so it costs nothing on screen.
+
+   Two jobs:
+     1. Force the light palette, in black ink on white paper, whatever theme
+        the reader has chosen on screen. This is done by re-declaring the same
+        custom properties the components already read — no component is
+        re-styled here, so print can never drift from the design system.
+     2. Remove everything that only makes sense on a screen (navigation,
+        controls, sticky bars, skeletons) and keep the things a student would
+        actually print: the syllabus tree, the PYQ lists and the About charts.
+
+   Contrast: the pairs below are measured on white, and every one clears
+   WCAG 2.1 AA (>= 4.5:1 for body text) — see the comment beside each value.
+   ========================================================================== */
+
+@media print {
+  :root,
+  :root[data-theme="dark"] {
+    color-scheme: light;
+
+    /* Surfaces — white paper, one faint sand for inset panels */
+    --bg-page: #FFFFFF;
+    --bg-subtle: #F4F4F4;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #FFFFFF;
+    --bg-sand: #F4F4F4;
+    --bg-sand-deep: #EDEDED;
+    --page-rgb: 255, 255, 255;
+    --border-subtle: #C4C4C4;
+    --border-strong: #808080;
+    --border-warm: #B4B4B4;
+
+    /* Ink — pure black for body copy: 21:1 on white */
+    --ink-primary: #000000;
+    --ink-secondary: #1A1A1A;      /* 17.4:1 */
+    --ink-muted: #3D3D3D;          /* 10.9:1 */
+    --ink-on-accent: #FFFFFF;
+
+    /* Accent — darkened terracotta so links stay legible in ink */
+    --accent: #A64728;
+    --accent-hover: #8A3A20;
+    --accent-cta: #8A3A20;
+    --accent-cta-hover: #73301A;
+    --accent-ink: #7A3A22;         /* 8.6:1 on white */
+    --accent-soft: #F7F1EE;
+    --accent-border: #C9B4AB;
+
+    /* Stage triplets flatten to grey: a colour printer keeps the tints, a
+       mono printer still separates the stages by tone. */
+    --st-prelims-bg: #F7F1EE;
+    --st-prelims-border: #C9B4AB;
+    --st-prelims-ink: #7A3A22;     /* 8.6:1 */
+    --st-prelims-solid: #8A3A20;
+    --st-prelims-on-solid: #FFFFFF;/* 7.8:1 */
+
+    --st-mains-bg: #F2F2F2;
+    --st-mains-border: #B8B8B8;
+    --st-mains-ink: #222222;       /* 15.9:1 */
+    --st-mains-solid: #3A3A3A;
+    --st-mains-on-solid: #FFFFFF;  /* 11.4:1 */
+
+    --st-optional-bg: #F1F4F7;
+    --st-optional-border: #B6C6D6;
+    --st-optional-ink: #1F3E5C;    /* 11.0:1 */
+    --st-optional-solid: #33526E;
+    --st-optional-on-solid: #FFFFFF;/* 8.2:1 */
+
+    --stage-bg: var(--st-mains-bg);
+    --stage-border: var(--st-mains-border);
+    --stage-ink: var(--st-mains-ink);
+    --stage-solid: var(--st-mains-solid);
+    --stage-on-solid: var(--st-mains-on-solid);
+
+    /* Progress / success */
+    --sage-bg: #F0F0F0;
+    --sage-border: #B0B0B0;
+    --sage-ink: #1E3D2C;           /* 11.9:1 */
+
+    /* Charts */
+    --chart-ink: #333333;          /* 12.6:1 on white */
+    --chart-ink-soft: #D6D6D6;
+
+    /* The deep band becomes a ruled light band */
+    --band-bg: #FFFFFF;
+    --band-bg-deep: #FFFFFF;
+    --band-ink: #000000;
+    --band-muted: #333333;         /* 12.6:1 on white */
+    --band-line: #C4C4C4;
+    --band-accent: #7A3A22;
+
+    /* Surfaces that must stop being translucent */
+    --nav-bg: #FFFFFF;
+    --sheet-bg: #FFFFFF;
+    --indicator-bg: #FFFFFF;
+    --meter-track: #D6D6D6;
+    --highlight: #F1E4C6;
+    --shadow-xs: none;
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-warm: none;
+    --shadow-lift: none;
+    --shadow-photo: none;
+  }
+
+  @page {
+    margin: 14mm 12mm;
+  }
+
+  html {
+    font-size: 11pt;
+    scroll-behavior: auto;
+  }
+
+  body {
+    background: #FFFFFF !important;
+    color: #000000;
+    overflow: visible;
+    transition: none;
+  }
+
+  /* ---- 1. Strip the screen-only chrome -------------------------------- */
+
+  .site-nav,
+  .nav-drawer,
+  .nav-backdrop,
+  .nav-toggle,
+  .theme-toggle,
+  .skip-link,
+  .mini-progress,
+  .today-strip,
+  .filterbar,
+  .filters-toggle,
+  .quiz-progressbar,
+  .quiz-timer-track,
+  .palette-panel,
+  .site-footer .footer-links,
+  .toast,
+  .skeleton,
+  .live-region,
+  .stage-emblem,
+  .chart-tabs,
+  .tab-indicator,
+  .notice-dismiss {
+    display: none !important;
+  }
+
+  /* Buttons and chips are controls; their labels still matter in a few
+     places, so they keep their text but lose the control affordance. */
+  .btn,
+  .btn-sm,
+  .chip,
+  .tab-btn,
+  .action-toggle,
+  .check-pill,
+  .palette-btn,
+  .legend-btn,
+  .density-toggle,
+  .freq-row,
+  .kbd-hint,
+  .q-tools-row,
+  .q-nav-row,
+  .backup-bar,
+  .import-label,
+  /* Form controls and their labels: an empty search box on paper is noise */
+  .input,
+  .select,
+  .search-wrap,
+  .syllabus-toolbar,
+  .field-label {
+    display: none !important;
+  }
+
+  .tabs {
+    display: none !important;
+  }
+
+  /* ---- 2. Keep the content, on paper --------------------------------- */
+
+  a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  /* Show the destination of a link only where it is not on this site. */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-family: var(--font-mono);
+    font-size: 0.72em;
+    color: #3D3D3D;
+    word-break: break-all;
+  }
+
+  /* Cards and panels: hairline instead of shadow, never split across pages */
+  .card,
+  .chart-card,
+  .status-card,
+  .stage-card,
+  .mains-group,
+  .pyq-item,
+  .opt-card,
+  .question-stage,
+  .paper-block,
+  .about-table tr,
+  .funnel-row,
+  .quick-fact,
+  .fact-card,
+  .data-details,
+  .table-wrap,
+  .marks-bar,
+  .cat-row,
+  .service-bar,
+  .unit-details,
+  .syllabus-unit {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none !important;
+  }
+
+  .card,
+  .chart-card,
+  .mains-group,
+  .table-wrap {
+    border: 1px solid var(--border-subtle);
+    background: #FFFFFF;
+  }
+
+  /* The stage wash behind a page header costs ink and says nothing on paper */
+  .page-header {
+    background: none !important;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .section--subtle,
+  .status-card,
+  .score-hero {
+    background: #FFFFFF !important;
+  }
+
+  /* Headings should not be orphaned at the foot of a page */
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* ---- 3. Expand every <details>, so nothing is hidden on paper ------- */
+
+  details,
+  details[open] {
+    display: block;
+  }
+
+  details > summary {
+    display: none;
+  }
+
+  details > *:not(summary),
+  details > summary + * {
+    display: block !important;
+  }
+
+  /* Chrome/Safari 131+ hide non-open content on the ::details-content box
+     rather than on the children; force it visible as well. */
+  details::details-content {
+    content-visibility: visible !important;
+    display: block !important;
+    height: auto !important;
+  }
+
+  /* ---- 4. Charts stay readable in ink -------------------------------- */
+
+  .chart-canvas svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .chart-grid-line {
+    stroke: #C4C4C4 !important;
+  }
+
+  .chart-axis-line {
+    stroke: #808080 !important;
+  }
+
+  .chart-tooltip {
+    display: none !important;
+  }
+
+  /* Animations are meaningless on paper: land everything on its end state. */
+  .reveal,
+  .js-motion .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  [data-draw-svg] path[data-draw-path] {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+
+  .meter-fill,
+  .funnel-fill,
+  .cat-fill,
+  .marks-seg,
+  .service-seg,
+  .quiz-progressbar-fill {
+    transition: none !important;
+  }
+
+  /* ---- 5. Footer: the bookend still closes the sheet ----------------- */
+
+  .site-footer {
+    border-top: 1px solid var(--border-subtle);
+    background: #FFFFFF !important;
+    background-image: none !important;
+    color: #3D3D3D !important;
+    padding-block: 12pt 0;
+    font-size: 8.5pt;
+  }
+
+  .site-footer .footer-brand,
+  .site-footer .footer-disclaimer strong {
+    color: #000000 !important;
+  }
+
+  .site-footer .footer-disclaimer,
+  .site-footer .footer-credit {
+    color: #3D3D3D !important;
+    border-top-color: var(--border-subtle) !important;
+  }
+
+  /* ---- 6. The 404 shell --------------------------------------------- */
+
+  .not-found {
+    padding: 0;
+  }
+
+  .not-found-card {
+    border: 1px solid var(--border-subtle);
+    box-shadow: none;
+  }
+
+  .nf-map {
+    display: none !important;
+  }
+
+  .nf-btn {
+    display: none !important;
+  }
+}

@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
   <link rel="canonical" href="https://chinmayapatro456.github.io/ias/syllabus/">
   <meta name="theme-color" content="#FAF8F5">
+  <meta name="theme-color" content="#16130F" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="../manifest.json">
   <link rel="apple-touch-icon" href="../assets/img/icon-192.png">
   <meta property="og:type" content="website">
@@ -15,14 +16,15 @@
   <meta property="og:title" content="Syllabus Tracker — Chinmaya Patro UPSC Study Desk">
   <meta property="og:description" content="Interactive UPSC CSE Syllabus tracker for Prelims, Mains (GS I–IV & Essay), and Geography Optional Paper I & II.">
   <meta property="og:url" content="https://chinmayapatro456.github.io/ias/syllabus/">
-  <meta property="og:image" content="https://chinmayapatro456.github.io/ias/assets/img/banner.webp">
-  <meta property="og:image:width" content="967">
-  <meta property="og:image:height" content="728">
-  <meta property="og:image:alt" content="Chinmaya Patro at the UPSC gate, Dholpur House, New Delhi">
+  <meta property="og:image" content="https://chinmayapatro456.github.io/ias/assets/img/banner-share.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Chinmaya Patro — UPSC Civil Services Study Desk, Geography Optional">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Syllabus Tracker — Chinmaya Patro UPSC Study Desk">
   <meta name="twitter:description" content="Interactive UPSC CSE Syllabus tracker for Prelims, Mains (GS I–IV & Essay), and Geography Optional Paper I & II.">
-  <meta name="twitter:image" content="https://chinmayapatro456.github.io/ias/assets/img/banner.webp">
+  <meta name="twitter:image" content="https://chinmayapatro456.github.io/ias/assets/img/banner-share.webp">
 
   <link rel="preload" href="../assets/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/inter-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -31,13 +33,19 @@
     try {
       if (localStorage.getItem('cp_theme') === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
+        /* Keep the browser chrome dark from the first paint, not just after
+           theme.js runs. Both metas are set, so the colour wins whatever the
+           OS preference says. */
+        var m = document.querySelectorAll('meta[name="theme-color"]');
+        for (var i = 0; i < m.length; i++) m[i].setAttribute('content', '#16130F');
       }
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127u">
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127u">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20261127u">
-  <link rel="stylesheet" href="../assets/css/syllabus.css?v=20261127u">
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127v">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127v">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20261127v">
+  <link rel="stylesheet" href="../assets/css/syllabus.css?v=20261127v">
+  <link rel="stylesheet" href="../assets/css/print.css?v=20261127v" media="print">
 </head>
 <body class="page-syllabus">
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -127,6 +135,14 @@
   <main id="main-content">
     <section class="page-header">
       <div class="container">
+        <span class="stage-emblem" aria-hidden="true">
+          <svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="2.4"
+               stroke-linecap="round" stroke-linejoin="round" data-draw-svg focusable="false">
+            <path data-draw-path d="M48 10A38 38 0 1 1 10 48"></path>
+            <path data-draw-path d="M48 22A26 26 0 1 1 22 48"></path>
+            <path data-draw-path d="M48 34A14 14 0 1 1 34 48"></path>
+          </svg>
+        </span>
         <span class="eyebrow">Official UPSC CSE Syllabus</span>
         <h1>Syllabus <span class="accent">Tracker</span></h1>
         <p class="lead">
@@ -198,7 +214,7 @@
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer site-footer--band">
     <div class="container footer-inner">
       <div class="footer-top">
         <span class="footer-brand">Chinmaya Patro · UPSC Study Desk</span>
@@ -216,11 +232,11 @@
     </div>
   </footer>
 
-  <script src="../data/syllabus-data.js?v=20261127u" defer></script>
-  <script src="../assets/js/storage.js?v=20261127u" defer></script>
-  <script src="../assets/js/theme.js?v=20261127u" defer></script>
-  <script src="../assets/js/nav.js?v=20261127u" defer></script>
-  <script src="../assets/js/motion.js?v=20261127u" defer></script>
-  <script src="../assets/js/syllabus.js?v=20261127u" defer></script>
+  <script src="../data/syllabus-data.js?v=20261127v" defer></script>
+  <script src="../assets/js/storage.js?v=20261127v" defer></script>
+  <script src="../assets/js/theme.js?v=20261127v" defer></script>
+  <script src="../assets/js/nav.js?v=20261127v" defer></script>
+  <script src="../assets/js/motion.js?v=20261127v" defer></script>
+  <script src="../assets/js/syllabus.js?v=20261127v" defer></script>
 </body>
 </html>

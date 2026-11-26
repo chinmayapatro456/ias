@@ -445,12 +445,22 @@ body.page-about {
 /* Chart cards, tabs and canvas
    ========================================================================== */
 
+/* .chart-card is a modifier used together with .card: it adds the frame and
+   the small-caps title row, and leaves the card surface to the base card.
+   Every hand-built SVG chart on the page sits in one of these, so the chrome
+   is identical from the cut-off line to the vacancy bars. */
 .chart-card {
   padding: clamp(1.1rem, 2.4vw, 1.75rem);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   background: var(--bg-card);
   box-shadow: var(--shadow-xs);
+}
+
+.chart-card .chart-head {
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: var(--space-4);
 }
 
 .chart-head {
@@ -460,6 +470,29 @@ body.page-about {
   justify-content: space-between;
   gap: var(--space-3);
   margin-bottom: var(--space-4);
+}
+
+/* The title row is a small-caps label rather than a headline: it names the
+   chart and then gets out of the way of the data. Ink stays --ink-secondary
+   (11.2:1 on ivory, 11.9:1 on the dark canvas). */
+.chart-card .chart-title,
+.chart-card > .chart-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+}
+
+@supports (font-variant-caps: all-small-caps) {
+  .chart-card .chart-title,
+  .chart-card > .chart-title {
+    font-variant-caps: all-small-caps;
+    text-transform: none;
+    letter-spacing: 0.11em;
+  }
 }
 
 .chart-title {
@@ -638,6 +671,26 @@ body.page-about {
 
 .data-details[open] summary {
   margin-bottom: var(--space-3);
+}
+
+/* Inside a chart card the numbers table is an inset panel: recessed onto the
+   sand surface with a hairline, so it reads as the data behind the picture
+   rather than a second card. Header cells drop their own tint so the panel
+   has one continuous surface. */
+.chart-card .data-details .table-wrap {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 1px 2px rgba(28, 25, 23, 0.04);
+}
+
+.chart-card .data-details .about-table thead th {
+  background: transparent;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.chart-card .data-details .about-table caption {
+  background: transparent;
 }
 
 /* Category bars

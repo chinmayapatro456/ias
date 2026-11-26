@@ -167,6 +167,13 @@
     var svgs = document.querySelectorAll('[data-draw-svg]');
     if (!svgs.length) return;
 
+    /* Mark the document as motion-capable, so the CSS that transitions the
+       draw-in only applies when this script is actually driving it. Without
+       JS (or with reduced motion) the SVG simply shows its finished state. */
+    if (!prefersReducedMotion()) {
+      document.documentElement.classList.add('js-motion');
+    }
+
     if (prefersReducedMotion()) {
       svgs.forEach(function (svg) {
         svg.classList.add('is-drawn');
@@ -216,12 +223,41 @@
     });
   }
 
+  /* 5. Sticky bar hook — .filterbar is position:sticky, but it only earns its
+     shadow and bottom hairline once it has actually detached from the flow.
+     A 1px sentinel is inserted above the bar; when it leaves the viewport the
+     bar gets .is-stuck. Cheap (one observer, no scroll listener). */
+  function initStickyBars() {
+    var bars = document.querySelectorAll('.filterbar');
+    if (!bars.length || typeof IntersectionObserver === 'undefined') return;
+
+    bars.forEach(function (bar) {
+      if (!bar.parentNode) return;
+      var sentinel = document.createElement('div');
+      sentinel.className = 'sticky-sentinel';
+      sentinel.setAttribute('aria-hidden', 'true');
+      bar.parentNode.insertBefore(sentinel, bar);
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            bar.classList.toggle('is-stuck', !entry.isIntersecting);
+          });
+        },
+        { threshold: 0 }
+      );
+
+      observer.observe(sentinel);
+    });
+  }
+
   function initAll() {
     try {
       initReveal();
       initTiltCards();
       initCounters();
       initSvgDraw();
+      initStickyBars();
     } catch (err) {
       document.documentElement.classList.remove('js-motion');
     }

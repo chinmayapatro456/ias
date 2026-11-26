@@ -58,7 +58,8 @@
   }
 }
 
-.chip-row,
+/* .chip-row is now the shared component in base.css (same one Optional uses);
+   only the Mains-specific groups are declared here. */
 .bar-right,
 .group-switch {
   display: flex;

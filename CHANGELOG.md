@@ -35,6 +35,116 @@ Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, a
 
 ---
 
+## Visual polish pass — share card, footer bookend, emblems, print (27 Nov 2026)
+
+Scope: `assets/css/tokens.css`, `assets/css/base.css`, `assets/css/prelims.css`,
+`assets/css/mains.css`, `assets/css/optional.css`, `assets/css/about.css`,
+`assets/js/theme.js`, `assets/js/motion.js`, `assets/js/prelims.js`,
+`assets/css/print.css` (new), `assets/img/banner-share.webp` +
+`banner-share.png` (new), and the heads/footers/page headers of all eight HTML
+files. **Untouched by design:** the home-page hero, the 3D subject cube
+(`cube/index.html` markup and its on-screen styling — it gains only the print
+stylesheet link), everything under `/data/`, the `cp_*` localStorage keys and
+schema, and the +2 / −0.66 scoring in `assets/js/prelims.js` (the only edit in
+that file reads the clock; it does not score). No new fonts, libraries or
+network requests; every cache stamp moved to `?v=20261127v`.
+
+- **Social share card.** New 1200×630 `assets/img/banner-share.webp` (PNG
+  fallback alongside it), built from the site's own tokens: warm ivory ground,
+  "Chinmaya Patro" in Newsreader at display optical size, the subtitle in Inter,
+  the terracotta map-pin monogram, and the India outline lifted from
+  `index.html`'s `.band-map` SVG as a faint watermark on the right. The hero
+  keeps its gate photograph; only the share image changed. `og:image`,
+  `og:image:width/height` (now 1200/630), `og:image:type`, `og:image:alt` and
+  `twitter:image` updated on all six pages that carry social metadata (the
+  noindex 404 and the self-contained cube page carry none, and were left as
+  they were).
+- **Footer as a bookend.** One modifier, `.site-footer--band`, applies the
+  deep-ink `--band-*` treatment to the footer on every page, including the 404
+  shell. Brand stays serif in `--band-ink`; links, disclaimer and the map/type
+  credit sit in `--band-muted`; hairlines use `--band-line`; hovers use
+  `--band-accent`. No raw colour anywhere — measured ratios are commented
+  beside the rules (brand 16.6:1 light / 15.9:1 dark, body 8.1:1 / 8.3:1,
+  hover 9.4:1 / 9.5:1).
+- **theme-color follows the theme.** Every page now declares two metas — the
+  ivory default and a `#16130F` counterpart scoped to
+  `(prefers-color-scheme: dark)` — and `theme.js` sets *both* on toggle, so the
+  browser chrome matches the page whatever the OS preference says. The
+  pre-paint inline script in each head sets them too, so there is no flash of
+  the wrong chrome colour and no layout impact.
+- **Stage emblem in every inner page header.** A 64–96px inline-SVG mark, right
+  aligned, stroked in `--stage-ink` at 0.28 opacity: progress-ring cluster on
+  Syllabus, stacked paper sheets on Mains, globe/graticule on Optional,
+  tally-on-a-scan-sheet on Prelims, the map-pin monogram on About. Drawn in once
+  by the existing `[data-draw-svg]` observer, gated on `.js-motion` and off
+  under `prefers-reduced-motion`; hidden below 900px; renders nothing if the SVG
+  is removed. No raster assets.
+- **Prelims quiz polish.** A 3px countdown depletion bar (`scaleX` only) sits
+  above the quiz layout in `--stage-solid`, turning to the danger ink in the
+  last five minutes; the `.is-urgent` state now pulses the progress text as well
+  as the clock. The selected option gets a 2px `--stage-solid` inset ring on top
+  of the stage tint, and its A–D key reads as a pressed key. The stem is now
+  `--text-lead` Newsreader at the 64ch measure. The question palette reads as
+  three shapes in one stage colour — filled = answered, 2px outline = current,
+  tint plus corner dot = flagged — with a legend row that mirrors them (and now
+  survives the phone layout instead of being hidden).
+- **Filter bars and chips.** Active chips are stage chips: `--stage-solid` fill
+  with `--stage-on-solid` text (light 4.74 / 9.95 / 6.72:1, dark 4.55 / 5.20 /
+  6.09:1). The chip row is now one base.css component (`.chip-row`,
+  `.topic-chips`) instead of two diverging copies. The sticky `.filterbar` is
+  flat in the flow and gains `.is-stuck` — bottom hairline in `--stage-border`
+  plus `--shadow-xs` — from a 1px-sentinel IntersectionObserver in
+  `assets/js/motion.js`, which both PYQ pages already load (one implementation,
+  no per-page copy). The desktop floating filter panel from the previous pass is
+  untouched.
+- **About chart chrome.** `.chart-card` is now a modifier over `.card` on the
+  five chart cards: card surface, a small-caps title row with a hairline under
+  it, and the "numbers as a table" panel recessed onto `--bg-subtle` with an
+  inset hairline. The line/bar draw-in animations are untouched.
+- **Micro-typography.** `.eyebrow` uses real `font-variant-caps: all-small-caps`
+  where the engine supports it, keeping the eyebrow's own tracking; uppercase
+  stays as the fallback. `<kbd>` is defined once in base.css — JetBrains Mono,
+  hairline border, 2px radius — and the Prelims hint no longer overrides it.
+  `font-variant-numeric: tabular-nums` now covers stat values, counters, the
+  quiz timer and progress text, dates, chart axis text and table numerics, so
+  digits no longer jitter while counting.
+- **Print stylesheet.** New `assets/css/print.css`, linked with `media="print"`
+  from every page. It re-declares the tokens in a black-ink-on-white palette (so
+  the components follow the design system rather than being restyled), strips
+  the nav, drawers, buttons, chips, filter bars, skeletons, search controls and
+  the today strip, expands every `<details>` (including the `::details-content`
+  box in current Chrome/Safari), keeps cards and table rows whole with
+  `page-break-inside: avoid`, lands every animation on its end state, and drops
+  the stage wash behind page headers to save ink. The syllabus tree, the PYQ
+  lists and the About charts print cleanly; the syllabus tree prints the stage
+  tab that is open, since the other stages are rendered on demand.
+- **Stray merge markers removed.** `syllabus/index.html` arrived with two
+  blocks of committed conflict markers (from commit `b63aa03`), which rendered
+  as literal `<<<<<<< HEAD` text at the top of the page and again above the
+  scripts. Both sides were identical apart from the new print stylesheet link,
+  so the file is resolved and the markers are gone.
+- **404 stops drifting.** Its inline `<style>` block is gone: the shell
+  (`.not-found`, `.not-found-card`, `.nf-btn`, `.nf-footer`) now lives in
+  base.css and follows the tokens, and only the India-outline watermark keeps an
+  inline rule (with token fallbacks) so the motif still renders if a deep GitHub
+  Pages 404 URL is served without the stylesheet. Its footer takes the band
+  treatment too.
+- **Contrast.** Every contrast-affecting token change carries its measured ratio
+  in a comment: the dark `--st-prelims-solid` deepened from `#C0613F` to
+  `#B75C3D` because white on the old value measured **4.18:1** (below AA) — it
+  is 4.55:1 now, and still 4.07:1 against the dark canvas. The `--band-*` pairs
+  used by the footer are measured in both themes, and the print palette is
+  measured on white.
+- **Checked.** `node scripts/audit.js` at 360/390/412/768/1280/1440 across all
+  seven audited pages: no horizontal overflow, no clipped text, no sub-44px tap
+  targets, no console errors. Re-run in the dark theme (plus the 404) with the
+  same result, and spot-checked for: the emblem hidden below 900px, both
+  `theme-color` metas following the toggle, `.is-stuck` arriving on scroll, the
+  timer bar depleting, the palette states, and the print PDF (nav gone,
+  `<details>` expanded, white page, black ink).
+
+---
+
 ## Home — role line under the name (27 Nov 2026)
 
 Scope: `index.html`, `assets/css/home.css` (`?v=20261127t`). No data, storage-key,

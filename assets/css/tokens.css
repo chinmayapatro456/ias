@@ -124,10 +124,10 @@
      -------------------------------------------------------------------- */
   --band-bg: #171310;
   --band-bg-deep: #0F0C0A;
-  --band-ink: #F7F2E8;            /* 15.6:1 on #171310 */
-  --band-muted: rgba(247, 242, 232, 0.68);
-  --band-line: rgba(247, 242, 232, 0.16);
-  --band-accent: #EDA98C;
+  --band-ink: #F7F2E8;            /* 16.6:1 on #171310, 17.5:1 on #0F0C0A */
+  --band-muted: rgba(247, 242, 232, 0.68); /* composites to #ADAAA3: 8.1:1 on #171310, 8.3:1 on #0F0C0A */
+  --band-line: rgba(247, 242, 232, 0.16);  /* hairline only, decorative (no text sits on it) */
+  --band-accent: #EDA98C;         /* 9.4:1 on #171310, 9.9:1 on #0F0C0A */
   --band-zone: rgba(178, 205, 233, 0.16);   /* faint Optional-zone tint */
   --band-zone-stroke: rgba(178, 205, 233, 0.38);
   --band-map-line: rgba(247, 242, 232, 0.5);
@@ -371,8 +371,11 @@ body.page-optional {
   --st-prelims-bg: #2C221C;
   --st-prelims-border: rgba(224, 139, 106, 0.34);
   --st-prelims-ink: #F2AC90;      /* 9.6:1 on #2C221C */
-  --st-prelims-solid: #C0613F;
-  --st-prelims-on-solid: #FFFFFF; /* 4.6:1 on #C0613F */
+  /* Deepened from #C0613F so the white label clears AA: white on #B75C3D is
+     4.55:1 (it was 4.18:1 before). The fill itself still reads as terracotta
+     against the dark canvas: #B75C3D on #16130F = 4.07:1. */
+  --st-prelims-solid: #B75C3D;
+  --st-prelims-on-solid: #FFFFFF; /* 4.55:1 on #B75C3D */
 
   --st-mains-bg: #23262A;
   --st-mains-border: rgba(198, 210, 220, 0.24);
@@ -389,10 +392,10 @@ body.page-optional {
   /* Contrast band — dark terracotta-brown, still a distinct step */
   --band-bg: #241812;
   --band-bg-deep: #1A110C;
-  --band-ink: #FBF4EC;            /* 15.1:1 on #241812 */
-  --band-muted: rgba(251, 244, 236, 0.7);
-  --band-line: rgba(251, 244, 236, 0.18);
-  --band-accent: #F0B295;
+  --band-ink: #FBF4EC;            /* 15.9:1 on #241812, 17.1:1 on #1A110C */
+  --band-muted: rgba(251, 244, 236, 0.7);  /* composites to #BFB6AC: 8.3:1 on #241812, 8.7:1 on #1A110C */
+  --band-line: rgba(251, 244, 236, 0.18);  /* hairline only, decorative */
+  --band-accent: #F0B295;         /* 9.5:1 on #241812, 10.2:1 on #1A110C */
   --band-zone: rgba(169, 199, 230, 0.14);
   --band-zone-stroke: rgba(169, 199, 230, 0.34);
   --band-map-line: rgba(251, 244, 236, 0.55);

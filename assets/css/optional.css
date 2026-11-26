@@ -304,9 +304,8 @@
 }
 
 .topic-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+  /* Row layout comes from the shared .chip-row/.topic-chips component in
+     base.css; only the offset above the chips is page-specific. */
   margin-top: var(--space-2);
 }
 

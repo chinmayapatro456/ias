@@ -55,8 +55,14 @@
 
     root.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
 
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', META[theme] || META.light);
+    /* Every page carries two theme-color metas — one plain, one scoped to
+       prefers-color-scheme: dark. Once a theme is chosen explicitly both are
+       set to that theme's canvas colour, so the browser chrome follows the
+       page even when the OS preference points the other way. */
+    var metas = document.querySelectorAll('meta[name="theme-color"]');
+    Array.prototype.forEach.call(metas, function (meta) {
+      meta.setAttribute('content', META[theme] || META.light);
+    });
 
     syncButtons(theme);
     if (persist) writeTheme(theme);
