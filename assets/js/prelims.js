@@ -43,6 +43,16 @@
       .replace(/'/g, '&#39;');
   }
 
+  /* Question text is stored as one flat string; PrelimsFormat rebuilds the
+     statement list, pairs table and code footer the paper printed. */
+  function stemHtml(text) {
+    return window.PrelimsFormat ? window.PrelimsFormat.stem(text) : escapeHtml(text);
+  }
+
+  function optionHtml(text) {
+    return window.PrelimsFormat ? window.PrelimsFormat.option(text) : escapeHtml(text);
+  }
+
   function shuffle(arr) {
     var copy = arr.slice();
     for (var i = copy.length - 1; i > 0; i--) {
@@ -545,7 +555,7 @@
     }
 
     var stemEl = document.getElementById('q-stem');
-    if (stemEl) stemEl.textContent = q.question;
+    if (stemEl) stemEl.innerHTML = stemHtml(q.question);
 
     var chosen = session.answers[q.id] || '';
     var optsEl = document.getElementById('q-options');
@@ -562,7 +572,7 @@
           '<button type="button" class="option-btn' + (isSel ? ' is-selected' : '') + extra + '" ' +
             'role="radio" aria-checked="' + String(isSel) + '" data-opt-key="' + escapeHtml(opt.key) + '">' +
             '<span class="option-key">' + escapeHtml(opt.key) + '</span>' +
-            '<span class="option-text">' + escapeHtml(opt.text) + '</span>' +
+            '<span class="option-text">' + optionHtml(opt.text) + '</span>' +
           '</button>'
         );
       }).join('');
@@ -905,7 +915,7 @@
         var cls = 'review-opt';
         if (item.outcome !== 'unscored' && opt.key === q.answer) cls += ' is-right-key';
         else if (opt.key === item.userAns && item.outcome === 'wrong') cls += ' is-user-wrong';
-        return '<li class="' + cls + '"><strong>' + escapeHtml(opt.key) + '.</strong> ' + escapeHtml(opt.text) + '</li>';
+        return '<li class="' + cls + '"><strong>' + escapeHtml(opt.key) + '.</strong> ' + optionHtml(opt.text) + '</li>';
       }).join('');
 
       return (
@@ -916,7 +926,7 @@
             '<span class="tag tag--sky">' + escapeHtml(q.subject) + '</span>' +
             '<span class="tag">' + escapeHtml(q.topic) + '</span>' +
           '</div>' +
-          '<p class="q-stem" style="margin-top:0.75rem">' + escapeHtml(q.question) + '</p>' +
+          '<div class="q-stem q-stem--review" style="margin-top:0.75rem">' + stemHtml(q.question) + '</div>' +
           '<ul class="review-options">' + optsHtml + '</ul>' +
         '</article>'
       );

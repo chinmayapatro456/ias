@@ -8,6 +8,38 @@ localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
 
 ---
 
+## Prelims Practice — questions laid out the way the paper printed them (27 Nov 2026)
+
+Scope: `assets/js/prelims-format.js` (new), `assets/js/prelims.js`,
+`assets/css/prelims.css`, `prelims-practice/index.html`, cache stamp bumped to
+`20261127x`. No data-file, storage-key or scoring change.
+
+- **What was wrong.** The PYQ bank stores every stem as one flat string, so a
+question printed as a lead line, three numbered statements and a closing
+"Select the answer using the code given below :" arrived on the page as one
+solid paragraph. Table questions were worse: cells were joined with "|" and
+ran together with the question sentence.
+- **Lead, statements, ask.** A new presentation layer splits a stem into the
+lead line, a marker list (I. / II. / III., 1. / 2. / 3., (A) / (B), (i) / (ii)),
+the ask line in heavier type, and the code footer in muted type. 1,383 of the
+3,940 live questions now render as a list instead of a paragraph.
+- **Pairs are tables.** "Consider the following pairs" renders as a two-column
+table with the column labels as headers, whether the pairs are written
+"Peak : Range" or "Peak — Range" (64 questions).
+- **Match List I with List II** renders as a two-column table with the "Code :
+  A B C D" line beneath, and answer options printed as "3 1 2 4" show lettered
+  columns (A B C D over the digits) — 244 table questions in all.
+- **"|" tables** (Sl. No. | Committee | Objective | Organisation, Waterfall |
+  Region | River, ...) are rebuilt as real tables, with the serial column
+  centred and the trailing question pulled out below.
+- **Assertion (A) / Reason (R)** and **Statement-I / Statement-II** each get
+  their own line with the label in bold.
+- **Text is never rewritten.** The formatter only re-flows the string it is
+  given: every word of the original stem survives, checked word-by-word
+  against all 3,976 questions.
+
+---
+
 ## Prelims Practice — Custom Quiz gets a multi-year filter (27 Nov 2026)
 
 Scope: `prelims-practice/index.html`, `assets/css/prelims.css`,
