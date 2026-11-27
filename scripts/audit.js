@@ -7,6 +7,7 @@ const PAGES = [
   'mains-pyqs/index.html',
   'optional-pyqs/index.html',
   'prelims-practice/index.html',
+  'csat-practice/index.html',
   'about/index.html',
   'cube/index.html'
 ];

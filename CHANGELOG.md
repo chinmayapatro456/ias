@@ -68,6 +68,67 @@ Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, a
 
 ---
 
+## New page — CSAT Practice (27 Nov 2026)
+
+Scope: new `csat-practice/`, `assets/css/csat.css`, `assets/js/csat.js`,
+`data/csat-data.js`; one nav + drawer + footer link added to every page (and a
+sixth button on the 404); `assets/js/storage.js` gains an additive key;
+`assets/css/base.css` gets one measure fix; `scripts/audit.js` now audits the
+new page. Cache stamps moved to `?v=20261127x`. No existing data file, storage
+key, scoring rule or page script was changed.
+
+- **The bank.** 1,096 CSAT questions, 2011–2026, parsed page by page out of the
+  302-page "Topicwise CSAT PYQs 2011–2025" compilation (questions, options,
+  answer keys and explanations). 1,056 carry a key; the other 40 are shown as
+  unscored — they are mostly Decision-Making items, which UPSC grades by
+  preference rather than with a single key. Per year: 48–80 questions, except
+  2026 (below).
+- **2026.** Four questions of the 2026 paper, the ones whose full text, four
+  options and provisional key could be read verbatim from a public source
+  (three data-sufficiency items, one inequality item). They are tagged 2026,
+  appear in their topics and in the year filter, and the year is labelled
+  "partial" so a four-question paper is never mistaken for a full one. No
+  further 2026 text could be verified, so nothing else was added.
+- **Not included: Data Interpretation.** All 47 DI questions in the source are
+  built on bar charts and tables that exist only as images in the PDF, so they
+  cannot be answered from text. Questions elsewhere that need a figure the text
+  does not carry were dropped the same way (65 in total). The page states this
+  where the marking note is.
+- **Two modes.** *Full-length tests* — one year's paper in the compilation's
+  order on a two-hour countdown with a depleting timer bar, exactly like the
+  Prelims simulations. *Sectional tests* — one topic drawn at random from every
+  year, 10/20/30/50 or all, with no clock.
+- **Marking is CSAT's own.** +2.5 for a correct answer, −0.83 for a wrong one
+  (one-third), 0 for a skip, and the results card states whether the score is
+  above or below the 33% qualifying line. The Prelims page keeps its +2/−0.66
+  untouched; the two pages share components, not scoring.
+- **Everything else is the Prelims pattern**, because it already worked:
+  question palette with filled/outline/dot states and a legend, flag and
+  bookmark, instant-feedback mode, `A`–`D` / `N` / `P` keys, topic-wise
+  accuracy and recent attempts in the lobby, a score ring, KPI cards, topic
+  bars, and a review list with the source's explanation for each question.
+  Progress lives under a new key, `cp_csat_state`, and is included in the
+  JSON export/import on the Prelims page.
+- **Passages.** 693 questions carry their reading passage or puzzle set-up, shown
+  in a scrollable panel above the stem (34vh, 28vh on a phone) so the options
+  stay on screen.
+- **One shared fix.** `.notice--callout` was measured in `ch`, which is the width
+  of "0" in the *loaded* font — when Inter arrived the box grew 77px, the text
+  re-wrapped and everything below it moved (CLS 0.19 on this page). It is now
+  `50em`, the same ~700px, and font-independent.
+- **Nav.** Seven items no longer fit a 768px strip, so the desktop link strip now
+  starts at 860px (the drawer covers 768–859 with the same links and 44px
+  targets), and the two practice links read "Prelims" and "CSAT" in the strip.
+- **Checked.** `node scripts/audit.js` (now 8 pages × 6 widths): no overflow, no
+  clipped text, no sub-44px targets, no console errors. CSAT page: 11 interaction
+  checks pass (defaults to the newest complete paper, sectional field swap, 10-Q
+  set with no clock, keyboard answering, bookmark persistence, submit → score
+  1.67/47.5 on 1 correct + 1 wrong, review filters, explanations, retry-wrong,
+  theme toggle); CLS 0.007 at 1280 and 0.001 at 390; print renders one clean
+  page with the setup controls stripped.
+
+---
+
 ## Load smoothness — no more jump on the list pages (27 Nov 2026)
 
 Scope: `assets/css/mains.css`, `assets/css/optional.css`,

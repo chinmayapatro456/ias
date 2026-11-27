@@ -165,6 +165,16 @@
   .q-nav-row,
   .backup-bar,
   .import-label,
+  /* Practice setup: a printed form of checkboxes and dropdowns is noise */
+  .setup-card,
+  .setup-footer,
+  .setup-options,
+  .neg-toggle,
+  .start-row,
+  .mode-desc,
+  .lobby-lower,
+  .palette-panel,
+  .quiz-timer-track,
   /* Form controls and their labels: an empty search box on paper is noise */
   .input,
   .select,

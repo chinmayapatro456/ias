@@ -10,6 +10,7 @@ A static, distraction-free personal study workspace for UPSC Civil Services prep
 - **Mains PYQs (`mains-pyqs/`)** — 2013–2026 Mains questions across 19 subject groups with paper/topic/year/keyword filters, topic or year grouping, local bookmarks, "answer written" ticks, and Ethics case study source links.
 - **Geography Optional PYQs (`optional-pyqs/`)** — 1986–2026 Paper I, Paper II, and Mapping questions with paper tabs, topic chips, year slider, "unattempted only" filter, and an animated SVG topic-frequency chart.
 - **Prelims Practice (`prelims-practice/`)** — 1995–2026 Prelims bank (3,976 questions) with topic quizzes, year-wise full-paper timed simulations (2-hour countdown, 100 or 150 questions), custom drills, wrong/bookmarked revision, toggleable `+2 / −0.66` UPSC scoring, keyboard shortcuts (`A`–`D`, `N`, `P`), subject-wise breakdown, and JSON export/import backup.
+- **CSAT Practice (`csat-practice/`)** — Paper II bank (1,096 questions, 2011–2026) as full-length year-wise papers on a two-hour countdown or topic-wise sectional tests, with the paper's own marking (`+2.5` correct, `−0.83` wrong, 33% to qualify), instant-feedback mode, a question palette, wrong/bookmarked revision, and explanations from the source.
 
 ## Updating Data Later
 
@@ -22,6 +23,7 @@ All content lives in `/data/` as plain browser globals—you never need to edit 
 | `data/optional-data.js` | `window.PYQ_DATA` | Geography Optional PYQs (1986–2026) & topic order |
 | `data/prelims-data.js` | `window.PRELIMS_DATA` | Prelims MCQ bank, 1995–2026 (3,976 questions; `incomplete` hidden; `no_key` & `source_marks_cancelled` unscored) |
 | `data/about-data.js` | `window.ABOUT_DATA` | Cut-off series (2015–2025), category cut-offs, year-wise vacancies and the CSE 2025 service split for the About page |
+| `data/csat-data.js` | `window.CSAT_DATA` | CSAT Paper II bank, 2011–2026 (1,096 questions; no-key items unscored) |
 
 ## Local Preview
 

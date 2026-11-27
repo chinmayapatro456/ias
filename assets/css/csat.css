@@ -1,0 +1,87 @@
+/* ==========================================================================
+   CSAT Practice — page-specific styles
+   Depends on: tokens.css, base.css, prelims.css
+
+   The quiz furniture (option cards, question palette, timer, score ring,
+   review cards) is shared with Prelims Practice and lives in prelims.css —
+   both pages run the same components. Only the passage block and the review
+   extras are new here, and every value reads a token.
+   ========================================================================== */
+
+/* Reading passage / data-sufficiency instructions above the question stem.
+   Long passages scroll inside their own box so the stem and the options stay
+   on screen — the same reasoning as the palette strip on a phone. */
+.q-passage {
+  max-height: 34vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--stage-border);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background-color: var(--bg-subtle);
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--ink-secondary);   /* 11.2:1 on --bg-subtle (light), 11.9:1 (dark) */
+  white-space: pre-line;
+}
+
+@media (max-width: 767px) {
+  .q-passage {
+    max-height: 28vh;
+    padding: var(--space-3) var(--space-4);
+    font-size: 0.98rem;
+  }
+}
+
+/* The same passage inside a review card, quieter and unbounded */
+.review-passage {
+  margin: var(--space-3) 0 0;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--stage-border);
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 68ch;
+}
+
+/* Explanation line under a reviewed question */
+.review-explanation {
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  max-width: 72ch;
+}
+
+.review-explanation strong {
+  color: var(--ink-primary);
+}
+
+/* The two practice modes read as a pair of equal choices */
+#csat-mode-tabs .tab-btn {
+  flex: 1 1 0;
+}
+
+/* Starting a paper scrolls to the top of it, not the top of the page, and the
+   sticky nav must not cover the topbar when it does. */
+.quiz-topbar,
+.results-header,
+#csat-mode-tabs {
+  scroll-margin-top: calc(var(--nav-height) + var(--space-3));
+}
+
+/* Year options in the full-length select are long ("2018 paper · 48 Qs") */
+#csat-year {
+  min-width: 0;
+}
+
+/* Qualifying verdict line in the score card */
+.score-copy .eyebrow {
+  margin-bottom: 0.35rem;
+}

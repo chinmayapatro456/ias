@@ -655,7 +655,10 @@ body {
   background: var(--bg-sand);
 }
 
-@media (min-width: 768px) {
+/* The desktop link strip needs room for seven items, so it starts at 860px
+   rather than 768px — below that the drawer carries the same links and every
+   target stays 44px. (Raised when CSAT Practice joined the nav.) */
+@media (min-width: 860px) {
   .nav-links {
     display: flex;
   }
@@ -1143,7 +1146,11 @@ body {
   color: var(--warning-ink);
   font-size: var(--text-sm);
   line-height: 1.5;
-  max-width: 78ch;
+  /* Measured in em, not ch: a ch here is the width of "0" in whatever font is
+     loaded, so the box grew ~77px when Inter arrived and the text re-wrapped,
+     pushing everything below it down (CLS 0.19 on the CSAT page). 50em at
+     --text-sm is the same ~700px the Inter-measured 78ch gave. */
+  max-width: 50em;
 }
 
 .notice--callout strong {

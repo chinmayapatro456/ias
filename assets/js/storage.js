@@ -14,7 +14,9 @@
     optionalBookmarks: 'cp_optional_bookmarks',
     prelimsState: 'cp_prelims_state',
     /* Additive: the light/dark choice. Existing keys above are untouched. */
-    theme: 'cp_theme'
+    theme: 'cp_theme',
+    /* Additive: CSAT Practice attempts, bookmarks and wrong-answer history. */
+    csatState: 'cp_csat_state'
   };
 
   function defaultPrelimsState() {
@@ -100,6 +102,27 @@
     return writeKey(KEYS.prelimsState, nextState);
   }
 
+  /* CSAT State Helpers — same shape as the Prelims state, separate key. */
+  function defaultCsatState() {
+    return { attempts: [], bookmarks: [], wrongIds: [], topicStats: {} };
+  }
+
+  function getCsatState() {
+    var raw = readKey(KEYS.csatState, null);
+    var base = defaultCsatState();
+    if (!raw) return base;
+    return {
+      attempts: Array.isArray(raw.attempts) ? raw.attempts : [],
+      bookmarks: Array.isArray(raw.bookmarks) ? raw.bookmarks : [],
+      wrongIds: Array.isArray(raw.wrongIds) ? raw.wrongIds : [],
+      topicStats: raw.topicStats && typeof raw.topicStats === 'object' ? raw.topicStats : {}
+    };
+  }
+
+  function saveCsatState(nextState) {
+    return writeKey(KEYS.csatState, nextState);
+  }
+
   function todayIsoLocal() {
     var now = new Date();
     var y = now.getFullYear();
@@ -139,7 +162,8 @@
       mainsBookmarks: readSet(KEYS.mainsBookmarks),
       optionalAttempted: readSet(KEYS.optionalAttempted),
       optionalBookmarks: readSet(KEYS.optionalBookmarks),
-      prelimsState: getPrelimsState()
+      prelimsState: getPrelimsState(),
+      csatState: getCsatState()
     };
   }
 
@@ -166,6 +190,10 @@
       var merged = Object.assign(defaultPrelimsState(), payload.prelimsState);
       writeKey(KEYS.prelimsState, merged);
     }
+    if (payload.csatState && typeof payload.csatState === 'object') {
+      var mergedCsat = Object.assign(defaultCsatState(), payload.csatState);
+      writeKey(KEYS.csatState, mergedCsat);
+    }
     return true;
   }
 
@@ -189,6 +217,8 @@
     },
     getPrelimsState: getPrelimsState,
     savePrelimsState: savePrelimsState,
+    getCsatState: getCsatState,
+    saveCsatState: saveCsatState,
     updateStreak: updateStreak,
     exportAll: exportAll,
     importAll: importAll,
