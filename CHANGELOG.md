@@ -8,6 +8,28 @@ localStorage keys or schema, "Not affiliated with UPSC" kept on every page.
 
 ---
 
+## Prelims Practice — Custom Quiz gets a multi-year filter (27 Nov 2026)
+
+Scope: `prelims-practice/index.html`, `assets/css/prelims.css`,
+`assets/js/prelims.js`, cache stamp bumped to `20261127w`. No data, storage-key
+or scoring change.
+
+- **What changed.** In Custom Quiz the single Exam Year dropdown is replaced by
+a checkbox per exam year (1995–2026, newest first), so several years' questions
+can be drilled in one session. Every year starts ticked, which is the old
+"All years" behaviour.
+- **Per-year counts.** Each pill shows how many questions that year has under
+the current subject and topic, so it is obvious which years are worth ticking.
+- **Shortcuts.** All years / Last 5 years / Clear sit above the list; the ticked
+count is repeated next to the EXAM YEARS label.
+- **Year-Wise Paper is untouched** — one paper at a time still uses the dropdown,
+and switching modes swaps the two controls automatically.
+- **Layout.** In Custom Quiz the year block takes the full width of the setup
+grid (two columns on a phone, up to nine on a desktop) and the remaining fields
+share one row.
+
+---
+
 ## Home — role line becomes an eyebrow (27 Nov 2026)
 
 Scope: `index.html`, `assets/css/home.css`, cache stamp bumped to `20261127q`.

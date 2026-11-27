@@ -41,11 +41,11 @@
       }
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127v">
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127v">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20261127v">
-  <link rel="stylesheet" href="../assets/css/prelims.css?v=20261127v">
-  <link rel="stylesheet" href="../assets/css/print.css?v=20261127v" media="print">
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261127w">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20261127w">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20261127w">
+  <link rel="stylesheet" href="../assets/css/prelims.css?v=20261127w">
+  <link rel="stylesheet" href="../assets/css/print.css?v=20261127w" media="print">
 </head>
 <body class="page-prelims">
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -205,8 +205,24 @@
               </div>
 
               <div data-field="year">
-                <label class="field-label" for="pre-year">Exam Year</label>
-                <select id="pre-year" class="select"></select>
+                <!-- Year-Wise Paper: one paper at a time, so a single select -->
+                <div class="year-select-wrap" id="pre-year-select-wrap">
+                  <label class="field-label" for="pre-year">Exam Year</label>
+                  <select id="pre-year" class="select"></select>
+                </div>
+
+                <!-- Custom Quiz: tick any number of years at once -->
+                <fieldset class="year-checks" id="pre-year-checks-field" hidden>
+                  <legend class="field-label">
+                    Exam Years <span class="year-checks-summary" id="pre-year-summary">All years</span>
+                  </legend>
+                  <div class="year-checks-tools">
+                    <button type="button" class="btn btn-ghost btn-sm" data-year-action="all">All years</button>
+                    <button type="button" class="btn btn-ghost btn-sm" data-year-action="recent">Last 5 years</button>
+                    <button type="button" class="btn btn-ghost btn-sm" data-year-action="none">Clear</button>
+                  </div>
+                  <div class="year-checks-list" id="pre-year-checks" role="group" aria-label="Filter by exam year"></div>
+                </fieldset>
               </div>
 
               <div data-field="count">
@@ -402,11 +418,11 @@
     </div>
   </footer>
 
-  <script src="../data/prelims-data.js?v=20261127v" defer></script>
-  <script src="../assets/js/storage.js?v=20261127v" defer></script>
-  <script src="../assets/js/theme.js?v=20261127v" defer></script>
-  <script src="../assets/js/nav.js?v=20261127v" defer></script>
-  <script src="../assets/js/motion.js?v=20261127v" defer></script>
-  <script src="../assets/js/prelims.js?v=20261127v" defer></script>
+  <script src="../data/prelims-data.js?v=20261127w" defer></script>
+  <script src="../assets/js/storage.js?v=20261127w" defer></script>
+  <script src="../assets/js/theme.js?v=20261127w" defer></script>
+  <script src="../assets/js/nav.js?v=20261127w" defer></script>
+  <script src="../assets/js/motion.js?v=20261127w" defer></script>
+  <script src="../assets/js/prelims.js?v=20261127w" defer></script>
 </body>
 </html>

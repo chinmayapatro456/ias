@@ -18,6 +18,9 @@
   var setup = {
     mode: 'topic'
   };
+  /* Custom Quiz year filter. `null` until the checkbox list is first built;
+     once built it holds every year the user has ticked. */
+  var selectedYears = null;
 
   var session = null;
   var lastReport = null;
@@ -27,7 +30,7 @@
   var MODE_DESCRIPTIONS = {
     topic: 'Focus on a single subject and topic to build conceptual accuracy.',
     year: 'Full year-wise paper on a 2-hour UPSC countdown timer — 100 questions from 2011, 150 in the older papers.',
-    custom: 'Mix any subject, topic, year, and question count for a tailored drill.',
+    custom: 'Mix any subject, topic, and exam years — tick several years to drill across papers.',
     revision: 'Re-attempt questions you previously answered wrong or bookmarked.'
   };
 
@@ -187,6 +190,90 @@
       }).join('');
   }
 
+  /* Custom Quiz year filter: a checkbox per exam year, so several papers can
+     be drilled in one session. Years with no questions under the current
+     subject/topic are still listed, with a count of 0, so the list never
+     jumps around while filters change. */
+  function poolYears() {
+    return Array.from(new Set(activePool.map(function (q) { return q.year; }).filter(Boolean)))
+      .sort(function (a, b) { return b - a; });
+  }
+
+  function getSubjectTopicPool() {
+    var subj = (document.getElementById('pre-subject') || {}).value || 'all';
+    var topic = (document.getElementById('pre-topic') || {}).value || 'all';
+    return activePool.filter(function (q) {
+      if (subj !== 'all' && q.subject !== subj) return false;
+      if (topic !== 'all' && q.topic !== topic) return false;
+      return true;
+    });
+  }
+
+  /* Returns null when every year is ticked (no filtering needed), otherwise
+     the Set of ticked years — an empty Set legitimately matches nothing. */
+  function getSelectedYears() {
+    var years = poolYears();
+    if (!selectedYears) return null;
+    if (selectedYears.size >= years.length) return null;
+    return selectedYears;
+  }
+
+  function updateYearSummary() {
+    var el = document.getElementById('pre-year-summary');
+    if (!el) return;
+    var years = poolYears();
+    var picked = years.filter(function (y) { return selectedYears && selectedYears.has(y); });
+
+    if (!years.length) {
+      el.textContent = '';
+    } else if (!picked.length) {
+      el.textContent = 'none selected';
+    } else if (picked.length === years.length) {
+      el.textContent = 'all ' + years.length + ' years';
+    } else if (picked.length <= 5) {
+      el.textContent = picked.slice().sort(function (a, b) { return a - b; }).join(', ');
+    } else {
+      el.textContent = picked.length + ' of ' + years.length + ' years';
+    }
+  }
+
+  function renderYearChecks() {
+    var box = document.getElementById('pre-year-checks');
+    if (!box) return;
+
+    var years = poolYears();
+    if (!selectedYears) selectedYears = new Set(years);
+    /* A year that left the pool cannot stay selected. */
+    Array.from(selectedYears).forEach(function (y) {
+      if (years.indexOf(y) === -1) selectedYears.delete(y);
+    });
+
+    var counts = {};
+    getSubjectTopicPool().forEach(function (q) {
+      counts[q.year] = (counts[q.year] || 0) + 1;
+    });
+
+    box.innerHTML = years.map(function (y) {
+      var n = counts[y] || 0;
+      return (
+        '<label class="year-check' + (n ? '' : ' is-empty') + (selectedYears.has(y) ? ' is-on' : '') + '">' +
+          '<input type="checkbox" value="' + y + '"' + (selectedYears.has(y) ? ' checked' : '') + '>' +
+          '<span class="year-check-year">' + y + '</span>' +
+          '<span class="year-check-count">' + n + '</span>' +
+        '</label>'
+      );
+    }).join('');
+
+    updateYearSummary();
+  }
+
+  function setAllYears(on) {
+    var years = poolYears();
+    selectedYears = new Set(on ? years : []);
+    renderYearChecks();
+    updateMatchCount();
+  }
+
   function syncModeFields() {
     var descEl = document.getElementById('mode-description');
     if (descEl) descEl.textContent = MODE_DESCRIPTIONS[setup.mode] || '';
@@ -203,6 +290,18 @@
       var box = document.querySelector('[data-field="' + name + '"]');
       if (box) box.hidden = !fields[name];
     });
+
+    /* Custom Quiz swaps the single-year select for the checkbox list. */
+    var isCustom = setup.mode === 'custom';
+    var yearSelectWrap = document.getElementById('pre-year-select-wrap');
+    var yearChecksField = document.getElementById('pre-year-checks-field');
+    var yearField = document.querySelector('[data-field="year"]');
+    var setupGrid = document.getElementById('setup-fields');
+    if (yearSelectWrap) yearSelectWrap.hidden = isCustom;
+    if (yearChecksField) yearChecksField.hidden = !isCustom;
+    if (yearField) yearField.classList.toggle('is-wide', isCustom);
+    if (setupGrid) setupGrid.classList.toggle('is-custom', isCustom);
+    if (isCustom) renderYearChecks();
 
     if (setup.mode === 'year') {
       var yearSel = document.getElementById('pre-year');
@@ -241,10 +340,11 @@
         });
       return matched;
     } else if (setup.mode === 'custom') {
+      var pickedYears = getSelectedYears();
       matched = activePool.filter(function (q) {
         if (subj !== 'all' && q.subject !== subj) return false;
         if (topic !== 'all' && q.topic !== topic) return false;
-        if (yearVal !== 'all' && String(q.year) !== String(yearVal)) return false;
+        if (pickedYears && !pickedYears.has(q.year)) return false;
         return true;
       });
       matched = shuffle(matched);
@@ -863,12 +963,51 @@
     if (subjSel) {
       subjSel.addEventListener('change', function () {
         populateTopicSelect();
+        renderYearChecks();
         updateMatchCount();
       });
     }
-    ['pre-topic', 'pre-year', 'pre-count', 'pre-revision-source'].forEach(function (id) {
+    var topicSel = document.getElementById('pre-topic');
+    if (topicSel) {
+      topicSel.addEventListener('change', function () {
+        renderYearChecks();
+        updateMatchCount();
+      });
+    }
+    ['pre-year', 'pre-count', 'pre-revision-source'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.addEventListener('change', updateMatchCount);
+    });
+
+    /* Custom Quiz year checkboxes + the All / Last 5 / Clear shortcuts */
+    var yearChecksBox = document.getElementById('pre-year-checks');
+    if (yearChecksBox) {
+      yearChecksBox.addEventListener('change', function (e) {
+        var input = e.target.closest('input[type="checkbox"]');
+        if (!input) return;
+        var y = parseInt(input.value, 10);
+        if (!selectedYears) selectedYears = new Set();
+        if (input.checked) selectedYears.add(y);
+        else selectedYears.delete(y);
+        var pill = input.closest('.year-check');
+        if (pill) pill.classList.toggle('is-on', input.checked);
+        updateYearSummary();
+        updateMatchCount();
+      });
+    }
+    document.querySelectorAll('[data-year-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var action = btn.getAttribute('data-year-action');
+        if (action === 'all') {
+          setAllYears(true);
+        } else if (action === 'none') {
+          setAllYears(false);
+        } else if (action === 'recent') {
+          selectedYears = new Set(poolYears().slice(0, 5));
+          renderYearChecks();
+          updateMatchCount();
+        }
+      });
     });
 
     /* Start Quiz */
