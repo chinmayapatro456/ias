@@ -444,7 +444,11 @@
     var chosen = session.answers[q.id];
     var optsEl = $('csat-q-options');
     if (optsEl) {
-      optsEl.innerHTML = q.options
+      /* A handful of questions have their options printed as figures: the
+         letters still work, the text does not. */
+      var list = q.optionImages ? ['A', 'B', 'C', 'D'] : q.options;
+      optsEl.classList.toggle('is-figure-options', !!q.optionImages);
+      optsEl.innerHTML = list
         .map(function (text, i) {
           var key = 'abcd'[i];
           var cls = 'option-btn';
@@ -457,7 +461,9 @@
             '<button type="button" class="' + cls + '" data-key="' + key + '" role="radio" aria-checked="' +
             (chosen === key) + '">' +
             '<span class="option-key">' + key.toUpperCase() + '</span>' +
-            '<span class="option-text">' + escapeHtml(text) + '</span>' +
+            '<span class="option-text">' +
+            (q.optionImages ? 'Figure (' + key + ')' : escapeHtml(text)) +
+            '</span>' +
             '</button>'
           );
         })
@@ -536,7 +542,8 @@
   function selectAnswer(key) {
     if (!session) return;
     var q = session.questions[session.index];
-    if ('abcd'.indexOf(key) === -1 || !q.options['abcd'.indexOf(key)]) return;
+    if ('abcd'.indexOf(key) === -1) return;
+    if (!q.options['abcd'.indexOf(key)] && !q.optionImages) return;
     session.answers[q.id] = key;
     renderQuestion();
   }
@@ -797,13 +804,13 @@
             ? '<span class="tag tag--warning">Unscored</span>'
             : '<span class="tag">Skipped (0)</span>';
 
-        var optsHtml = q.options
+        var optsHtml = (q.optionImages ? ['A', 'B', 'C', 'D'] : q.options)
           .map(function (text, i) {
             var key = 'abcd'[i];
             var cls = 'review-opt';
             if (item.outcome !== 'unscored' && key === q.answer) cls += ' is-right-key';
             else if (key === item.userAns && item.outcome === 'wrong') cls += ' is-user-wrong';
-            return '<li class="' + cls + '"><strong>' + key.toUpperCase() + '.</strong> ' + escapeHtml(text) + '</li>';
+            return '<li class="' + cls + '"><strong>' + key.toUpperCase() + '.</strong> ' + (q.optionImages ? 'Figure (' + key + ')' : escapeHtml(text)) + '</li>';
           })
           .join('');
 

@@ -100,6 +100,39 @@ Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, a
 
 ---
 
+## Figure puzzles completed (27 Nov 2026)
+
+Scope: `data/csat-data.js` (rebuilt), `assets/js/csat.js`,
+`csat-practice/index.html`, `data/prelims-data.js` untouched.
+
+**The scan.** Both data layers were checked for questions held back by a
+picture:
+
+| Layer | Held back | Why |
+| --- | --- | --- |
+| Prelims | 36 | pairs/statements text is empty in the source — no figures involved, so nothing to draw |
+| CSAT | 30 | options were printed as figures, which the text parser could not read |
+
+**CSAT, fixed.** Every figure on a page sits in the vertical band between one
+question number and the next, so each image was assigned to the question it was
+printed beside (band from the text spans, image centre from its bounding box).
+14 questions whose *options* were figures now ship with their figures: the
+question shows the problem figure and the four lettered answer figures, and the
+A–D buttons stand for them, so the source's key still marks them. CSAT went
+1,230 → **1,244** questions, 2018 77 → 79, and 16 questions remain out — all of
+them ones where the missing piece is text, not a picture.
+
+**Prelims, not fixable this way.** The 36 `incomplete` questions are missing
+their pair rows or statement lines — `"Consider the following pairs : I. II.
+III."` with nothing between. Only one of the 36 mentions a figure at all. There
+is no diagram to draw; the text itself is absent from the data layer, and the
+Prelims source PDF is not in this repository, so they stay hidden rather than be
+reconstructed from memory.
+
+Stamps to `?v=20261127z`.
+
+---
+
 ## CSAT: 2018 and 2026 filled in, figures restored (27 Nov 2026)
 
 Scope: `data/csat-data.js` (rebuilt), `assets/img/csat/` (new, 233 figures),
