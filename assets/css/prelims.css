@@ -371,6 +371,171 @@
   white-space: pre-line;
 }
 
+/* Question presentation — lead line, statement list, pairs / Match-List
+   tables, the ask line and the "Select the answer using the code given
+   below :" footer. Built by assets/js/prelims-format.js. */
+.q-stem > *:first-child {
+  margin-top: 0;
+}
+
+.q-stem > *:last-child {
+  margin-bottom: 0;
+}
+
+.q-para,
+.q-line {
+  margin: 0 0 0.85rem;
+  color: var(--ink-primary);
+}
+
+.q-line {
+  margin-bottom: 0.55rem;
+}
+
+.q-line-label {
+  font-family: var(--font-sans);
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.q-list {
+  margin: 0 0 0.95rem;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.q-list li {
+  display: grid;
+  grid-template-columns: 2.1rem minmax(0, 1fr);
+  gap: 0 0.5rem;
+}
+
+.q-marker {
+  font-family: var(--font-sans);
+  font-size: 0.8em;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--accent-ink);
+  white-space: nowrap;
+}
+
+.q-item-text {
+  min-width: 0;
+}
+
+.q-ask {
+  margin: 1.05rem 0 0.6rem;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.q-foot {
+  margin: 0.8rem 0 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.q-code {
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+/* Tables inside a question (pairs, Match List I/II, "|" tables) */
+.q-table-wrap {
+  margin: 0.55rem 0 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.q-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  background-color: var(--bg-card);
+}
+
+.q-table th,
+.q-table td {
+  border: 1px solid var(--border-strong);
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.q-table th {
+  background-color: var(--bg-subtle);
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.q-table td {
+  color: var(--ink-secondary);
+}
+
+.q-table--pairs td:first-child,
+.q-table--match td:first-child {
+  width: 45%;
+}
+
+.q-cell-num {
+  width: 3.4rem;
+  text-align: center;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 767px) {
+  .q-table {
+    font-size: var(--text-xs);
+  }
+
+  .q-table th,
+  .q-table td {
+    padding: 0.4rem 0.45rem;
+  }
+
+  .q-table--pairs td:first-child,
+  .q-table--match td:first-child {
+    width: 42%;
+  }
+
+  .q-list li {
+    grid-template-columns: 1.8rem minmax(0, 1fr);
+  }
+}
+
+/* Answer code printed as lettered columns: A B C D over 3 1 2 4 */
+.option-code {
+  display: inline-flex;
+  gap: 0.6rem;
+}
+
+.option-code-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 1.5rem;
+}
+
+.option-code-head {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.option-code-num {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  color: var(--ink-primary);
+}
+
 .options-list {
   display: flex;
   flex-direction: column;
