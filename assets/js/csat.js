@@ -150,11 +150,11 @@
       DATA.questions.forEach(function (q) {
         counts[q.year] = (counts[q.year] || 0) + 1;
       });
-      /* Default to the newest paper that is actually complete; 2026 is a
-         four-question partial set, so it is listed but not preselected. */
+      /* Default to the newest paper that is complete enough to sit as a paper;
+         2026 is a 64-question partial set, so it is listed but not preselected. */
       var newestFull = null;
       DATA.years.forEach(function (y) {
-        if ((counts[y] || 0) >= 60) newestFull = y;
+        if ((counts[y] || 0) >= 75) newestFull = y;
       });
       yearSel.innerHTML = DATA.years
         .slice()
@@ -163,10 +163,13 @@
         })
         .map(function (y) {
           var n = counts[y] || 0;
-          var partial = n < 60;
+          /* Every year is a few questions short of 80 in the source, so the
+             count is always shown; "partial" is reserved for 2026, which is
+             still missing a quarter of its paper. */
+          var note = n < 80 ? ' · ' + n + ' Qs' + (y === 2026 ? ' (partial)' : '') : '';
           return (
             '<option value="' + y + '"' + (y === newestFull ? ' selected' : '') + '>' +
-            y + ' paper' + (partial ? ' · ' + n + ' Qs (partial)' : '') +
+            y + ' paper' + note +
             '</option>'
           );
         })
@@ -413,6 +416,25 @@
       } else {
         passageEl.hidden = true;
         passageEl.textContent = '';
+      }
+    }
+
+    /* Charts, tables and figure matrices lifted out of the source PDF */
+    var figEl = $('csat-q-figure');
+    if (figEl) {
+      if (q.images && q.images.length) {
+        figEl.hidden = false;
+        figEl.innerHTML = q.images
+          .map(function (name) {
+            return (
+              '<img src="../assets/img/csat/' + encodeURIComponent(name) + '" ' +
+              'alt="Chart or figure for this question" loading="lazy" decoding="async">'
+            );
+          })
+          .join('');
+      } else {
+        figEl.hidden = true;
+        figEl.innerHTML = '';
       }
     }
 
@@ -792,6 +814,15 @@
           '<span class="tag tag--sky">' + escapeHtml(q.topic) + '</span>' +
           '</div>' +
           (q.passage ? '<p class="review-passage">' + escapeHtml(q.passage) + '</p>' : '') +
+          (q.images && q.images.length
+            ? '<div class="review-figure">' +
+              q.images
+                .map(function (name) {
+                  return '<img src="../assets/img/csat/' + encodeURIComponent(name) + '" alt="Chart or figure for this question" loading="lazy" decoding="async">';
+                })
+                .join('') +
+              '</div>'
+            : '') +
           '<p class="q-stem" style="margin-top:0.75rem">' + escapeHtml(q.stem) + '</p>' +
           '<ul class="review-options">' + optsHtml + '</ul>' +
           (q.explanation ? '<p class="review-explanation"><strong>Why:</strong> ' + escapeHtml(q.explanation) + '</p>' : '') +

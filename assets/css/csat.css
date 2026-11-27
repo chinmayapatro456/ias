@@ -63,6 +63,37 @@
   color: var(--ink-primary);
 }
 
+/* Charts, tables and figure matrices lifted out of the source PDF. They keep
+   their own white ground (a chart on a dark card is unreadable), so the image
+   sits on a paper-coloured plate with a hairline. */
+.q-figure,
+.review-figure {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.q-figure img,
+.review-figure img {
+  display: block;
+  max-width: min(100%, 420px);
+  height: auto;
+  padding: 6px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: #FFFFFF;
+}
+
+.review-figure {
+  margin-top: var(--space-3);
+}
+
+.review-figure img {
+  max-width: min(100%, 300px);
+  padding: 4px;
+}
+
 /* The two practice modes read as a pair of equal choices */
 #csat-mode-tabs .tab-btn {
   flex: 1 1 0;

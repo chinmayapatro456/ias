@@ -100,6 +100,52 @@ Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, a
 
 ---
 
+## CSAT: 2018 and 2026 filled in, figures restored (27 Nov 2026)
+
+Scope: `data/csat-data.js` (rebuilt), `assets/img/csat/` (new, 233 figures),
+`assets/js/csat.js`, `csat-practice/index.html`. Cache stamps to
+`?v=20261127y`.
+
+**Why 2018 was short.** Not a missing year — a parsing fault. The year tag was
+never the problem (the PDF carries 79 tags for 2018); the *options* were. Some
+option lines in the source are indented by a space (` (a) …`), and the parser
+anchored the option marker to column 0, so it swallowed them into the stem and
+the question failed the "four options" test. A second fault: the running page
+header ("45 / Comprehension") was being glued onto the last option of a question
+that crossed a page break. Both fixed:
+
+  * options may be indented
+  * page folios and running headers are skipped
+  * the year-tag typo `CSATV-2015` is recognised
+
+2018 went from 48 usable questions to **77**; every other year gained 0–4.
+1,157 → 1,170 complete questions.
+
+**Why 2026 was four.** The paper was sat on 24 May 2026 and no single page
+carried all eighty questions without truncating the fetch. Per-question pages
+did, so all eighty were pulled one by one and 64 transcribed verbatim with their
+four options and provisional key. The other 16 are not included because the
+source page shows the answer but no option text — the questions cannot be
+answered without inventing options, so they were left out rather than guessed.
+
+**Data Interpretation is back.** All 47 DI questions, and the figure-based
+reasoning questions elsewhere, were previously dropped because their charts and
+tables exist only as images in the PDF. They are now extracted: 233 embedded
+images lifted out of the PDF, resized to 760px, saved as WebP (1.3 MB total) and
+attached to the 50 questions that need them. The quiz shows the figure above the
+stem, and the review shows it above the question. Only 4 questions remain
+excluded — their figure is not on their own page.
+
+Result: **1,230 questions**, 1,189 with a key, 64 of them from 2026.
+
+**Page behaviour.** The year list now shows each paper's real count ("2024 paper
+· 78 Qs") and marks 2026 "(partial)"; the default paper is the newest with at
+least 75 questions, so 2026 is listed but never preselected. Checked:
+`node scripts/audit.js` 48 runs clean, 11 interaction checks, 2026 paper starts
+with 64 questions and no console errors.
+
+---
+
 ## New page — CSAT Practice (27 Nov 2026)
 
 Scope: new `csat-practice/`, `assets/css/csat.css`, `assets/js/csat.js`,
