@@ -100,6 +100,39 @@ Scope: `assets/css/base.css`, `assets/js/mains.js`, `assets/js/optional.js`, a
 
 ---
 
+## CSAT: parser faults fixed, 8 more 2026 questions (27 Nov 2026)
+
+Scope: `data/csat-data.js` (rebuilt), `csat-practice/index.html`.
+Stamps to `?v=20261127z2`.
+
+**Three parser faults, all found by chasing the questions that were still
+short:**
+
+1. `Directions` was matched as a heading anywhere, so a stem that wrapped at
+   the word "direction," was cut in half and lost its options and year
+   (Time & Work 2022, q12). The pattern now needs "Directions for the
+   following" or "Direction:".
+2. Numbered statements inside a stem ("Consider the following statements:
+   1. … 2. …") were read as new questions whenever they happened to line up
+   with the next number. While such a stem is open, those numbers stay text.
+3. Year tags appear as `CSE-2018` and `C5AT-2020` (an OCR slip), not only
+   `CSAT-YYYY`, so two questions had no year and fell out of the year papers.
+
+Effect: 2011, 2012, 2015, 2016, 2018, 2019, 2024 and 2025 now hold a full
+80 questions each; 2020, 2021, 2023 and 2014 are at 78–79.
+
+**8 more 2026 questions.** The per-question pages omit the option list for
+sixteen items, but the paper page and the topic pages carry them. Options for
+q10, q15, q19, q25, q38, q42, q45 and q49 were read from there and added with
+their keys. 2026: 64 → **72 of 80**.
+
+The remaining 8 (q18, q23, q24, q50, q67, q68, q75, q79) have no option text
+on any page reachable from here, so they stay out rather than be invented.
+
+Bank: 1,244 → **1,262** questions, 1,221 with a key.
+
+---
+
 ## Figure puzzles completed (27 Nov 2026)
 
 Scope: `data/csat-data.js` (rebuilt), `assets/js/csat.js`,
